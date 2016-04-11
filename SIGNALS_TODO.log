@@ -1,0 +1,439 @@
+NEEDS_DECLARE:
+  QTaurusBaseListener:             emmiter.taurusEvent
+
+NEEDS_DECLARE:
+  DataModel:         self.dataChanged
+
+NOT_CONVERTED:
+         self.connect(writer, QtCore.SIGNAL(signalname), self.setData)
+
+NOT_CONVERTED:
+  self.disconnect(writer, QtCore.SIGNAL(signalname), self.setData)
+
+NEEDS_DECLARE:
+  TaurusEmitterThread: self.emitter.somethingDone
+
+NEEDS_DECLARE:
+  TaurusEmitterThread:             self.emitter.doSomething
+
+NEEDS_DECLARE:
+  SingletonWorker:             self.thread.emitter.newQueue
+
+NOT_CONVERTED:
+ signaller.emit(Qt.SIGNAL('taurusEvent'), *evt)
+
+NOT_CONVERTED:
+ self.connect(parent_widget,
+                             Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
+                             self.parentModelChanged)
+
+NOT_CONVERTED:
+ self.disconnect(parent_widget,
+                                Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
+                                self.parentModelChanged)
+
+NOT_CONVERTED:
+ self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+
+NOT_CONVERTED:
+ self.disconnect(self._parentTaurusComponent,
+                                    Qt.SIGNAL(
+                                        TaurusBaseWidget.ModelChangedSignal),
+                                    self.parentModelChanged)
+
+NOT_CONVERTED:
+             self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+
+NEEDS_DECLARE:
+  TaurusBaseWidget:         self.valueChanged
+
+NOT_CONVERTED:
+ self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+
+NOT_CONVERTED:
+ self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+
+NEEDS_DECLARE:
+  TaurusQAttribute:             self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusQAttribute:         self.dataChanged
+
+NEEDS_DECLARE:
+  QButtonBox: self.okClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.openClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.saveClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.cancelClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.closeClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.discardClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.applyClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.resetClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.restoreDefaultsClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.helpClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.saveAllClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.yesClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.yesToAllClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.noClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.noToAllClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.abortClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.retryClicked
+
+NEEDS_DECLARE:
+  QButtonBox: self.ignoreClicked
+
+NEEDS_DECLARE:
+  TaurusCommandButton: self.commandExecuted
+
+NOT_CONVERTED:
+ self.connect(self.readWidget, sig, self.enterEdit)
+
+NOT_CONVERTED:
+ self.connect(self.writeWidget, sig, self.exitEdit)
+
+NEEDS_DECLARE:
+  TaurusGroupBox:         self.pendingOperationsChanged
+
+NEEDS_DECLARE:
+  TaurusMainWindow:         self.perspectiveChanged
+
+NEEDS_DECLARE:
+  TaurusCurveItemTableModel: self.dataChanged
+
+NEEDS_DECLARE:
+  CurveItemConfDlg:                 self.dataChanged
+
+NEEDS_DECLARE:
+  CurveItemConfDlg: self.applied
+
+NEEDS_DECLARE:
+  TaurusCurveDialog: self.modelChanged
+
+NEEDS_DECLARE:
+  TaurusTrendDialog:         self.modelChanged
+
+NOT_CONVERTED:
+         self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
+
+NEEDS_DECLARE:
+  QXTermWidget: self.commandFinished
+
+NEEDS_DECLARE:
+  TaurusGraphicsUpdateThread: emitter.updateView
+
+NEEDS_DECLARE:
+  TaurusGraphicsScene:         self.graphicSceneClicked
+
+NEEDS_DECLARE:
+  TaurusGraphicsScene:                     self.graphicItemSelected
+
+NEEDS_DECLARE:
+  TaurusGraphicsScene: self.graphicItemSelected
+
+NEEDS_DECLARE:
+  TaurusJDrawSynopticsView: self.itemsChanged
+
+NEEDS_DECLARE:
+  TaurusJDrawSynopticsView:         self.graphicItemSelected
+
+NEEDS_DECLARE:
+  TaurusJDrawSynopticsView:         self.graphicSceneClicked
+
+NEEDS_DECLARE:
+  TaurusJDrawSynopticsView:         self.modelsChanged
+
+NEEDS_DECLARE:
+  GraphicalChoiceWidget:         self.choiceMade
+
+NOT_CONVERTED:
+ self.emit(Qt.SIGNAL(QWheelEdit.NumberChangedStr), v)
+
+NOT_CONVERTED:
+ self.emit(Qt.SIGNAL(QWheelEdit.NumberEditedStr), v)
+
+NEEDS_DECLARE:
+  QWheelEdit: self.returnPressed
+
+NEEDS_DECLARE:
+  TaurusValueComboBox: self.applied
+
+NOT_CONVERTED:
+         self.connect(self, Qt.SIGNAL(
+            QWheelEdit.NumberChangedStr), self.valueChanged)
+
+NEEDS_DECLARE:
+  FilterToolBar:         self.clearFilterTriggered
+
+NEEDS_DECLARE:
+  FilterToolBar:         self.filterChanged
+
+NEEDS_DECLARE:
+  FilterToolBar:         self.filterEdited
+
+NEEDS_DECLARE:
+  EditorToolBar: self.addTriggered
+
+NEEDS_DECLARE:
+  EditorToolBar: self.removeTriggered
+
+NEEDS_DECLARE:
+  EditorToolBar: self.moveTopTriggered
+
+NEEDS_DECLARE:
+  EditorToolBar: self.moveUpTriggered
+
+NEEDS_DECLARE:
+  EditorToolBar: self.moveDownTriggered
+
+NEEDS_DECLARE:
+  EditorToolBar: self.moveBottomTriggered
+
+NEEDS_DECLARE:
+  SelectionToolBar: self.selectAllTriggered
+
+NEEDS_DECLARE:
+  SelectionToolBar: self.clearSelectionTriggered
+
+NEEDS_DECLARE:
+  RefreshToolBar: self.refreshTriggered
+
+NEEDS_DECLARE:
+  PerspectiveToolBar:         self.perspectiveChanged
+
+NEEDS_DECLARE:
+  QBaseModelWidget:         self.itemClicked
+
+NEEDS_DECLARE:
+  QBaseModelWidget:         self.itemDoubleClicked
+
+NEEDS_DECLARE:
+  QBaseModelWidget: self.itemSelectionChanged
+
+NEEDS_DECLARE:
+  QBaseModelWidget: self.currentItemChanged
+
+NEEDS_DECLARE:
+  QRawDataWidget:         self.ReadFromFiles
+
+NEEDS_DECLARE:
+  QRawDataWidget:         self.AddCurve
+
+NEEDS_DECLARE:
+  QConfigEditorModel: self.showError
+
+NEEDS_DECLARE:
+  TaurusMessagePanel:         self.toggledDetails
+
+NOT_CONVERTED:
+         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
+        self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
+                     self._deviceTree.setModel)
+
+NEEDS_DECLARE:
+  TaurusModelSelectorTree: self.addModels
+
+NOT_CONVERTED:
+ 
+        # self.tree.setUseParentModel(True)  #It does not work!!!!
+        # @todo: This is Workaround because UseSetParentModel is giving trouble again!
+        self.connect(self, Qt.SIGNAL(
+            self.ModelChangedSignal), self.tree.setModel)
+
+NEEDS_DECLARE:
+  TaurusModelChooser:         self.updateModels
+
+NEEDS_DECLARE:
+  TaurusModelChooser: self.UpdateAttrs
+
+NEEDS_DECLARE:
+  TaurusModelModel: self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusModelModel:         self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusModelList:         self.dataChanged
+
+NEEDS_DECLARE:
+  ControllerBox: self.selected
+
+NEEDS_DECLARE:
+  CurveStatsDialog:         self.closed
+
+NEEDS_DECLARE:
+  CurvesTableModel:                 self.dataChanged
+
+NEEDS_DECLARE:
+  CurvesTableModel: self.dataChanged
+
+NEEDS_DECLARE:
+  CurvesAppearanceChooser:             self.curvesLW.CurveTitleEdited
+
+NEEDS_DECLARE:
+  CurvesAppearanceChooser: 
+        self.controlChanged
+
+NEEDS_DECLARE:
+  CurvesAppearanceChooser: self.curveAppearanceChanged
+
+NEEDS_DECLARE:
+  TaurusXValues:         self._signalGen.taurusEvent
+
+NEEDS_DECLARE:
+  TaurusCurve:             self._signalGen.dataChanged
+
+NEEDS_DECLARE:
+  TaurusCurve:         self._signalGen.dataChanged
+
+NEEDS_DECLARE:
+  TaurusPlot: self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusPlot: self.CurvesYAxisChanged
+
+NEEDS_DECLARE:
+  TaurusPlot:         self.modelChanged
+
+NEEDS_DECLARE:
+  TaurusTrendsSet: self.dataChanged
+
+NEEDS_DECLARE:
+  ScanTrendsSet:         self.dataChanged
+
+NEEDS_DECLARE:
+  ScanTrendsSet: self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusTrend: self.dataChanged
+
+NEEDS_DECLARE:
+  LoggingToolBar: self.scrollLockToggled
+
+NEEDS_DECLARE:
+  TaurusGrid: obj.itemClicked
+
+NEEDS_DECLARE:
+  TaurusGrid:         self.itemClicked
+
+NEEDS_DECLARE:
+  TaurusValuesIOTableModel:         self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusValuesIOTableModel: self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusValuesIOTableDelegate: self.editorCreated
+
+NEEDS_DECLARE:
+  BooleanWidget: self.valueChanged
+
+NEEDS_DECLARE:
+  BasePage:         self.completeChanged
+
+NEEDS_DECLARE:
+  GeneralSettings: self.completeChanged
+
+NEEDS_DECLARE:
+  DynamicPlotManager:         self.newShortMessage
+
+NEEDS_DECLARE:
+  MacroBroker: self.newShortMessage
+
+NEEDS_DECLARE:
+  ExpertWidgetChooserDlg:         # emit a signal with a dictionary that can be used to initialize
+        self.memberSelected
+
+NEEDS_DECLARE:
+  BlackListValidator: self.stateChanged
+
+NEEDS_DECLARE:
+  CommTableModel:             self.dataChanged
+
+NEEDS_DECLARE:
+  TaurusGui:         self.newShortMessage
+
+NEEDS_DECLARE:
+  TaurusGui: self.macroserverNameChanged
+
+NEEDS_DECLARE:
+  TaurusGui: self.doorNameChanged
+
+NEEDS_DECLARE:
+  TaurusGui: self.SelectedInstrument
+
+NEEDS_DECLARE:
+  NavigationToolBar: self.goIntoTriggered
+
+NEEDS_DECLARE:
+  NavigationToolBar: self.goUpTriggered
+
+NEEDS_DECLARE:
+  NavigationToolBar: self.goTopTriggered
+
+NEEDS_DECLARE:
+  ExpansionBar: self.expandTriggered
+
+NEEDS_DECLARE:
+  ExpansionBar: self.collapseTriggered
+
+NEEDS_DECLARE:
+  ExpansionBar: self.expandSelectionTriggered
+
+NEEDS_DECLARE:
+  ExpansionBar: self.collapseSelectionTriggered
+
+NEEDS_DECLARE:
+  TaurusTreeNodeContainer:         self.addAttrSelected
+
+NEEDS_DECLARE:
+  TaurusTreeNodeContainer:         self.removeAttrSelected
+
+NEEDS_DECLARE:
+  TaurusDevTree:         self.refreshTree
+
+NEEDS_DECLARE:
+  TaurusDevTree:             self.deviceSelected
+
+NEEDS_DECLARE:
+  TaurusDevTreeOptions: self.search
+
+NOT_CONVERTED:
+  f.emit(Qt.SIGNAL(s), args)
+
+NEEDS_DECLARE:
+  ExternalAppAction: self.cmdArgsChanged
+
+NEEDS_DECLARE:
+  Grabber: self.grab
+

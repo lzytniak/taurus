@@ -88,8 +88,7 @@ class QTaurusBaseListener(TaurusListener):
         """
         try:
             emmiter = self.getSignaller()
-            emmiter.emit(Qt.SIGNAL('taurusEvent'),
-                         evt_src, evt_type, evt_value)
+            emmiter.taurusEvent.emit(evt_src, evt_type, evt_value)
         except:
             pass
 

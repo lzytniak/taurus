@@ -151,8 +151,7 @@ class DefaultLabelWidget(TaurusLabel):
             cm_action = menu.addAction("Compact")
             cm_action.setCheckable(True)
             cm_action.setChecked(self.taurusValueBuddy().isCompact())
-            self.connect(cm_action, Qt.SIGNAL("toggled(bool)"),
-                         self.taurusValueBuddy().setCompact)
+            cm_action.toggled.connect(self.taurusValueBuddy().setCompact)
         menu.exec_(event.globalPos())
         event.accept()
 
@@ -853,8 +852,7 @@ class TaurusValue(Qt.QWidget, TaurusBaseWidget):
             # hide getPendingOperations of the writeWidget so that containers don't get duplicate lists
             #self._writeWidget._getPendingOperations = self._writeWidget.getPendingOperations
             #self._writeWidget.getPendingOperations = lambda : []
-            self.connect(self._writeWidget, Qt.SIGNAL(
-                'valueChanged'), self.updatePendingOpsStyle)
+            self._writeWidget.valueChanged.connect(self.updatePendingOpsStyle)
             self._writeWidget.setDangerMessage(self.getDangerMessage())
             self._writeWidget.setForceDangerousOperations(
                 self.getForceDangerousOperations())
@@ -1359,8 +1357,7 @@ if __name__ == "__main__":
     if models == []:
         from taurus.qt.qtgui.panel import TaurusModelChooser
         modelChooser = TaurusModelChooser()
-        form.connect(modelChooser, Qt.SIGNAL(
-            "updateModels"), container.setModel)
+        modelChooser.updateModels.connect(container.setModel)
         modelChooser.show()
 
     sys.exit(app.exec_())

@@ -101,14 +101,10 @@ class TaurusNeXusBrowser(TaurusWidget):
         self.layout().setMenuBar(self._toolbar)
 
         # connections
-        self.connect(self.__fileModel, Qt.SIGNAL(
-            'fileAppended'), self.treeWidget.fileAppended)
-        self.connect(self.treeWidget, Qt.SIGNAL(
-            "HDF5WidgetSignal"), self.onHDF5WidgetSignal)
-        self.connect(self.openFileAction, Qt.SIGNAL(
-            "triggered()"), self.openFile)
-        self.connect(self.togglePreviewAction, Qt.SIGNAL(
-            "toggled(bool)"), self.__previewStack.setVisible)
+        self.__fileModel.fileAppended.connect(self.treeWidget.fileAppended)
+        self.treeWidget.HDF5WidgetSignal.connect(self.onHDF5WidgetSignal)
+        self.openFileAction.triggered.connect(self.openFile)
+        self.togglePreviewAction.toggled.connect(self.__previewStack.setVisible)
 
         # configuration
         self.registerConfigProperty(

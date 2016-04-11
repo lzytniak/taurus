@@ -86,7 +86,7 @@ class DataModel(QtCore.QObject):
         '''
         self.__data = data
         self.__isDataSet = True
-        self.emit(QtCore.SIGNAL("dataChanged"), self.__data)
+        self.dataChanged.emit(self.__data)
 
     def connectReader(self, slot, readOnConnect=True):
         '''
@@ -102,7 +102,7 @@ class DataModel(QtCore.QObject):
 
         .. seealso:: :meth:`connectWriter`, :meth:`getData`
         '''
-        self.connect(self, QtCore.SIGNAL("dataChanged"), slot)
+        self.dataChanged.connect(slot)
         if readOnConnect and self.__isDataSet:
             slot(self.__data)
         obj = getattr(slot, '__self__', slot)
@@ -142,7 +142,7 @@ class DataModel(QtCore.QObject):
 
         .. seealso:: :meth:`SharedDataManager.disconnectReader`, :meth:`getData`
         '''
-        ok = self.disconnect(self, QtCore.SIGNAL("dataChanged"), slot)
+        ok = self.dataChanged.disconnect(slot)
         self.__readerSlots.remove((weakref.ref(slot.__self__), slot.__name__))
 
     def isDataSet(self):

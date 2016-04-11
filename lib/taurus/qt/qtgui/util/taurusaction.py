@@ -74,7 +74,7 @@ class ExternalAppAction(Qt.QAction, BaseConfigurableClass):
         self.interactive = interactive
         self._process = []
         self.setCmdArgs(cmdargs)
-        self.connect(self, Qt.SIGNAL("triggered()"), self.actionTriggered)
+        self.triggered.connect(self.actionTriggered)
         self.setToolTip("Launches %s (external application)" % text)
         self.registerConfigProperty(self.cmdArgs, self.setCmdArgs, 'cmdArgs')
 
@@ -93,7 +93,7 @@ class ExternalAppAction(Qt.QAction, BaseConfigurableClass):
             cmdargs = shlex.split(str(cmdargs))
         self.__cmdargs = cmdargs
         if emitsignal:
-            self.emit(Qt.SIGNAL("cmdArgsChanged"), self.__cmdargs)
+            self.cmdArgsChanged.emit(self.__cmdargs)
 
     def cmdArgs(self):
         return self.__cmdargs
@@ -192,9 +192,8 @@ class TaurusAction(Qt.QAction):
 
         Qt.QAction.__init__(self, parent)
 
-        self.connect(parent, Qt.SIGNAL(
-            'modelChanged(const QString &)'), self.modelChanged)
-        self.connect(self, Qt.SIGNAL("triggered()"), self.actionTriggered)
+        parent.modelChanged.connect(self.modelChanged)
+        self.triggered.connect(self.actionTriggered)
 
         self.update()
 

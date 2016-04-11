@@ -49,11 +49,9 @@ class TangoConfigLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
         self.call__init__(TaurusBaseWritableWidget,
                           name, designMode=designMode)
 
-        self.connect(self, Qt.SIGNAL(
-            'textChanged(const QString &)'), self.valueChanged)
-        self.connect(self, Qt.SIGNAL('returnPressed()'), self.writeValue)
-        self.connect(self, Qt.SIGNAL('editingFinished()'),
-                     self._onEditingFinished)
+        self.textChanged.connect(self.valueChanged)
+        self.returnPressed.connect(self.writeValue)
+        self.editingFinished.connect(self._onEditingFinished)
 
     def _onEditingFinished(self):
         if self._autoApply:

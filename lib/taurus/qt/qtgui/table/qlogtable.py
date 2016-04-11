@@ -396,7 +396,7 @@ class LoggingToolBar(FilterToolBar):
         self.addAction(self._scrollLockAction)
 
     def onToggleScrollLock(self, yesno):
-        self.emit(Qt.SIGNAL("scrollLockToggled(bool)"), yesno)
+        self.scrollLockToggled.emit(yesno)
 
     def onLogLevelChanged(self, index):
         self.onFilterChanged()

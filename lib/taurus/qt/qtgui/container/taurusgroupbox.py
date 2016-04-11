@@ -69,7 +69,7 @@ class TaurusGroupBox(Qt.QGroupBox, TaurusBaseContainer):
     @Qt.pyqtSignature("pendingOperationsChanged(bool)")
     def pendingOperationsChanged(self, yesno):
         self.debug("emiting pendingOperationsChanged(%s)" % str(yesno))
-        self.emit(Qt.SIGNAL('pendingOperationsChanged(bool)'), yesno)
+        self.pendingOperationsChanged.emit(yesno)
 
     @Qt.pyqtSignature("applyPendingChanges()")
     def applyPendingChanges(self):

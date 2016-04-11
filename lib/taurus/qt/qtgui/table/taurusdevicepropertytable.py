@@ -195,14 +195,11 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
         self.info('TaurusPropTable.contextMenuEvent()')
         menu = Qt.QMenu(self)
         configDialogAction = menu.addAction("Add new property")
-        self.connect(configDialogAction, QtCore.SIGNAL(
-            "triggered()"), self.addProperty)
+        configDialogAction.triggered.connect(self.addProperty)
         configDialogAction = menu.addAction("Delete property")
-        self.connect(configDialogAction, QtCore.SIGNAL(
-            "triggered()"), self.deleteProperty)
+        configDialogAction.triggered.connect(self.deleteProperty)
         configDialogAction = menu.addAction("Edit property")
-        self.connect(configDialogAction, QtCore.SIGNAL(
-            "triggered()"), self.editProperty)
+        configDialogAction.triggered.connect(self.editProperty)
         menu.addSeparator()
         menu.exec_(event.globalPos())
         del menu

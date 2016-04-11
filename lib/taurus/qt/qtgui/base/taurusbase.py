@@ -1592,7 +1592,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
     def emitValueChanged(self, *args):
         """Connect the specific XXXXChanged signals from derived classes to this
         method in order to have a unified signal which can be used by Taurus Widgets"""
-        self.emit(Qt.SIGNAL('valueChanged'))
+        self.valueChanged.emit()
         self.updatePendingOpsStyle()  # by default, update its own style
 
     def safeApplyOperations(self, ops=None):
@@ -1706,8 +1706,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         # operations
         self._forcedApply = False
 
-        self.connect(self, Qt.SIGNAL('valueChanged'),
-                     self.updatePendingOperations)
+        self.valueChanged.connect(self.updatePendingOperations)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWidget overwriting

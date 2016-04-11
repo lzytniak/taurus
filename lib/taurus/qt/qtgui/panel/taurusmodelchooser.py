@@ -120,7 +120,7 @@ class TaurusModelSelectorTree(TaurusWidget):
         return selected
 
     def onAddSelected(self):
-        self.emit(Qt.SIGNAL("addModels"), self.getSelectedModels())
+        self.addModels.emit(self.getSelectedModels())
 
     def treeView(self):
         return self._deviceTree.treeView()
@@ -196,8 +196,8 @@ class TaurusModelChooser(TaurusWidget):
             self.ModelChangedSignal), self.tree.setModel)
 
         # connections:
-        self.connect(self.tree, Qt.SIGNAL("addModels"), self.addModels)
-        self.connect(applyBT, Qt.SIGNAL("clicked()"), self._onUpdateModels)
+        self.tree.addModels.connect(self.addModels)
+        applyBT.clicked.connect(self._onUpdateModels)
 #        self.connect(self.tree._deviceTree, Qt.SIGNAL("itemDoubleClicked"), self.onTreeDoubleClick)
 
 #    def onTreeDoubleClick(self, item, colum): #@todo: Implement this function properly
@@ -267,10 +267,10 @@ class TaurusModelChooser(TaurusWidget):
 
     def _onUpdateModels(self):
         models = self.getListedModels()
-        self.emit(Qt.SIGNAL("updateModels"), models)
+        self.updateModels.emit(models)
         if taurus.core.taurusbasetypes.TaurusElementType.Attribute in self.tree._selectables:
             # for backwards compatibility with the old AttributeChooser
-            self.emit(Qt.SIGNAL("UpdateAttrs"), models)
+            self.UpdateAttrs.emit(models)
 
     def setSingleModelMode(self, single):
         '''sets whether the selection should be limited to just one model
@@ -320,7 +320,7 @@ class TaurusModelChooser(TaurusWidget):
             parent=parent, selectables=selectables, host=host, singleModel=singleModel)
         layout.addWidget(w)
         dlg.setLayout(layout)
-        dlg.connect(w, Qt.SIGNAL('updateModels'), dlg.accept)
+        w.updateModels.connect(dlg.accept)
         dlg.exec_()
         return w.getListedModels(asMimeData=asMimeData), (dlg.result() == dlg.Accepted)
 

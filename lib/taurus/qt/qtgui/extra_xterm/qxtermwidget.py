@@ -53,7 +53,7 @@ class QXTermWidget(QtGui.QWidget):
 
     @QtCore.pyqtSignature("commandFinished(int,QProcess::ExitStatus)")
     def _commandFinished(self, exitCode, exitStatus):
-        self.emit(QtCore.SIGNAL("commandFinished(int)"), exitCode)
+        self.commandFinished.emit(exitCode)
         if exitStatus == 0:
             self._restartTheProcess()
 

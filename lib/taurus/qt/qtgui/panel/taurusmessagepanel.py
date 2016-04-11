@@ -309,7 +309,7 @@ class TaurusMessagePanel(Qt.QWidget):
             text = "Show details..."
         self._ui._showDetailsButton.setText(text)
         self.adjustSize()
-        self.emit(Qt.SIGNAL("toggledDetails(bool)"), show)
+        self.toggledDetails.emit(show)
 
     def reportComboBox(self):
         return self._ui._reportComboBox

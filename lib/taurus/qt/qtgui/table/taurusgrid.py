@@ -901,7 +901,7 @@ class TaurusGrid(QtGui.QFrame, TaurusBaseWidget):
                     # print 'In cell clicked'
                     targets = set(str(child.getModelName()) for child in obj.children()
                                   if hasattr(child, 'underMouse') and child.underMouse() and hasattr(child, 'getModelName'))
-                    [obj.emit(Qt.SIGNAL("itemClicked(QString)"), t)
+                    [obj.itemClicked.emit(t)
                      for t in targets]
 
                 cell_frame.mousePressEvent = partial(
@@ -916,7 +916,7 @@ class TaurusGrid(QtGui.QFrame, TaurusBaseWidget):
     def itemClicked(self, item_name):
         self.trace('In TaurusGrid.itemClicked(%s)' % item_name)
         self.setItemSelected(item_name)
-        self.emit(QtCore.SIGNAL("itemClicked(QString)"), str(item_name))
+        self.itemClicked.emit(str(item_name))
 
     def setItemSelected(self, item_name='', selected=True):
         """ it adds a blue frame around a clicked item. """

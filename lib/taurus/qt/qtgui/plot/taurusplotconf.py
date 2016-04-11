@@ -106,11 +106,10 @@ class TaurusPlotConfDlg(Qt.QWidget):
         self.ui.tangoTree.setModel(host)
 
         # Connections
-        self.connect(self.ui.applyBT, Qt.SIGNAL("clicked()"), self.onApply)
-        self.connect(self.ui.reloadBT, Qt.SIGNAL("clicked()"), self.onReload)
-        self.connect(self.ui.cancelBT, Qt.SIGNAL("clicked()"), self.close)
-        self.connect(self.ui.tangoTree, Qt.SIGNAL(
-            "addModels"), self.onModelsAdded)
+        self.ui.applyBT.clicked.connect(self.onApply)
+        self.ui.reloadBT.clicked.connect(self.onReload)
+        self.ui.cancelBT.clicked.connect(self.close)
+        self.ui.tangoTree.addModels.connect(self.onModelsAdded)
 
     def __replaceWidget(self, new, old, layout=None):
         if layout is None:

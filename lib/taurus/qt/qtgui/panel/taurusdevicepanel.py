@@ -251,7 +251,7 @@ class TaurusDevicePanel(TaurusWidget):
             ':/actions/window-new.svg')
         self._dup.setIcon(Qt.QIcon(qpixmap))
         self._dup.setIconSize(Qt.QSize(15, 15))
-        self.connect(self._dup, Qt.SIGNAL("pressed()"), self.duplicate)
+        self._dup.pressed.connect(self.duplicate)
 
         self._image = Qt.QLabel()
 
@@ -538,8 +538,7 @@ class TaurusDevPanel(TaurusMainWindow):
 
         # self.addToolBar(self.basicTaurusToolbar())
 
-        self.connect(self.deviceTree, Qt.SIGNAL(
-            "currentItemChanged"), self.onItemSelectionChanged)
+        self.deviceTree.currentItemChanged.connect(self.onItemSelectionChanged)
 
         self.updatePerspectivesMenu()
         if not designMode:

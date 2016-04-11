@@ -42,10 +42,8 @@ class QRawDataWidget(Qt.QWidget):
         self.loadUi()
 
         # connecttions
-        self.connect(self.openFilesBT, Qt.SIGNAL(
-            "clicked()"), self.onOpenFilesButtonClicked)
-        self.connect(self.addCurveBT, Qt.SIGNAL(
-            "clicked()"), self.onAddCurveButtonClicked)
+        self.openFilesBT.clicked.connect(self.onOpenFilesButtonClicked)
+        self.addCurveBT.clicked.connect(self.onAddCurveButtonClicked)
 
         # set validators in LE's
         self.xFromLE.setValidator(Qt.QDoubleValidator(self))
@@ -58,7 +56,7 @@ class QRawDataWidget(Qt.QWidget):
         if xcol == self.xcolSB.minimum():
             xcol = None
         skiprows = self.headerSB.value()
-        self.emit(Qt.SIGNAL("ReadFromFiles"), xcol, skiprows)
+        self.ReadFromFiles.emit(xcol, skiprows)
 
     def onAddCurveButtonClicked(self):
         """ Emit a AddCurve signal with a rawdata dictionary as a parameter.
@@ -76,7 +74,7 @@ class QRawDataWidget(Qt.QWidget):
                     self, 'Invalid x values' 'Cannot interpret the x values.\n Use Python expressions like "[1, 3 , 67]" or "arange(100)")')
                 return
         rawdata['f(x)'] = str(self.f_xLE.text())
-        self.emit(Qt.SIGNAL("AddCurve"), rawdata)
+        self.AddCurve.emit(rawdata)
 
 if __name__ == "__main__":
     import sys

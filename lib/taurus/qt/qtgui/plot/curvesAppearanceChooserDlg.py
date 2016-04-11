@@ -189,8 +189,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
         currentTitle = item.text()
         if previousTitle != currentTitle:
             self.curvePropDict[name].title = currentTitle
-            self.curvesLW.emit(
-                Qt.SIGNAL('CurveTitleEdited'), name, currentTitle)
+            self.curvesLW.CurveTitleEdited.emit(name, currentTitle)
 
     def updateTitles(self, newTitlesDict=None):
         '''
@@ -280,7 +279,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
         'controlChanged signal and applies the change if in autoapply mode.
         It ignores any arguments passed'''
 
-        self.emit(Qt.SIGNAL("controlChanged"))
+        self.controlChanged.emit()
         if self.autoApply:
             self.onApply()
 
@@ -374,7 +373,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
                                                                     conflict=CurveAppearanceProperties.inConflict_update_a)
         # emit a (PyQt) signal telling what properties (first argument) need to
         # be applied to which curves (second argument)
-        self.emit(Qt.SIGNAL("curveAppearanceChanged"), prop, names)
+        self.curveAppearanceChanged.emit(prop, names)
         # return both values
         return prop, names
 

@@ -1,0 +1,3004 @@
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtcore/taurusqlistener.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtcore/taurusqlistener.py	(refactored)
+@@ -88,8 +88,7 @@
+         """
+         try:
+             emmiter = self.getSignaller()
+-            emmiter.emit(Qt.SIGNAL('taurusEvent'),
+-                         evt_src, evt_type, evt_value)
++            emmiter.taurusEvent.emit(evt_src, evt_type, evt_value)
+         except:
+             pass
+ 
+
+SKIPPING non trivial signal:
+        self.connect(writer, QtCore.SIGNAL(signalname), self.setData)
+
+
+SKIPPING non trivial signal:
+ self.disconnect(writer, QtCore.SIGNAL(signalname), self.setData)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtcore/communication/communication.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtcore/communication/communication.py	(refactored)
+@@ -86,7 +86,7 @@
+         '''
+         self.__data = data
+         self.__isDataSet = True
+-        self.emit(QtCore.SIGNAL("dataChanged"), self.__data)
++        self.dataChanged.emit(self.__data)
+ 
+     def connectReader(self, slot, readOnConnect=True):
+         '''
+@@ -102,7 +102,7 @@
+ 
+         .. seealso:: :meth:`connectWriter`, :meth:`getData`
+         '''
+-        self.connect(self, QtCore.SIGNAL("dataChanged"), slot)
++        self.dataChanged.connect(slot)
+         if readOnConnect and self.__isDataSet:
+             slot(self.__data)
+         obj = getattr(slot, '__self__', slot)
+@@ -142,7 +142,7 @@
+ 
+         .. seealso:: :meth:`SharedDataManager.disconnectReader`, :meth:`getData`
+         '''
+-        ok = self.disconnect(self, QtCore.SIGNAL("dataChanged"), slot)
++        ok = self.dataChanged.disconnect(slot)
+         self.__readerSlots.remove((weakref.ref(slot.__self__), slot.__name__))
+ 
+     def isDataSet(self):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtcore/util/emitter.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtcore/util/emitter.py	(refactored)
+@@ -219,7 +219,7 @@
+             except:
+                 self.log.error('At TaurusEmitterThread._doSomething(%s): \n%s' % (
+                     map(str, args), traceback.format_exc()))
+-        self.emitter.emit(Qt.SIGNAL("somethingDone"))
++        self.emitter.somethingDone.emit()
+         self._done += 1
+         return
+ 
+@@ -262,7 +262,7 @@
+                 else:
+                     continue
+             self.log.debug('Emitting doSomething signal ...')
+-            self.emitter.emit(Qt.SIGNAL("doSomething"), item)
++            self.emitter.doSomething.emit(item)
+             # End of while
+         self.log.info(
+             '#' * 80 + '\nOut of TaurusEmitterThread.run()' + '\n' + '#' * 80)
+@@ -330,7 +330,7 @@
+                     self.thread.getQueue().put(item)
+                 i += 1
+             self.log.info('%d Items added to emitter queue' % i)
+-            self.thread.emitter.emit(Qt.SIGNAL("newQueue"))
++            self.thread.emitter.newQueue.emit()
+         except Queue.Empty:
+             self.log.warning(traceback.format_exc())
+         except:
+
+SKIPPING non trivial signal:
+signaller.emit(Qt.SIGNAL('taurusEvent'), *evt)
+
+
+SKIPPING non trivial signal:
+self.connect(parent_widget,
+                             Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
+                             self.parentModelChanged)
+
+
+SKIPPING non trivial signal:
+self.disconnect(parent_widget,
+                                Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
+                                self.parentModelChanged)
+
+
+SKIPPING non trivial signal:
+self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+
+
+SKIPPING non trivial signal:
+self.disconnect(self._parentTaurusComponent,
+                                    Qt.SIGNAL(
+                                        TaurusBaseWidget.ModelChangedSignal),
+                                    self.parentModelChanged)
+
+
+SKIPPING non trivial signal:
+            self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+
+
+SKIPPING non trivial signal:
+self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+
+
+SKIPPING non trivial signal:
+self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/base/taurusbase.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/base/taurusbase.py	(refactored)
+@@ -1592,7 +1592,7 @@
+     def emitValueChanged(self, *args):
+         """Connect the specific XXXXChanged signals from derived classes to this
+         method in order to have a unified signal which can be used by Taurus Widgets"""
+-        self.emit(Qt.SIGNAL('valueChanged'))
++        self.valueChanged.emit()
+         self.updatePendingOpsStyle()  # by default, update its own style
+ 
+     def safeApplyOperations(self, ops=None):
+@@ -1706,8 +1706,7 @@
+         # operations
+         self._forcedApply = False
+ 
+-        self.connect(self, Qt.SIGNAL('valueChanged'),
+-                     self.updatePendingOperations)
++        self.valueChanged.connect(self.updatePendingOperations)
+ 
+     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+     # TaurusBaseWidget overwriting
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/base/taurusqattribute.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/base/taurusqattribute.py	(refactored)
+@@ -135,8 +135,7 @@
+         """
+         # disconnect previously referenced qAttrs and clean the list
+         for c in self._referencedQAttrs:
+-            self.disconnect(c, Qt.SIGNAL("dataChanged"),
+-                            self.applyTransformation)
++            c.dataChanged.disconnect(self.applyTransformation)
+         self._referencedQAttrs = []
+ 
+         # reset symbols
+@@ -167,7 +166,7 @@
+         its id to the safe evaluation symbols. It returns the qAttr.
+         '''
+         c = taurusQAttributeFactory.getQAttr(ref)
+-        self.connect(c, Qt.SIGNAL("dataChanged"), self.applyTransformation)
++        c.dataChanged.connect(self.applyTransformation)
+         self.sev.addSafe({c.id: c.value})
+         self._referencedQAttrs.append(c)
+         return c
+@@ -178,7 +177,7 @@
+             if isinstance(sender, TaurusQAttribute):
+                 self.sev.addSafe({sender.id: sender.value})
+             self.value = self.sev.eval(self._transformationString)
+-            self.emit(Qt.SIGNAL("dataChanged"))
++            self.dataChanged.emit()
+         except Exception, e:
+             self.warning("the function '%s' could not be evaluated. Reason: %s" % (
+                 self._transformationString, repr(e)))
+@@ -191,7 +190,7 @@
+         model = src if src is not None else self.getModelObj()
+         if model is None:
+             self._values = None
+-            self.emit(Qt.SIGNAL('dataChanged'))
++            self.dataChanged.emit()
+             return
+         if isinstance(val, (TaurusAttrValue, PyTango.DeviceAttribute)):
+             value = val
+@@ -201,4 +200,4 @@
+                 "Could not get TaurusAttrValue value for this event. Dropping")
+             return
+         self.value = value.value
+-        self.emit(Qt.SIGNAL('dataChanged'))
++        self.dataChanged.emit()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/button/qbuttonbox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/button/qbuttonbox.py	(refactored)
+@@ -54,41 +54,41 @@
+ 
+     def onClicked(self, button):
+         if self.standardButton(button) == Qt.QDialogButtonBox.Ok:
+-            self.emit(Qt.SIGNAL("okClicked()"))
++            self.okClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Open:
+-            self.emit(Qt.SIGNAL("openClicked()"))
++            self.openClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Save:
+-            self.emit(Qt.SIGNAL("saveClicked()"))
++            self.saveClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Cancel:
+-            self.emit(Qt.SIGNAL("cancelClicked()"))
++            self.cancelClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Close:
+-            self.emit(Qt.SIGNAL("closeClicked()"))
++            self.closeClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Discard:
+-            self.emit(Qt.SIGNAL("discardClicked()"))
++            self.discardClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Apply:
+-            self.emit(Qt.SIGNAL("applyClicked()"))
++            self.applyClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Reset:
+-            self.emit(Qt.SIGNAL("resetClicked()"))
++            self.resetClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.RestoreDefaults:
+-            self.emit(Qt.SIGNAL("restoreDefaultsClicked()"))
++            self.restoreDefaultsClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Help:
+-            self.emit(Qt.SIGNAL("helpClicked()"))
++            self.helpClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.SaveAll:
+-            self.emit(Qt.SIGNAL("saveAllClicked()"))
++            self.saveAllClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Yes:
+-            self.emit(Qt.SIGNAL("yesClicked()"))
++            self.yesClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.YesToAll:
+-            self.emit(Qt.SIGNAL("yesToAllClicked()"))
++            self.yesToAllClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.No:
+-            self.emit(Qt.SIGNAL("noClicked()"))
++            self.noClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.NoToAll:
+-            self.emit(Qt.SIGNAL("noToAllClicked()"))
++            self.noToAllClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Abort:
+-            self.emit(Qt.SIGNAL("abortClicked()"))
++            self.abortClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Retry:
+-            self.emit(Qt.SIGNAL("retryClicked()"))
++            self.retryClicked.emit()
+         elif self.standardButton(button) == Qt.QDialogButtonBox.Ignore:
+-            self.emit(Qt.SIGNAL("ignoreClicked()"))
++            self.ignoreClicked.emit()
+ 
+ 
+ if __name__ == "__main__":
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/button/taurusbutton.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/button/taurusbutton.py	(refactored)
+@@ -135,7 +135,7 @@
+             self.setWidget(widget)
+         elif widget is not None:
+             self._widgetClassName = widget
+-        self.connect(self, Qt.SIGNAL('clicked()'), self.onClicked)
++        self.clicked.connect(self.onClicked)
+         self.setDefault(False)
+         self.setAutoDefault(False)
+         # no need to listen to change events!
+@@ -298,7 +298,7 @@
+         self.setCustomText(text)
+         self.setDefault(False)
+         self.setAutoDefault(False)
+-        self.connect(self, Qt.SIGNAL('clicked()'), self.onClicked)
++        self.clicked.connect(self.onClicked)
+ 
+     def getDisplayValue(self):
+         '''see :meth:`TaurusBaseComponent.displayValue`'''
+@@ -357,7 +357,7 @@
+         finally:
+             modelobj.set_timeout_millis(orig_timeout)
+ 
+-        self.emit(Qt.SIGNAL('commandExecuted'), result)
++        self.commandExecuted.emit(result)
+         return result
+ 
+     def _castParameters(self, parameters=None, command=None, dev=None):
+@@ -556,7 +556,7 @@
+         name = self.__class__.__name__
+         self.call__init__wo_kw(Qt.QPushButton, parent)
+         self.call__init__(TaurusBaseWidget, name, designMode=designMode)
+-        self.connect(self, Qt.SIGNAL("toggled(bool)"), self.on_toggle)
++        self.toggled.connect(self.on_toggle)
+         self.setCheckable(True)
+         self.setAutoTooltip(False)
+         self.insertEventFilter(eventfilters.IGNORE_ALL)
+@@ -668,7 +668,7 @@
+ 
+     def f(*a):
+         print a
+-    form.connect(form, Qt.SIGNAL('commandExecuted'), f)
++    form.commandExecuted.connect(f)
+     form.show()
+     sys.exit(app.exec_())
+ 
+
+SKIPPING non trivial signal:
+self.connect(self.readWidget, sig, self.enterEdit)
+
+
+SKIPPING non trivial signal:
+self.connect(self.writeWidget, sig, self.exitEdit)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/compact/abstractswitcher.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/compact/abstractswitcher.py	(refactored)
+@@ -136,10 +136,8 @@
+         self.exitEditAction.setShortcutContext(
+             Qt.Qt.WidgetWithChildrenShortcut)
+         self.addAction(self.exitEditAction)
+-        self.connect(self.enterEditAction, Qt.SIGNAL(
+-            "triggered()"), self._onEnterEditActionTriggered)
+-        self.connect(self.exitEditAction, Qt.SIGNAL(
+-            "triggered()"), self._onExitEditActionTriggered)
++        self.enterEditAction.triggered.connect(self._onEnterEditActionTriggered)
++        self.exitEditAction.triggered.connect(self._onExitEditActionTriggered)
+ 
+         # add read and write widgets
+         if self.readWClass is not None:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/container/taurusgroupbox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/container/taurusgroupbox.py	(refactored)
+@@ -69,7 +69,7 @@
+     @Qt.pyqtSignature("pendingOperationsChanged(bool)")
+     def pendingOperationsChanged(self, yesno):
+         self.debug("emiting pendingOperationsChanged(%s)" % str(yesno))
+-        self.emit(Qt.SIGNAL('pendingOperationsChanged(bool)'), yesno)
++        self.pendingOperationsChanged.emit(yesno)
+ 
+     @Qt.pyqtSignature("applyPendingChanges()")
+     def applyPendingChanges(self):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/container/taurusmainwindow.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/container/taurusmainwindow.py	(refactored)
+@@ -49,7 +49,7 @@
+     def __init__(self, extapp, *args):
+         Qt.QLineEdit.__init__(self, *args)
+         self._extapp = extapp
+-        self.connect(self, Qt.SIGNAL("textEdited(QString)"), self.setCmdText)
++        self.textEdited.connect(self.setCmdText)
+ 
+     def setCmdText(self, cmdargs):
+         if not isinstance(cmdargs, (basestring, Qt.QString)):
+@@ -93,8 +93,7 @@
+         editWidget = CommandArgsLineEdit(extapp, " ".join(extapp.cmdArgs()))
+         #editWidget = Qt.QLineEdit(" ".join(extapp.cmdArgs()))
+         self.externalAppsPage.widget().layout().addRow(label, editWidget)
+-        self.connect(extapp, Qt.SIGNAL(
+-            "cmdArgsChanged"), editWidget.setCmdText)
++        extapp.cmdArgsChanged.connect(editWidget.setCmdText)
+ 
+     def deleteExternalAppConfig(self, extapp):
+         '''Remove the given external application configuration from
+@@ -147,7 +146,7 @@
+         self.setText(text)
+         self.button(Qt.QMessageBox.Ok).setEnabled(False)
+ 
+-        self.connect(parent, Qt.SIGNAL("rpdb2Started"), self.onStarted)
++        parent.rpdb2Started.connect(self.onStarted)
+ 
+     def onStarted(self):
+         self.setWindowTitle("Rpdb2 running!")
+@@ -379,73 +378,61 @@
+         '''initializes the application-wide actions'''
+         self.quitApplicationAction = Qt.QAction(
+             getThemeIcon("process-stop"), 'Exit Application', self)
+-        self.connect(self.quitApplicationAction,
+-                     Qt.SIGNAL("triggered()"), self.close)
++        self.quitApplicationAction.triggered.connect(self.close)
+         self.changeTangoHostAction = Qt.QAction(getThemeIcon(
+             "network-server"), 'Change Tango Host ...', self)
+         self.changeTangoHostAction.setShortcut(Qt.QKeySequence("Ctrl+P"))
+-        self.connect(self.changeTangoHostAction, Qt.SIGNAL(
+-            "triggered()"), self._onChangeTangoHostAction)
++        self.changeTangoHostAction.triggered.connect(self._onChangeTangoHostAction)
+ 
+         self.loadPerspectiveAction = Qt.QAction(getThemeIcon(
+             "document-open"), 'Load Perspective ...', self)
+-        self.connect(self.loadPerspectiveAction, Qt.SIGNAL(
+-            "triggered()"), self.loadPerspective)
++        self.loadPerspectiveAction.triggered.connect(self.loadPerspective)
+ 
+         self.savePerspectiveAction = Qt.QAction(getThemeIcon(
+             "document-save"), 'Save Perspective ...', self)
+-        self.connect(self.savePerspectiveAction, Qt.SIGNAL(
+-            "triggered()"), self.savePerspective)
++        self.savePerspectiveAction.triggered.connect(self.savePerspective)
+ 
+         self.deletePerspectiveAction = Qt.QAction(
+             getIcon(":/actions/edit-delete.svg"), 'Delete Perspective ...', self)
+-        self.connect(self.deletePerspectiveAction, Qt.SIGNAL(
+-            "triggered()"), self.removePerspective)
++        self.deletePerspectiveAction.triggered.connect(self.removePerspective)
+ 
+         self.exportSettingsFileAction = Qt.QAction(
+             getThemeIcon("document-save"), 'Export Settings ...', self)
+-        self.connect(self.exportSettingsFileAction, Qt.SIGNAL(
+-            "triggered()"), self.exportSettingsFile)
++        self.exportSettingsFileAction.triggered.connect(self.exportSettingsFile)
+ 
+         self.importSettingsFileAction = Qt.QAction(
+             getThemeIcon("document-open"), 'Import Settings ...', self)
+-        self.connect(self.importSettingsFileAction, Qt.SIGNAL(
+-            "triggered()"), self.importSettingsFile)
++        self.importSettingsFileAction.triggered.connect(self.importSettingsFile)
+ 
+         #self.resetSettingsAction = Qt.QAction(getThemeIcon("edit-undo"),'Reset Settings', self)
+         #self.connect(self.resetSettingsAction, Qt.SIGNAL("triggered()"), self.resetSettings)
+ 
+         self.configurationAction = Qt.QAction(getThemeIcon(
+             "preferences-system"), 'Configurations ...', self)
+-        self.connect(self.configurationAction, Qt.SIGNAL(
+-            "triggered()"), self.configurationDialog.show)
++        self.configurationAction.triggered.connect(self.configurationDialog.show)
+ 
+         #self.rpdb2Action = Qt.QAction("Spawn rpdb2", self)
+         self.spawnRpdb2Shortcut = Qt.QShortcut(self)
+         self.spawnRpdb2Shortcut.setKey(Qt.QKeySequence(Qt.Qt.Key_F9))
+-        self.connect(self.spawnRpdb2Shortcut, Qt.SIGNAL(
+-            "activated()"), self._onSpawnRpdb2)
++        self.spawnRpdb2Shortcut.activated.connect(self._onSpawnRpdb2)
+ 
+         #self.rpdb2Action = Qt.QAction("Spawn rpdb2", self)
+         self.spawnRpdb2Shortcut = Qt.QShortcut(self)
+         rpdb2key = Qt.QKeySequence(
+             Qt.Qt.CTRL + Qt.Qt.ALT + Qt.Qt.Key_0, Qt.Qt.Key_1)
+         self.spawnRpdb2Shortcut.setKey(rpdb2key)
+-        self.connect(self.spawnRpdb2Shortcut, Qt.SIGNAL(
+-            "activated()"), self._onSpawnRpdb2)
++        self.spawnRpdb2Shortcut.activated.connect(self._onSpawnRpdb2)
+ 
+         self.spawnRConsoleShortcut = Qt.QShortcut(self)
+         rconsolekey = Qt.QKeySequence(
+             Qt.Qt.CTRL + Qt.Qt.ALT + Qt.Qt.Key_0, Qt.Qt.Key_2)
+         self.spawnRConsoleShortcut.setKey(rconsolekey)
+-        self.connect(self.spawnRConsoleShortcut, Qt.SIGNAL(
+-            "activated()"), self._onSpawnRConsole)
++        self.spawnRConsoleShortcut.activated.connect(self._onSpawnRConsole)
+ 
+         self.toggleFullScreenAction = Qt.QAction(
+             getIcon(":/actions/view-fullscreen.svg"), 'Show FullScreen', self)
+         self.toggleFullScreenAction.setCheckable(True)
+-        self.connect(self.toggleFullScreenAction, Qt.SIGNAL(
+-            "toggled(bool)"), self._onToggleFullScreen)
++        self.toggleFullScreenAction.toggled.connect(self._onToggleFullScreen)
+ 
+         # In Qt <= 4.4 setting the QAction shortcut at the application level
+         # doesn't work when trying to get out of fullscreen so we create a
+@@ -454,8 +441,7 @@
+         # self.toggleFullScreenAction.setShortcutContext(Qt.Qt.ApplicationShortcut)
+         self.fullScreenShortcut = Qt.QShortcut(self)
+         self.fullScreenShortcut.setKey(Qt.QKeySequence(Qt.Qt.Key_F11))
+-        self.connect(self.fullScreenShortcut, Qt.SIGNAL(
+-            "activated()"), self._onToggleFullScreen)
++        self.fullScreenShortcut.activated.connect(self._onToggleFullScreen)
+ 
+     @protectTaurusMessageBox
+     def _onSpawnRpdb2(self):
+@@ -714,7 +700,7 @@
+                 return
+         self.loadSettings(settings=settings,
+                           group="Perspectives/%s" % name, ignoreGeometry=True)
+-        self.emit(Qt.SIGNAL('perspectiveChanged'), name)
++        self.perspectiveChanged.emit(name)
+ 
+     def getPerspectivesList(self, settings=None):
+         '''Returns the list of saved perspectives
+@@ -977,8 +963,7 @@
+             return False
+         else:
+             self.socketServer = QtNetwork.QLocalServer(self)
+-            self.connect(self.socketServer, Qt.SIGNAL(
+-                "newConnection()"), self.onIncommingSocketConnection)
++            self.socketServer.newConnection.connect(self.onIncommingSocketConnection)
+             ok = self.socketServer.listen(key)
+             if not ok:
+                 AddressInUseError = QtNetwork.QAbstractSocket.AddressInUseError
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusconfigurationdialog.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusconfigurationdialog.py	(refactored)
+@@ -46,10 +46,8 @@
+         layout.addWidget(self._panel)
+         self._panel._ui.pushButtonOk.setVisible(True)
+         self._panel._ui.pushButtonCancel.setVisible(True)
+-        self.connect(self._panel._ui.pushButtonOk,
+-                     Qt.SIGNAL("clicked()"), self._onOk)
+-        self.connect(self._panel._ui.pushButtonCancel,
+-                     Qt.SIGNAL("clicked()"), self._onCancel)
++        self._panel._ui.pushButtonOk.clicked.connect(self._onOk)
++        self._panel._ui.pushButtonCancel.clicked.connect(self._onCancel)
+         self.adjustSize()
+         self.show()
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusinputdialog.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusinputdialog.py	(refactored)
+@@ -135,8 +135,8 @@
+         self._panel = panel = input_panel_klass(input_data, self)
+         layout.setContentsMargins(0, 0, 0, 0)
+         layout.addWidget(self._panel)
+-        self.connect(panel.buttonBox(), Qt.SIGNAL("accepted()"), self.accept)
+-        self.connect(panel.buttonBox(), Qt.SIGNAL("rejected()"), self.reject)
++        panel.buttonBox().accepted.connect(self.accept)
++        panel.buttonBox().rejected.connect(self.reject)
+         self._panel.setInputFocus()
+ 
+     def panel(self):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusmessagebox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/dialog/taurusmessagebox.py	(refactored)
+@@ -76,10 +76,8 @@
+                                self, designMode)
+         layout.setContentsMargins(0, 0, 0, 0)
+         layout.addWidget(self._panel)
+-        self.connect(self.panel().buttonBox(), Qt.SIGNAL("accepted()"),
+-                     self.accept)
+-        self.connect(self._panel, Qt.SIGNAL("toggledDetails(bool)"),
+-                     self._onShowDetails)
++        self.panel().buttonBox().accepted.connect(self.accept)
++        self._panel.toggledDetails.connect(self._onShowDetails)
+ 
+     def _onShowDetails(self, show):
+         self.adjustSize()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/display/qled.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/display/qled.py	(refactored)
+@@ -214,8 +214,7 @@
+         if interval > 0:
+             if self._timer is None:
+                 self._timer = Qt.QTimer(self)
+-                self.connect(self._timer, Qt.SIGNAL(
+-                    'timeout()'), self.toggleLedStatus)
++                self._timer.timeout.connect(self.toggleLedStatus)
+             self._timer.start(interval)
+         else:
+             if self._timer is not None:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/display/tauruslabel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/display/tauruslabel.py	(refactored)
+@@ -244,8 +244,7 @@
+ 
+         self.setAlignment(self.DefaultAlignment)
+ 
+-        self.connect(self, Qt.SIGNAL("linkActivated (const QString &)"),
+-                     self.showValueDialog)
++        self.linkActivated.connect(self.showValueDialog)
+ 
+         # if we are in design mode there will be no events so we force the
+         # creation of a controller object
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/editor/tauruseditor.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/editor/tauruseditor.py	(refactored)
+@@ -132,12 +132,9 @@
+         font = Qt.QFont("Monospace")
+         font.setPointSize(10)
+         editorstack.set_default_font(font, color_scheme='Spyder')
+-        self.connect(editorstack, Qt.SIGNAL('close_file(int)'),
+-                     self.close_file_in_all_editorstacks)
+-        self.connect(editorstack, Qt.SIGNAL("create_new_window()"),
+-                     self.create_new_window)
+-        self.connect(editorstack, Qt.SIGNAL('plugin_load(QString)'),
+-                     self.load)
++        editorstack.close_file.connect(self.close_file_in_all_editorstacks)
++        editorstack.create_new_window.connect(self.create_new_window)
++        editorstack.plugin_load.connect(self.load)
+ 
+     def unregister_editorstack(self, editorstack):
+         self.editorstacks.pop(self.editorstacks.index(editorstack))
+@@ -157,8 +154,7 @@
+         window.resize(self.size())
+         window.show()
+         self.register_editorwindow(window)
+-        self.connect(window, Qt.SIGNAL("destroyed()"),
+-                     lambda win=window: self.unregister_editorwindow(win))
++        window.destroyed.connect(lambda win=window: self.unregister_editorwindow(win))
+ 
+     def register_editorwindow(self, window):
+         self.editorwindows.append(window)
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/curvesmodel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/curvesmodel.py	(refactored)
+@@ -261,8 +261,7 @@
+                 curve.y.processSrc(value)
+             elif column == TITLE:
+                 curve.curveparam.label = value
+-            self.emit(
+-                Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), index, index)
++            self.dataChanged.emit(index, index)
+             return True
+         return False
+ 
+@@ -391,13 +390,11 @@
+         self.ui.tangoTree.setModel(host)
+ 
+         # Connections
+-        self.connect(self.ui.applyBT, Qt.SIGNAL("clicked()"), self.onApply)
+-        self.connect(self.ui.reloadBT, Qt.SIGNAL("clicked()"), self.onReload)
+-        self.connect(self.ui.cancelBT, Qt.SIGNAL("clicked()"), self.close)
+-        self.connect(self.ui.tangoTree, Qt.SIGNAL(
+-            "addModels"), self.onModelsAdded)
+-        self.connect(self.ui.curvesTable, Qt.SIGNAL(
+-            "customContextMenuRequested(QPoint)"), self.onTableContextMenu)
++        self.ui.applyBT.clicked.connect(self.onApply)
++        self.ui.reloadBT.clicked.connect(self.onReload)
++        self.ui.cancelBT.clicked.connect(self.close)
++        self.ui.tangoTree.addModels.connect(self.onModelsAdded)
++        self.ui.curvesTable.customContextMenuRequested.connect(self.onTableContextMenu)
+ 
+     def onTableContextMenu(self, pos):
+         index = self.ui.curvesTable.indexAt(pos)
+@@ -433,7 +430,7 @@
+                 group.edit()
+                 c.x.processSrc(c.taurusparam.xModel)
+                 c.y.processSrc(c.taurusparam.yModel)
+-                self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), self.model.index(
++                self.dataChanged.emit(self.model.index(
+                     row, 0), self.model.index(row, self.model.rowCount()))
+ 
+     def onModelsAdded(self, models):
+@@ -468,13 +465,13 @@
+         w = CurveItemConfDlg(parent=parent, curves=curves)
+         layout.addWidget(w)
+         dlg.setLayout(layout)
+-        dlg.connect(w, Qt.SIGNAL('applied'), dlg.accept)
+-        dlg.connect(w.ui.cancelBT, Qt.SIGNAL("clicked()"), dlg.close)
++        w.applied.connect(dlg.accept)
++        w.ui.cancelBT.clicked.connect(dlg.close)
+         dlg.exec_()
+         return w.getCurveItemConfs(), (dlg.result() == dlg.Accepted)
+ 
+     def onApply(self):
+-        self.emit(Qt.SIGNAL('applied'))
++        self.applied.emit()
+ 
+     def onReload(self):
+         print "RELOAD!!! (todo)"
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/image.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/image.py	(refactored)
+@@ -514,8 +514,7 @@
+         :param doorname: (str) the QDoor name
+         '''
+         qdoor = taurus.Device(doorname)
+-        qdoor.connect(qdoor, Qt.SIGNAL("recordDataUpdated"),
+-                      self.scanDataReceived)
++        qdoor.recordDataUpdated.connect(self.scanDataReceived)
+ 
+     def getModel(self):
+         return self.__model
+@@ -572,8 +571,7 @@
+         plot.add_item(img)
+         # IMPORTANT: connect the cross section plots to the taurusimage so that
+         # they are updated when the taurus data changes
+-        win.connect(img.getSignaller(), Qt.SIGNAL(
+-            "dataChanged"), win.update_cross_sections)
++        img.getSignaller().dataChanged.connect(win.update_cross_sections)
+ 
+     win.exec_()
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/plot.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/plot.py	(refactored)
+@@ -158,7 +158,7 @@
+                               linestyle=linestyle, linewidth=2)
+             item.set_readonly(not self.isModifiableByUser())
+             plot.add_item(item)
+-        self.emit(Qt.SIGNAL("modelChanged()"))
++        self.modelChanged.emit()
+ 
+     def getModel(self):
+         """reimplemented from :class:`TaurusBaseWidget`"""
+@@ -292,7 +292,7 @@
+             item.update_params()
+ 
+         self.setStackMode(self.defaultTaurusparam.stackMode)
+-        self.emit(Qt.SIGNAL("modelChanged()"))
++        self.modelChanged.emit()
+ 
+     def getModel(self):
+         """reimplemented from :class:`TaurusBaseWidget`"""
+@@ -485,8 +485,7 @@
+         self.imgItem.set_readonly(not self.isModifiableByUser())
+         # IMPORTANT: connect the cross section plots to the taurusimage so that
+         # they are updated when the taurus data changes
+-        self.connect(self.imgItem.getSignaller(), Qt.SIGNAL(
+-            "dataChanged"), self.update_cross_sections)
++        self.imgItem.getSignaller().dataChanged.connect(self.update_cross_sections)
+ 
+     def getModel(self):
+         '''reimplemented from :class:`TaurusBaseWidget`'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/taurustrend2d.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/taurustrend2d.py	(refactored)
+@@ -141,8 +141,7 @@
+             self.debug('cannot set units for colormap axis')
+             self.traceback()
+ 
+-        self.connect(self.trendItem.getSignaller(), Qt.SIGNAL(
+-            "dataChanged"), self.update_cross_sections)
++        self.trendItem.getSignaller().dataChanged.connect(self.update_cross_sections)
+ 
+     def getModel(self):
+         '''reimplemented from :class:`TaurusBaseWidget`'''
+
+SKIPPING non trivial signal:
+        self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/tools.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_guiqwt/tools.py	(refactored)
+@@ -222,11 +222,9 @@
+         # retrieve current Taurus curves
+         for item in self.getScrollItems(plot):
+             if checked:
+-                self.connect(item.getSignaller(), Qt.SIGNAL(
+-                    'scrollRequested'), self.onScrollRequested)
++                item.getSignaller().scrollRequested.connect(self.onScrollRequested)
+             else:
+-                self.disconnect(item.getSignaller(), Qt.SIGNAL(
+-                    'scrollRequested'), self.onScrollRequested)
++                item.getSignaller().scrollRequested.disconnect(self.onScrollRequested)
+ 
+     def getScrollItems(self, plot):
+         return [item for item in plot.get_items() if isinstance(item, (TaurusTrendItem, TaurusTrend2DItem))]
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_nexus/taurusnexuswidget.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_nexus/taurusnexuswidget.py	(refactored)
+@@ -101,14 +101,10 @@
+         self.layout().setMenuBar(self._toolbar)
+ 
+         # connections
+-        self.connect(self.__fileModel, Qt.SIGNAL(
+-            'fileAppended'), self.treeWidget.fileAppended)
+-        self.connect(self.treeWidget, Qt.SIGNAL(
+-            "HDF5WidgetSignal"), self.onHDF5WidgetSignal)
+-        self.connect(self.openFileAction, Qt.SIGNAL(
+-            "triggered()"), self.openFile)
+-        self.connect(self.togglePreviewAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.__previewStack.setVisible)
++        self.__fileModel.fileAppended.connect(self.treeWidget.fileAppended)
++        self.treeWidget.HDF5WidgetSignal.connect(self.onHDF5WidgetSignal)
++        self.openFileAction.triggered.connect(self.openFile)
++        self.togglePreviewAction.toggled.connect(self.__previewStack.setVisible)
+ 
+         # configuration
+         self.registerConfigProperty(
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_xterm/qxtermwidget.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/extra_xterm/qxtermwidget.py	(refactored)
+@@ -53,7 +53,7 @@
+ 
+     @QtCore.pyqtSignature("commandFinished(int,QProcess::ExitStatus)")
+     def _commandFinished(self, exitCode, exitStatus):
+-        self.emit(QtCore.SIGNAL("commandFinished(int)"), exitCode)
++        self.commandFinished.emit(exitCode)
+         if exitStatus == 0:
+             self._restartTheProcess()
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/graphic/taurusgraphic.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/graphic/taurusgraphic.py	(refactored)
+@@ -123,7 +123,7 @@
+ 
+             for v in p.views():
+                 # p.debug("emit('updateView')")
+-                emitter.emit(Qt.SIGNAL("updateView"), v)
++                emitter.updateView.emit(v)
+             # This sleep is needed to reduce CPU usage of the application!
+             self.sleep(self.period)
+             # End of while
+@@ -367,7 +367,7 @@
+     def getItemClicked(self, mouseEvent):
+         pos = mouseEvent.scenePos()
+         x, y = pos.x(), pos.y()
+-        self.emit(Qt.SIGNAL("graphicSceneClicked(QPoint)"), Qt.QPoint(x, y))
++        self.graphicSceneClicked.emit(Qt.QPoint(x, y))
+         obj = self.getItemByPosition(x, y)
+         #self.debug('mouse clicked on %s(%s) at (%s,%s)'%(type(obj).__name__,getattr(obj,'_name',''),x,y))
+         return obj
+@@ -385,19 +385,17 @@
+                 if self.selectGraphicItem(obj_name):
+                     self.debug(
+                         ' => graphicItemSelected(QString)(%s)' % obj_name)
+-                    self.emit(
+-                        Qt.SIGNAL("graphicItemSelected(QString)"), obj_name)
++                    self.graphicItemSelected.emit(obj_name)
+                 else:
+                     # It should send None but the signature do not allow it
+-                    self.emit(Qt.SIGNAL("graphicItemSelected(QString)"), "")
++                    self.graphicItemSelected.emit("")
+ 
+             def addMenuAction(menu, k, action, last_was_separator=False):
+                 try:
+                     if k:
+                         configDialogAction = menu.addAction(k)
+                         if action:
+-                            self.connect(configDialogAction, Qt.SIGNAL(
+-                                "triggered()"), lambda dev=obj_name, act=action: act(dev))
++                            configDialogAction.triggered.connect(lambda dev=obj_name, act=action: act(dev))
+                         else:
+                             configDialogAction.setEnabled(False)
+                         last_was_separator = False
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/graphic/jdraw/jdraw_view.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/graphic/jdraw/jdraw_view.py	(refactored)
+@@ -150,7 +150,7 @@
+                     continue
+                 item_colors[item._name] = item._currBgBrush.color().name()
+             if emit:
+-                self.emit(Qt.SIGNAL("itemsChanged"), self.modelName.split(
++                self.itemsChanged.emit(self.modelName.split(
+                     '/')[-1].split('.')[0], item_colors)
+         except:
+             self.warning('Unable to emitColors: %s' % traceback.format_exc())
+@@ -164,17 +164,17 @@
+ 
+     def _graphicItemSelected(self, item_name):
+         self.debug(' => graphicItemSelected(QString)(%s)' % item_name)
+-        self.emit(Qt.SIGNAL("graphicItemSelected(QString)"), item_name)
++        self.graphicItemSelected.emit(item_name)
+ 
+     def _graphicSceneClicked(self, point):
+         self.debug('In TaurusJDrawSynopticsView.graphicSceneClicked(%s,%s)' % (
+             point.x(), point.y()))
+-        self.emit(Qt.SIGNAL("graphicSceneClicked(QPoint)"), point)
++        self.graphicSceneClicked.emit(point)
+ 
+     def modelsChanged(self):
+         items = self.get_item_list()
+         self.debug('modelsChanged(%s)' % len(items))
+-        self.emit(Qt.SIGNAL("modelsChanged"), items)
++        self.modelsChanged.emit(items)
+ 
+     def emitColors(self):
+         '''emit signal which is used to refresh the tree and colors of icons depend of the current status in jdrawSynoptic'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/help/assistant.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/help/assistant.py	(refactored)
+@@ -133,7 +133,7 @@
+                 del __ASSISTANTS[collection_file]
+         assistant = _Assistant(collection_file, parent=parent)
+         __ASSISTANTS[collection_file] = assistant
+-        assistant.connect(assistant, Qt.SIGNAL('finished(int)'), finished)
++        assistant.finished.connect(finished)
+     return assistant
+ 
+ 
+@@ -162,8 +162,8 @@
+         if assistant:
+             assistant.terminate()
+ 
+-    goButton.connect(goButton, Qt.SIGNAL('clicked()'), go)
+-    terminateButton.connect(terminateButton, Qt.SIGNAL('clicked()'), terminate)
++    goButton.clicked.connect(go)
++    terminateButton.clicked.connect(terminate)
+     window.show()
+     sys.exit(app.exec_())
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/help/helppanel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/help/helppanel.py	(refactored)
+@@ -39,12 +39,8 @@
+         self.__help_engine = help_engine
+         content_widget = help_engine.contentWidget()
+         index_widget = help_engine.indexWidget()
+-        content_widget.connect(content_widget,
+-                               Qt.SIGNAL('linkActivated (QUrl)'),
+-                               self.setSource)
+-        index_widget.connect(index_widget,
+-                             Qt.SIGNAL('linkActivated (QUrl)'),
+-                             self.setSource)
++        content_widget.linkActivated.connect(self.setSource)
++        index_widget.linkActivated.connect(self.setSource)
+ 
+     def loadResource(self, type, url):
+         if url.scheme() == "qthelp":
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/choicedlg.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/choicedlg.py	(refactored)
+@@ -54,8 +54,7 @@
+                                                 horizontalScrollBarPolicy=horizontalScrollBarPolicy,
+                                                 verticalScrollBarPolicy=verticalScrollBarPolicy)
+         self.layout().addWidget(self._iconsArea)
+-        self.connect(self._iconsArea, Qt.SIGNAL(
+-            'choiceMade'), self.onChoiceMade)
++        self._iconsArea.choiceMade.connect(self.onChoiceMade)
+ 
+     def setHorizontalScrollBarPolicy(self, policy):
+         '''sets horizontal scrollbar policy of scrollArea'''
+@@ -188,13 +187,13 @@
+         button.setIcon(Qt.QIcon(pixmap))
+         button.setIconSize(Qt.QSize(self._iconSize, self._iconSize))
+         button.setToolTip(tooltip)
+-        self.connect(button, Qt.SIGNAL("clicked()"), self.onClick)
++        button.clicked.connect(self.onClick)
+         self.gridLayout.addWidget(button, row, col, Qt.Qt.AlignCenter)
+ 
+     def onClick(self):
+         '''slot called when a button is clicked'''
+         self._chosen = unicode(self.sender().text())
+-        self.emit(Qt.SIGNAL('choiceMade'), self._chosen)
++        self.choiceMade.emit(self._chosen)
+ 
+     def getChosen(self):
+         '''
+
+SKIPPING non trivial signal:
+self.emit(Qt.SIGNAL(QWheelEdit.NumberChangedStr), v)
+
+
+SKIPPING non trivial signal:
+self.emit(Qt.SIGNAL(QWheelEdit.NumberEditedStr), v)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/qwheel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/qwheel.py	(refactored)
+@@ -313,16 +313,12 @@
+                 l.addWidget(down, 2, col)
+             l.addWidget(d, 1, col)
+ 
+-        self.connect(self._upButtons,
+-                     Qt.SIGNAL('buttonClicked(QAbstractButton *)'),
+-                     self.buttonPressed)
+-        self.connect(self._downButtons,
+-                     Qt.SIGNAL('buttonClicked(QAbstractButton *)'),
+-                     self.buttonPressed)
++        self._upButtons.buttonClicked.connect(self.buttonPressed)
++        self._downButtons.buttonClicked.connect(self.buttonPressed)
+ 
+         ed = _NumericEditor(self)
+-        self.connect(ed, Qt.SIGNAL('returnPressed()'), self.editingFinished)
+-        self.connect(ed, Qt.SIGNAL('lostFocus()'), ed.hide)
++        ed.returnPressed.connect(self.editingFinished)
++        ed.lostFocus.connect(ed.hide)
+         rect = Qt.QRect(l.cellRect(1, 0).topLeft(), l.cellRect(1,
+                                                                l.columnCount() - 1).bottomRight())
+         ed.setGeometry(rect)
+@@ -338,12 +334,8 @@
+ 
+         Clears this widget sub-items"""
+ 
+-        self.disconnect(self._upButtons,
+-                        Qt.SIGNAL('buttonClicked(QAbstractButton *)'),
+-                        self.buttonPressed)
+-        self.disconnect(self._downButtons,
+-                        Qt.SIGNAL('buttonClicked(QAbstractButton *)'),
+-                        self.buttonPressed)
++        self._upButtons.buttonClicked.disconnect(self.buttonPressed)
++        self._downButtons.buttonClicked.disconnect(self.buttonPressed)
+ 
+         for b in self._upButtons.buttons():
+             self._upButtons.removeButton(b)
+@@ -824,7 +816,7 @@
+                 self.hideEditWidget()
+                 self._editing = False
+             else:
+-                self.emit(Qt.SIGNAL('returnPressed()'))
++                self.returnPressed.emit()
+ 
+         # TODO Decide when to emit editingFinished for completeness
+         Qt.QWidget.keyPressEvent(self, key_event)
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruscheckbox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruscheckbox.py	(refactored)
+@@ -46,7 +46,7 @@
+ 
+         self.setObjectName(name)
+         self.updateStyle()
+-        self.connect(self, Qt.SIGNAL('stateChanged(int)'), self.valueChanged)
++        self.stateChanged.connect(self.valueChanged)
+ 
+     def keyPressEvent(self, event):
+         if event.key() in (Qt.Qt.Key_Return, Qt.Qt.Key_Enter):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruscombobox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruscombobox.py	(refactored)
+@@ -139,13 +139,13 @@
+         '''slot called to emit a valueChanged signal when the currentIndex is changed'''
+         self.emitValueChanged()
+         if self.getAutoApply():
+-            self.emit(Qt.SIGNAL("applied()"))
++            self.applied.emit()
+ 
+     def keyPressEvent(self, event):
+         '''reimplemented to emit an 'applied()' signal when Enter (or Return)
+         key is pressed'''
+         if event.key() in [Qt.Qt.Key_Return, Qt.Qt.Key_Enter]:
+-            self.emit(Qt.SIGNAL("applied()"))
++            self.applied.emit()
+             event.accept()
+         else:
+             return Qt.QComboBox.keyPressEvent(self, event)
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruslineedit.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruslineedit.py	(refactored)
+@@ -52,13 +52,10 @@
+         self.setAlignment(Qt.Qt.AlignRight)
+         self.setValidator(None)
+ 
+-        self.connect(self, Qt.SIGNAL(
+-            'textChanged(const QString &)'), self.valueChanged)
+-        self.connect(self, Qt.SIGNAL('returnPressed()'), self.writeValue)
+-        self.connect(self, Qt.SIGNAL('valueChanged'),
+-                     self.updatePendingOperations)
+-        self.connect(self, Qt.SIGNAL('editingFinished()'),
+-                     self._onEditingFinished)
++        self.textChanged.connect(self.valueChanged)
++        self.returnPressed.connect(self.writeValue)
++        self.valueChanged.connect(self.updatePendingOperations)
++        self.editingFinished.connect(self._onEditingFinished)
+ 
+     def _updateValidator(self, value):
+         '''This method sets a validator depending on the data type'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/taurusspinbox.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/taurusspinbox.py	(refactored)
+@@ -51,8 +51,7 @@
+         lineEdit = TaurusValueLineEdit(designMode=designMode)
+         self.setLineEdit(lineEdit)
+         self.setAccelerated(True)
+-        self.connect(self, Qt.SIGNAL("editingFinished()"),
+-                     self.writeValue)
++        self.editingFinished.connect(self.writeValue)
+ 
+     def __getattr__(self, name):
+         return getattr(self.lineEdit(), name)
+
+SKIPPING non trivial signal:
+        self.connect(self, Qt.SIGNAL(
+            QWheelEdit.NumberChangedStr), self.valueChanged)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruswheel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/input/tauruswheel.py	(refactored)
+@@ -47,9 +47,8 @@
+                           name, designMode=designMode)
+         self.connect(self, Qt.SIGNAL(
+             QWheelEdit.NumberChangedStr), self.valueChanged)
+-        self.connect(self, Qt.SIGNAL('returnPressed()'), self.writeValue)
+-        self.connect(self, Qt.SIGNAL('valueChanged'),
+-                     self.updatePendingOperations)
++        self.returnPressed.connect(self.writeValue)
++        self.valueChanged.connect(self.updatePendingOperations)
+ 
+     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+     # TaurusBaseWidget overwriting
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/model/qbasemodel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/model/qbasemodel.py	(refactored)
+@@ -85,15 +85,15 @@
+ 
+     def onClearFilter(self):
+         self.getFilterLineEdit().setText("")
+-        self.emit(Qt.SIGNAL("clearFilterTriggered"))
++        self.clearFilterTriggered.emit()
+ 
+     def onFilterChanged(self, text=None):
+         text = text or self.getFilterLineEdit().text()
+-        self.emit(Qt.SIGNAL("filterChanged"), text)
++        self.filterChanged.emit(text)
+ 
+     def onFilterEdited(self, text=None):
+         text = text or self.getFilterLineEdit().text()
+-        self.emit(Qt.SIGNAL("filterEdited"), text)
++        self.filterEdited.emit(text)
+ 
+     def setFilterText(self, text):
+         self.getFilterLineEdit().setText(text)
+@@ -142,22 +142,22 @@
+         #self.setStyleSheet("QWidget {background : red; }")
+ 
+     def onAdd(self):
+-        self.emit(Qt.SIGNAL("addTriggered"))
++        self.addTriggered.emit()
+ 
+     def onRemove(self):
+-        self.emit(Qt.SIGNAL("removeTriggered"))
++        self.removeTriggered.emit()
+ 
+     def onMoveTop(self):
+-        self.emit(Qt.SIGNAL("moveTopTriggered"))
++        self.moveTopTriggered.emit()
+ 
+     def onMoveUp(self):
+-        self.emit(Qt.SIGNAL("moveUpTriggered"))
++        self.moveUpTriggered.emit()
+ 
+     def onMoveDown(self):
+-        self.emit(Qt.SIGNAL("moveDownTriggered"))
++        self.moveDownTriggered.emit()
+ 
+     def onMoveBottom(self):
+-        self.emit(Qt.SIGNAL("moveBottomTriggered"))
++        self.moveBottomTriggered.emit()
+ 
+ 
+ class SelectionToolBar(BaseToolBar):
+@@ -182,10 +182,10 @@
+         self.addAction(self._clearSelectionAction)
+ 
+     def onSelectAll(self):
+-        self.emit(Qt.SIGNAL("selectAllTriggered"))
++        self.selectAllTriggered.emit()
+ 
+     def onclearSelection(self):
+-        self.emit(Qt.SIGNAL("clearSelectionTriggered"))
++        self.clearSelectionTriggered.emit()
+ 
+ 
+ class RefreshToolBar(BaseToolBar):
+@@ -203,7 +203,7 @@
+         self.addAction(self._refreshAction)
+ 
+     def onRefresh(self):
+-        self.emit(Qt.SIGNAL("refreshTriggered"))
++        self.refreshTriggered.emit()
+ 
+ 
+ class PerspectiveToolBar(BaseToolBar):
+@@ -245,7 +245,7 @@
+         action = self.sender()
+         self._perspective = action.perspective
+         self._perspective_button.setDefaultAction(action)
+-        self.emit(Qt.SIGNAL("perspectiveChanged"), action.perspective)
++        self.perspectiveChanged.emit(action.perspective)
+ 
+     def perspective(self):
+         return self._perspective
+@@ -311,8 +311,7 @@
+         if len(self.KnownPerspectives) > 1:
+             p_bar = self._perspectiveBar = PerspectiveToolBar(
+                 perspective, view=self, parent=self)
+-            self.connect(p_bar, Qt.SIGNAL("perspectiveChanged"),
+-                         self.onSwitchPerspective)
++            p_bar.perspectiveChanged.connect(self.onSwitchPerspective)
+             self.addToolBar(p_bar)
+         else:
+             self._perspectiveBar = None
+@@ -386,13 +385,13 @@
+         '''Emits an "itemClicked" signal with with the clicked item and column
+         as arguments'''
+         item = self._mapToSource(index).internalPointer()
+-        self.emit(Qt.SIGNAL('itemClicked'), item, index.column())
++        self.itemClicked.emit(item, index.column())
+ 
+     def _onDoubleClicked(self, index):
+         '''Emits an "itemDoubleClicked" signal with the clicked item and column
+         as arguments'''
+         item = self._mapToSource(index).internalPointer()
+-        self.emit(Qt.SIGNAL('itemDoubleClicked'), item, index.column())
++        self.itemDoubleClicked.emit(item, index.column())
+ 
+     def viewWidget(self):
+         return self._viewWidget
+@@ -441,7 +440,7 @@
+         self._updateToolBar()
+ 
+     def viewSelectionChanged(self, selected, deselected):
+-        self.emit(Qt.SIGNAL("itemSelectionChanged"))
++        self.itemSelectionChanged.emit()
+ 
+     def viewCurrentIndexChanged(self, current, previous):
+         # if there is a proxy model we have to translate the selection
+@@ -459,7 +458,7 @@
+             previousTaurusTreeItem = base_previous.internalPointer()
+         else:
+             previousTaurusTreeItem = None
+-        self.emit(Qt.SIGNAL("currentItemChanged"), currentTaurusTreeItem,
++        self.currentItemChanged.emit(currentTaurusTreeItem,
+                   previousTaurusTreeItem)
+ 
+     def _updateToolBar(self, current=None, previous=None):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/qdoublelist.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/qdoublelist.py	(refactored)
+@@ -63,8 +63,8 @@
+         self.setList1(list1)
+         self.setList2(list2)
+ 
+-        self.connect(self.ui.to1BT, Qt.SIGNAL('clicked(bool)'), self.onTo1)
+-        self.connect(self.ui.to2BT, Qt.SIGNAL('clicked(bool)'), self.onTo2)
++        self.ui.to1BT.clicked.connect(self.onTo1)
++        self.ui.to2BT.clicked.connect(self.onTo2)
+ 
+     def _moveItem(self, fromlist, tolist):
+         selected = fromlist.selectedItems()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/qrawdatachooser.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/qrawdatachooser.py	(refactored)
+@@ -42,10 +42,8 @@
+         self.loadUi()
+ 
+         # connecttions
+-        self.connect(self.openFilesBT, Qt.SIGNAL(
+-            "clicked()"), self.onOpenFilesButtonClicked)
+-        self.connect(self.addCurveBT, Qt.SIGNAL(
+-            "clicked()"), self.onAddCurveButtonClicked)
++        self.openFilesBT.clicked.connect(self.onOpenFilesButtonClicked)
++        self.addCurveBT.clicked.connect(self.onAddCurveButtonClicked)
+ 
+         # set validators in LE's
+         self.xFromLE.setValidator(Qt.QDoubleValidator(self))
+@@ -58,7 +56,7 @@
+         if xcol == self.xcolSB.minimum():
+             xcol = None
+         skiprows = self.headerSB.value()
+-        self.emit(Qt.SIGNAL("ReadFromFiles"), xcol, skiprows)
++        self.ReadFromFiles.emit(xcol, skiprows)
+ 
+     def onAddCurveButtonClicked(self):
+         """ Emit a AddCurve signal with a rawdata dictionary as a parameter.
+@@ -76,7 +74,7 @@
+                     self, 'Invalid x values' 'Cannot interpret the x values.\n Use Python expressions like "[1, 3 , 67]" or "arange(100)")')
+                 return
+         rawdata['f(x)'] = str(self.f_xLE.text())
+-        self.emit(Qt.SIGNAL("AddCurve"), rawdata)
++        self.AddCurve.emit(rawdata)
+ 
+ if __name__ == "__main__":
+     import sys
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusconfigeditor.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusconfigeditor.py	(refactored)
+@@ -64,7 +64,7 @@
+         try:
+             self.valueChanged(value_str, index)
+         except:
+-            self.emit(Qt.SIGNAL("showError"), 'Wrong value!',
++            self.showError.emit('Wrong value!',
+                       'The value you entered is wrong. The old value will be restored.')
+             return Qt.QStandardItemModel.setData(self, index, index.data(), role)
+         return Qt.QStandardItemModel.setData(self, index, value, role)
+@@ -426,7 +426,7 @@
+             "edit-undo"), "Reload from file", self.restoreOriginal)
+         self.layout().setMenuBar(self._toolbar)
+         self.setWindowTitle('TaurusConfigEditor')
+-        self.connect(self.tree, Qt.SIGNAL("showError"), self._showError)
++        self.tree.showError.connect(self._showError)
+ 
+     def contextMenuEvent(self, event):
+         '''Reimplemented from :meth:`QWidget.contextMenuEvent`'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusconfigurationpanel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusconfigurationpanel.py	(refactored)
+@@ -49,11 +49,9 @@
+         self.call__init__(TaurusBaseWritableWidget,
+                           name, designMode=designMode)
+ 
+-        self.connect(self, Qt.SIGNAL(
+-            'textChanged(const QString &)'), self.valueChanged)
+-        self.connect(self, Qt.SIGNAL('returnPressed()'), self.writeValue)
+-        self.connect(self, Qt.SIGNAL('editingFinished()'),
+-                     self._onEditingFinished)
++        self.textChanged.connect(self.valueChanged)
++        self.returnPressed.connect(self.writeValue)
++        self.editingFinished.connect(self._onEditingFinished)
+ 
+     def _onEditingFinished(self):
+         if self._autoApply:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusdevicepanel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusdevicepanel.py	(refactored)
+@@ -251,7 +251,7 @@
+             ':/actions/window-new.svg')
+         self._dup.setIcon(Qt.QIcon(qpixmap))
+         self._dup.setIconSize(Qt.QSize(15, 15))
+-        self.connect(self._dup, Qt.SIGNAL("pressed()"), self.duplicate)
++        self._dup.pressed.connect(self.duplicate)
+ 
+         self._image = Qt.QLabel()
+ 
+@@ -538,8 +538,7 @@
+ 
+         # self.addToolBar(self.basicTaurusToolbar())
+ 
+-        self.connect(self.deviceTree, Qt.SIGNAL(
+-            "currentItemChanged"), self.onItemSelectionChanged)
++        self.deviceTree.currentItemChanged.connect(self.onItemSelectionChanged)
+ 
+         self.updatePerspectivesMenu()
+         if not designMode:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusform.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusform.py	(refactored)
+@@ -120,26 +120,22 @@
+ 
+         self.chooseModelsAction = Qt.QAction('Modify Contents', self)
+         self.addAction(self.chooseModelsAction)
+-        self.connect(self.chooseModelsAction, Qt.SIGNAL(
+-            "triggered()"), self.chooseModels)
++        self.chooseModelsAction.triggered.connect(self.chooseModels)
+ 
+         self.showButtonsAction = Qt.QAction('Show Buttons', self)
+         self.showButtonsAction.setCheckable(True)
+         self.addAction(self.showButtonsAction)
+-        self.connect(self.showButtonsAction, Qt.SIGNAL(
+-            "triggered(bool)"), self.setWithButtons)
++        self.showButtonsAction.triggered.connect(self.setWithButtons)
+         self.setWithButtons(withButtons)
+ 
+         self.changeLabelsAction = Qt.QAction('Change labels (all items)', self)
+         self.addAction(self.changeLabelsAction)
+-        self.connect(self.changeLabelsAction, Qt.SIGNAL(
+-            "triggered()"), self.onChangeLabelsAction)
++        self.changeLabelsAction.triggered.connect(self.onChangeLabelsAction)
+ 
+         self.compactModeAction = Qt.QAction('Compact mode (all items)', self)
+         self.compactModeAction.setCheckable(True)
+         self.addAction(self.compactModeAction)
+-        self.connect(self.compactModeAction, Qt.SIGNAL(
+-            "triggered(bool)"), self.setCompact)
++        self.compactModeAction.triggered.connect(self.setCompact)
+ 
+         self.resetModifiableByUser()
+         self.setSupportedMimeTypes([TAURUS_MODEL_LIST_MIME_TYPE, TAURUS_DEV_MIME_TYPE,
+@@ -207,8 +203,7 @@
+             layout = Qt.QVBoxLayout()
+             layout.addWidget(self.__modelChooserDlg.modelChooser)
+             self.__modelChooserDlg.setLayout(layout)
+-            self.connect(self.__modelChooserDlg.modelChooser,
+-                         Qt.SIGNAL("updateModels"), self.setModel)
++            self.__modelChooserDlg.modelChooser.updateModels.connect(self.setModel)
+ 
+         models_and_labels = []
+         models = [m.lower() for m in self.getModel()]
+@@ -584,8 +579,7 @@
+         self._operatorViewFilter = lambda x: x.disp_level == PyTango.DispLevel.OPERATOR
+ 
+         # self.setLayout(Qt.QGridLayout())
+-        self.connect(self, Qt.SIGNAL(
+-            'modelChanged(const QString &)'), self._updateCommandWidgets)
++        self.modelChanged.connect(self._updateCommandWidgets)
+ 
+     def createConfig(self, allowUnpickable=False):
+         '''
+@@ -646,8 +640,7 @@
+             layout.addWidget(button, row, 0)
+             button.setUseParentModel(True)
+             self._cmdWidgets.append(button)
+-            self.connect(button, Qt.SIGNAL('commandExecuted'),
+-                         self._onCommandExecuted)
++            button.commandExecuted.connect(self._onCommandExecuted)
+ 
+             if c.in_type != PyTango.CmdArgType.DevVoid:
+                 self.debug('Adding arguments for command %s' % c.cmd_name)
+@@ -662,14 +655,10 @@
+                         pwidget.setEditable(False)
+                         button.setParameters(self._defaultParameters[
+                                              c.cmd_name.lower()][0])
+-                self.connect(pwidget, Qt.SIGNAL(
+-                    'editTextChanged (const QString&)'), button.setParameters)
+-                self.connect(pwidget, Qt.SIGNAL(
+-                    'currentIndexChanged (const QString&)'), button.setParameters)
+-                self.connect(pwidget, Qt.SIGNAL(
+-                    'activated (int)'), button.setFocus)
+-                self.connect(button, Qt.SIGNAL('commandExecuted'),
+-                             pwidget.rememberCurrentText)
++                pwidget.editTextChanged.connect(button.setParameters)
++                pwidget.currentIndexChanged.connect(button.setParameters)
++                pwidget.activated.connect(button.setFocus)
++                button.commandExecuted.connect(pwidget.rememberCurrentText)
+                 layout.addWidget(pwidget, row, 1)
+                 self._paramWidgets.append(pwidget)
+ 
+@@ -792,8 +781,7 @@
+         self.layout().addWidget(self._form)
+         self.registerConfigDelegate(self._form)
+ 
+-        self.connect(self, Qt.SIGNAL(
+-            'modelChanged(const QString &)'), self._updateAttrWidgets)
++        self.modelChanged.connect(self._updateAttrWidgets)
+ 
+         self._sortKey = lambda x: x.name
+ 
+@@ -1022,18 +1010,15 @@
+     from taurus.qt.qtgui.resource import getThemeIcon
+     quitApplicationAction = Qt.QAction(
+         getThemeIcon("process-stop"), 'Close Form', dialog)
+-    dialog.connect(quitApplicationAction, Qt.SIGNAL(
+-        "triggered()"), dialog.close)
++    quitApplicationAction.triggered.connect(dialog.close)
+ 
+     saveConfigAction = Qt.QAction("Save current settings...", dialog)
+     saveConfigAction.setShortcut(Qt.QKeySequence.Save)
+-    dialog.connect(saveConfigAction, Qt.SIGNAL(
+-        "triggered()"), dialog.saveConfigFile)
++    saveConfigAction.triggered.connect(dialog.saveConfigFile)
+ 
+     loadConfigAction = Qt.QAction("&Retrieve saved settings...", dialog)
+     loadConfigAction.setShortcut(Qt.QKeySequence.Open)
+-    dialog.connect(loadConfigAction, Qt.SIGNAL(
+-        "triggered()"), dialog.loadConfigFile)
++    loadConfigAction.triggered.connect(dialog.loadConfigFile)
+ 
+     dialog.addActions(
+         (saveConfigAction, loadConfigAction, quitApplicationAction))
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusinputpanel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusinputpanel.py	(refactored)
+@@ -411,7 +411,7 @@
+     w = TaurusInputPanel(d)
+     l = Listener()
+     l.panel = w
+-    w.connect(w.buttonBox(), Qt.SIGNAL("accepted()"), l.on_accept)
++    w.buttonBox().accepted.connect(l.on_accept)
+     w.show()
+     app.exec_()
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmessagepanel.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmessagepanel.py	(refactored)
+@@ -309,7 +309,7 @@
+             text = "Show details..."
+         self._ui._showDetailsButton.setText(text)
+         self.adjustSize()
+-        self.emit(Qt.SIGNAL("toggledDetails(bool)"), show)
++        self.toggledDetails.emit(show)
+ 
+     def reportComboBox(self):
+         return self._ui._reportComboBox
+
+SKIPPING non trivial signal:
+        # @todo: This is Workaround because UseSetParentModel is giving trouble again!
+        self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
+                     self._deviceTree.setModel)
+
+
+SKIPPING non trivial signal:
+
+        # self.tree.setUseParentModel(True)  #It does not work!!!!
+        # @todo: This is Workaround because UseSetParentModel is giving trouble again!
+        self.connect(self, Qt.SIGNAL(
+            self.ModelChangedSignal), self.tree.setModel)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmodelchooser.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmodelchooser.py	(refactored)
+@@ -120,7 +120,7 @@
+         return selected
+ 
+     def onAddSelected(self):
+-        self.emit(Qt.SIGNAL("addModels"), self.getSelectedModels())
++        self.addModels.emit(self.getSelectedModels())
+ 
+     def treeView(self):
+         return self._deviceTree.treeView()
+@@ -196,8 +196,8 @@
+             self.ModelChangedSignal), self.tree.setModel)
+ 
+         # connections:
+-        self.connect(self.tree, Qt.SIGNAL("addModels"), self.addModels)
+-        self.connect(applyBT, Qt.SIGNAL("clicked()"), self._onUpdateModels)
++        self.tree.addModels.connect(self.addModels)
++        applyBT.clicked.connect(self._onUpdateModels)
+ #        self.connect(self.tree._deviceTree, Qt.SIGNAL("itemDoubleClicked"), self.onTreeDoubleClick)
+ 
+ #    def onTreeDoubleClick(self, item, colum): #@todo: Implement this function properly
+@@ -267,10 +267,10 @@
+ 
+     def _onUpdateModels(self):
+         models = self.getListedModels()
+-        self.emit(Qt.SIGNAL("updateModels"), models)
++        self.updateModels.emit(models)
+         if taurus.core.taurusbasetypes.TaurusElementType.Attribute in self.tree._selectables:
+             # for backwards compatibility with the old AttributeChooser
+-            self.emit(Qt.SIGNAL("UpdateAttrs"), models)
++            self.UpdateAttrs.emit(models)
+ 
+     def setSingleModelMode(self, single):
+         '''sets whether the selection should be limited to just one model
+@@ -320,7 +320,7 @@
+             parent=parent, selectables=selectables, host=host, singleModel=singleModel)
+         layout.addWidget(w)
+         dlg.setLayout(layout)
+-        dlg.connect(w, Qt.SIGNAL('updateModels'), dlg.accept)
++        w.updateModels.connect(dlg.accept)
+         dlg.exec_()
+         return w.getListedModels(asMimeData=asMimeData), (dlg.result() == dlg.Accepted)
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmodellist.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusmodellist.py	(refactored)
+@@ -174,8 +174,7 @@
+                 item.src = value
+             elif role == Qt.Qt.DisplayRole:
+                 item.display = value
+-            self.emit(
+-                Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), index, index)
++            self.dataChanged.emit(index, index)
+             return True
+         return False
+ 
+@@ -214,8 +213,7 @@
+         '''swap the items described by index1 and index2 in the list'''
+         r1, r2 = index1.row(), index2.row()
+         self.items[r1], self.items[r2] = self.items[r2], self.items[r1]
+-        self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"),
+-                  index1, index2)
++        self.dataChanged.emit(index1, index2)
+ 
+     def mimeTypes(self):
+         '''reimplemented from :class:`Qt.QAbstractListModel`'''
+@@ -308,14 +306,10 @@
+ 
+         # signal connections
+         selectionmodel = self.selectionModel()
+-        self.connect(selectionmodel, Qt.SIGNAL(
+-            "selectionChanged(QItemSelection, QItemSelection)"), self._onSelectionChanged)
+-        self.connect(self._model, Qt.SIGNAL(
+-            "dataChanged (QModelIndex, QModelIndex)"), self._onDataChanged)
+-        self.connect(self._model, Qt.SIGNAL(
+-            "rowsInserted (QModelIndex, int, int)"), self._onDataChanged)
+-        self.connect(self._model, Qt.SIGNAL(
+-            "rowsRemoved (QModelIndex, int, int)"), self._onDataChanged)
++        selectionmodel.selectionChanged.connect(self._onSelectionChanged)
++        self._model.dataChanged.connect(self._onDataChanged)
++        self._model.rowsInserted.connect(self._onDataChanged)
++        self._model.rowsRemoved.connect(self._onDataChanged)
+         self._onSelectionChanged(Qt.QItemSelection(), Qt.QItemSelection())
+ 
+     def clear(self):
+@@ -349,7 +343,7 @@
+ 
+     def _onDataChanged(self, *args):
+         '''emits a signal containing the current data as a list of strings'''
+-        self.emit(Qt.SIGNAL("dataChanged"), self.getModelItems())
++        self.dataChanged.emit(self.getModelItems())
+ 
+     def contextMenuEvent(self, event):
+         '''see :meth:`QWidget.contextMenuEvent`'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusvalue.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/taurusvalue.py	(refactored)
+@@ -151,8 +151,7 @@
+             cm_action = menu.addAction("Compact")
+             cm_action.setCheckable(True)
+             cm_action.setChecked(self.taurusValueBuddy().isCompact())
+-            self.connect(cm_action, Qt.SIGNAL("toggled(bool)"),
+-                         self.taurusValueBuddy().setCompact)
++            cm_action.toggled.connect(self.taurusValueBuddy().setCompact)
+         menu.exec_(event.globalPos())
+         event.accept()
+ 
+@@ -853,8 +852,7 @@
+             # hide getPendingOperations of the writeWidget so that containers don't get duplicate lists
+             #self._writeWidget._getPendingOperations = self._writeWidget.getPendingOperations
+             #self._writeWidget.getPendingOperations = lambda : []
+-            self.connect(self._writeWidget, Qt.SIGNAL(
+-                'valueChanged'), self.updatePendingOpsStyle)
++            self._writeWidget.valueChanged.connect(self.updatePendingOpsStyle)
+             self._writeWidget.setDangerMessage(self.getDangerMessage())
+             self._writeWidget.setForceDangerousOperations(
+                 self.getForceDangerousOperations())
+@@ -1359,8 +1357,7 @@
+     if models == []:
+         from taurus.qt.qtgui.panel import TaurusModelChooser
+         modelChooser = TaurusModelChooser()
+-        form.connect(modelChooser, Qt.SIGNAL(
+-            "updateModels"), container.setModel)
++        modelChooser.updateModels.connect(container.setModel)
+         modelChooser.show()
+ 
+     sys.exit(app.exec_())
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/report/basicreport.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/panel/report/basicreport.py	(refactored)
+@@ -54,8 +54,8 @@
+     def __init__(self, parent=None):
+         Qt.QDialog.__init__(self, parent)
+         self.loadUi(filename="SendMailForm.ui")
+-        self.connect(self.ui.buttonBox, Qt.SIGNAL("accepted()"), self.accept)
+-        self.connect(self.ui.buttonBox, Qt.SIGNAL("rejected()"), self.reject)
++        self.ui.buttonBox.accepted.connect(self.accept)
++        self.ui.buttonBox.rejected.connect(self.reject)
+         self.ui.editMessage.setFont(Qt.QFont("Monospace"))
+ 
+     def setFrom(self, efrom):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/arrayedit.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/arrayedit.py	(refactored)
+@@ -51,12 +51,12 @@
+         #self.connect(self.corrSB, Qt.SIGNAL('valueChanged(double)'), self.enableScale)
+ 
+     def mousePressEvent(self, event):
+-        self.emit(Qt.SIGNAL('selected'), self._x)
++        self.selected.emit(self._x)
+         # print 'SELECTED', self
+         #Qt.QDoubleSpinBox.focusInEvent(self.corrSB, event)
+ 
+     def corrSB_focusInEvent(self, event):
+-        self.emit(Qt.SIGNAL('selected'), self._x)
++        self.selected.emit(self._x)
+         # print 'GOT FOCUS', self
+         Qt.QDoubleSpinBox.focusInEvent(self.corrSB, event)
+ 
+@@ -153,16 +153,11 @@
+         # Qt.QTimer.singleShot(0, <method>)
+ 
+         # connections
+-        self.connect(self.addCPointsBT, Qt.SIGNAL(
+-            'clicked (bool)'), self._addCPointsDialog.show)
+-        self.connect(self._addCPointsDialog.editBT, Qt.SIGNAL(
+-            'clicked (bool)'), self.showEditCPointsDialog)
+-        self.connect(self._addCPointsDialog.cleanBT, Qt.SIGNAL(
+-            'clicked (bool)'), self.resetCorrection)
+-        self.connect(self._addCPointsDialog.addSingleCPointBT,
+-                     Qt.SIGNAL('clicked (bool)'), self.onAddSingleCPointBT)
+-        self.connect(self._addCPointsDialog.addRegEspCPointsBT,
+-                     Qt.SIGNAL('clicked (bool)'), self.onAddRegEspCPointsBT)
++        self.addCPointsBT.clicked.connect(self._addCPointsDialog.show)
++        self._addCPointsDialog.editBT.clicked.connect(self.showEditCPointsDialog)
++        self._addCPointsDialog.cleanBT.clicked.connect(self.resetCorrection)
++        self._addCPointsDialog.addSingleCPointBT.clicked.connect(self.onAddSingleCPointBT)
++        self._addCPointsDialog.addRegEspCPointsBT.clicked.connect(self.onAddRegEspCPointsBT)
+ 
+     def plot1MousePressEvent(self, event):
+         self.plotMousePressEvent(event, self.plot1)
+@@ -232,13 +227,12 @@
+         self.scrollArea.ensureWidgetVisible(ctrl)
+ 
+     def connectToController(self, ctrl):
+-        self.connect(ctrl, Qt.SIGNAL('selected'), self.changeCPointSelection)
+-        self.connect(ctrl.corrSB, Qt.SIGNAL(
+-            'valueChanged (double)'), self.onCorrSBChanged)
+-        self.connect(ctrl.lCopyBT, Qt.SIGNAL('clicked (bool)'), self.onLCopy)
+-        self.connect(ctrl.rCopyBT, Qt.SIGNAL('clicked (bool)'), self.onRCopy)
+-        self.connect(ctrl.lScaleBT, Qt.SIGNAL('clicked (bool)'), self.onLScale)
+-        self.connect(ctrl.rScaleBT, Qt.SIGNAL('clicked (bool)'), self.onRScale)
++        ctrl.selected.connect(self.changeCPointSelection)
++        ctrl.corrSB.valueChanged.connect(self.onCorrSBChanged)
++        ctrl.lCopyBT.clicked.connect(self.onLCopy)
++        ctrl.rCopyBT.clicked.connect(self.onRCopy)
++        ctrl.lScaleBT.clicked.connect(self.onLScale)
++        ctrl.rScaleBT.clicked.connect(self.onRScale)
+ 
+     def onAddSingleCPointBT(self):
+         x = self._addCPointsDialog.singleCPointXSB.value()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curveStatsDlg.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curveStatsDlg.py	(refactored)
+@@ -112,35 +112,23 @@
+         refreshAction = Qt.QAction(getThemeIcon(
+             'view-refresh'), "Refresh available curves", self.ui.statsTW)
+         refreshAction.setShortcut(Qt.Qt.Key_F5)
+-        self.connect(refreshAction, Qt.SIGNAL(
+-            "triggered()"), self.refreshCurves)
++        refreshAction.triggered.connect(self.refreshCurves)
+         self.ui.statsTW.addAction(refreshAction)
+ 
+         # connections
+         for cb in cbs:
+-            self.connect(cb, Qt.SIGNAL('toggled(bool)'), self.onStatToggled)
+-        self.connect(self.ui.calculatePB, Qt.SIGNAL(
+-            'clicked()'), self.onCalculate)
+-        self.connect(self.ui.selectMinPB, Qt.SIGNAL(
+-            'clicked()'), self.onSelectMin)
+-        self.connect(self.ui.selectMaxPB, Qt.SIGNAL(
+-            'clicked()'), self.onSelectMax)
+-        self.connect(self.minPicker, Qt.SIGNAL(
+-            'selected(QwtDoublePoint)'), self.minSelected)
+-        self.connect(self.maxPicker, Qt.SIGNAL(
+-            'selected(QwtDoublePoint)'), self.maxSelected)
+-        self.connect(self.ui.minSB, Qt.SIGNAL(
+-            'valueChanged(double)'), self.onMinChanged)
+-        self.connect(self.ui.minDTE, Qt.SIGNAL(
+-            'dateTimeChanged(QDateTime)'), self.onMinChanged)
+-        self.connect(self.ui.maxSB, Qt.SIGNAL(
+-            'valueChanged(double)'), self.onMaxChanged)
+-        self.connect(self.ui.maxDTE, Qt.SIGNAL(
+-            'dateTimeChanged(QDateTime)'), self.onMaxChanged)
+-        self.connect(self.ui.minCB, Qt.SIGNAL(
+-            'toggled(bool)'), self.onMinChanged)
+-        self.connect(self.ui.maxCB, Qt.SIGNAL(
+-            'toggled(bool)'), self.onMaxChanged)
++            cb.toggled.connect(self.onStatToggled)
++        self.ui.calculatePB.clicked.connect(self.onCalculate)
++        self.ui.selectMinPB.clicked.connect(self.onSelectMin)
++        self.ui.selectMaxPB.clicked.connect(self.onSelectMax)
++        self.minPicker.selected.connect(self.minSelected)
++        self.maxPicker.selected.connect(self.maxSelected)
++        self.ui.minSB.valueChanged.connect(self.onMinChanged)
++        self.ui.minDTE.dateTimeChanged.connect(self.onMinChanged)
++        self.ui.maxSB.valueChanged.connect(self.onMaxChanged)
++        self.ui.maxDTE.dateTimeChanged.connect(self.onMaxChanged)
++        self.ui.minCB.toggled.connect(self.onMinChanged)
++        self.ui.maxCB.toggled.connect(self.onMaxChanged)
+ 
+     def _timestamptToQDateTime(self, ts):
+         dt = datetime.fromtimestamp(ts)
+@@ -327,7 +315,7 @@
+     def closeEvent(self, event):
+         '''See :meth:`Qwidget.closeEvent`'''
+         self.restorePlot()
+-        self.emit(Qt.SIGNAL('closed'))
++        self.closed.emit()
+ 
+     def showEvent(self, event):
+         '''See :meth:`Qwidget.showEvent`'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curveprops.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curveprops.py	(refactored)
+@@ -277,7 +277,7 @@
+             curve = self.curves[row]
+             if role == PROPS_ROLE:
+                 self.curves[row].properties = value
+-                self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), self.index(
++                self.dataChanged.emit(self.index(
+                     row, 0), self.index(row, self.ncolumns - 1))
+             else:
+                 column = index.column()
+@@ -290,8 +290,7 @@
+                     curve.title = value
+                 elif column == VIS:
+                     curve.vis = value
+-                self.emit(
+-                    Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), index, index)
++                self.dataChanged.emit(index, index)
+             return True
+         return False
+ 
+@@ -409,28 +408,17 @@
+         self.showProperties(self._emptyProps)
+ 
+         # Connections
+-        self.connect(self.ui.sStyleCB, Qt.SIGNAL(
+-            "currentIndexChanged(const QString&)"), self._onSymbolStyleChanged)
+-        self.connect(self.ui.sStyleCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.lStyleCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.lStyleCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.lColorCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.sColorCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.cStyleCB, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.sSizeSB, Qt.SIGNAL(
+-            "valueChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.lWidthSB, Qt.SIGNAL(
+-            "valueChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.sFillCB, Qt.SIGNAL(
+-            "stateChanged(int)"), self.onPropertyControlChanged)
+-        self.connect(self.ui.cFillCB, Qt.SIGNAL(
+-            "stateChanged(int)"), self.onPropertyControlChanged)
++        self.ui.sStyleCB.currentIndexChanged.connect(self._onSymbolStyleChanged)
++        self.ui.sStyleCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.lStyleCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.lStyleCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.lColorCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.sColorCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.cStyleCB.currentIndexChanged.connect(self.onPropertyControlChanged)
++        self.ui.sSizeSB.valueChanged.connect(self.onPropertyControlChanged)
++        self.ui.lWidthSB.valueChanged.connect(self.onPropertyControlChanged)
++        self.ui.sFillCB.stateChanged.connect(self.onPropertyControlChanged)
++        self.ui.cFillCB.stateChanged.connect(self.onPropertyControlChanged)
+ 
+     #-------------------------------------------------------------------------
+     # Reimplemented functions from base class
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curvesAppearanceChooserDlg.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/curvesAppearanceChooserDlg.py	(refactored)
+@@ -189,8 +189,7 @@
+         currentTitle = item.text()
+         if previousTitle != currentTitle:
+             self.curvePropDict[name].title = currentTitle
+-            self.curvesLW.emit(
+-                Qt.SIGNAL('CurveTitleEdited'), name, currentTitle)
++            self.curvesLW.CurveTitleEdited.emit(name, currentTitle)
+ 
+     def updateTitles(self, newTitlesDict=None):
+         '''
+@@ -280,7 +279,7 @@
+         'controlChanged signal and applies the change if in autoapply mode.
+         It ignores any arguments passed'''
+ 
+-        self.emit(Qt.SIGNAL("controlChanged"))
++        self.controlChanged.emit()
+         if self.autoApply:
+             self.onApply()
+ 
+@@ -374,7 +373,7 @@
+                                                                     conflict=CurveAppearanceProperties.inConflict_update_a)
+         # emit a (PyQt) signal telling what properties (first argument) need to
+         # be applied to which curves (second argument)
+-        self.emit(Qt.SIGNAL("curveAppearanceChanged"), prop, names)
++        self.curveAppearanceChanged.emit(prop, names)
+         # return both values
+         return prop, names
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/qwtdialog.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/qwtdialog.py	(refactored)
+@@ -181,46 +181,33 @@
+             self.ui.peaksComboBox.setCurrentIndex(3)
+ 
+         # connect signals
+-        self.connect(self.ui.buttonBox.button(
+-            Qt.QDialogButtonBox.Close), Qt.SIGNAL("clicked()"), self.hide)
+-        self.connect(self.ui.buttonBox.button(
+-            Qt.QDialogButtonBox.Apply), Qt.SIGNAL("clicked()"), self.apply)
+-        self.connect(self.ui.xAutoGroupBox,  Qt.SIGNAL(
+-            "toggled (bool)"), self.toggledAutoScale)
+-        self.connect(self.ui.y1AutoGroupBox, Qt.SIGNAL(
+-            "toggled (bool)"), self.toggledAutoScale)
+-        self.connect(self.ui.y2AutoGroupBox, Qt.SIGNAL(
+-            "toggled (bool)"), self.toggledAutoScale)
++        self.ui.buttonBox.button(
++            Qt.QDialogButtonBox.Close).clicked.connect(self.hide)
++        self.ui.buttonBox.button(
++            Qt.QDialogButtonBox.Apply).clicked.connect(self.apply)
++        self.ui.xAutoGroupBox.toggled.connect(self.toggledAutoScale)
++        self.ui.y1AutoGroupBox.toggled.connect(self.toggledAutoScale)
++        self.ui.y2AutoGroupBox.toggled.connect(self.toggledAutoScale)
+ #        self.connect(self.ui.xEditMin,  Qt.SIGNAL("returnPressed()"),self.apply)
+ #        self.connect(self.ui.xEditMax,  Qt.SIGNAL("returnPressed()"),self.apply)
+ #        self.connect(self.ui.y1EditMin, Qt.SIGNAL("returnPressed()"),self.apply)
+ #        self.connect(self.ui.y1EditMax, Qt.SIGNAL("returnPressed()"),self.apply)
+ #        self.connect(self.ui.y2EditMin, Qt.SIGNAL("returnPressed()"),self.apply)
+ #        self.connect(self.ui.y2EditMax, Qt.SIGNAL("returnPressed()"),self.apply)
+-        self.connect(self.ui.xModeComboBox, Qt.SIGNAL(
+-            "currentIndexChanged(const QString&)"), self.modeComboChanged)
+-        self.connect(self.ui.xDynScaleCheckBox, Qt.SIGNAL(
+-            "toggled (bool)"), self.setXDynScale)
++        self.ui.xModeComboBox.currentIndexChanged.connect(self.modeComboChanged)
++        self.ui.xDynScaleCheckBox.toggled.connect(self.setXDynScale)
+         #self.connect(self.ui.xRangeCB, Qt.SIGNAL("currentIndexChanged(const QString&)"),self.apply)
+-        self.connect(self.ui.y1ModeComboBox, Qt.SIGNAL(
+-            "currentIndexChanged(const QString&)"), self.modeComboChanged)
+-        self.connect(self.ui.y2ModeComboBox, Qt.SIGNAL(
+-            "currentIndexChanged(const QString&)"), self.modeComboChanged)
+-        self.connect(self.ui.peaksComboBox, Qt.SIGNAL(
+-            "currentIndexChanged(int)"), self.peaksComboChanged)
++        self.ui.y1ModeComboBox.currentIndexChanged.connect(self.modeComboChanged)
++        self.ui.y2ModeComboBox.currentIndexChanged.connect(self.modeComboChanged)
++        self.ui.peaksComboBox.currentIndexChanged.connect(self.peaksComboChanged)
+         # self.connect(self.curvesAppearanceChooser,
+         # Qt.SIGNAL("controlChanged"),self.apply) #"autoapply" mode for *all*
+         # the curve appearance controls
+-        self.connect(self.curvesAppearanceChooser.assignToY1BT,
+-                     Qt.SIGNAL("clicked()"), self.setCurvesYAxis)
+-        self.connect(self.curvesAppearanceChooser.assignToY2BT,
+-                     Qt.SIGNAL("clicked()"), self.setCurvesYAxis)
+-        self.connect(self.curvesAppearanceChooser.bckgndBT,
+-                     Qt.SIGNAL("clicked()"), self.changeBackgroundColor)
+-        self.connect(self.curvesAppearanceChooser.changeTitlesBT,
+-                     Qt.SIGNAL("clicked()"), self.onChangeTitles)
+-        self.connect(self.curvesAppearanceChooser.curvesLW, Qt.SIGNAL(
+-            "CurveTitleEdited"), self.onCurveTitleEdited)
++        self.curvesAppearanceChooser.assignToY1BT.clicked.connect(self.setCurvesYAxis)
++        self.curvesAppearanceChooser.assignToY2BT.clicked.connect(self.setCurvesYAxis)
++        self.curvesAppearanceChooser.bckgndBT.clicked.connect(self.changeBackgroundColor)
++        self.curvesAppearanceChooser.changeTitlesBT.clicked.connect(self.onChangeTitles)
++        self.curvesAppearanceChooser.curvesLW.CurveTitleEdited.connect(self.onCurveTitleEdited)
+ 
+         # finally adjust size
+         self.adjustSize()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusarrayedit.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusarrayedit.py	(refactored)
+@@ -56,10 +56,10 @@
+         layout.addWidget(self.fromAttrBT, 1, 2)
+         layout.addWidget(self.toAttrBT, 1, 3)
+ 
+-        self.connect(self.fromFileBT, Qt.SIGNAL("clicked()"), self.onFromFile)
+-        self.connect(self.toFileBT, Qt.SIGNAL("clicked()"), self.onToFile)
+-        self.connect(self.fromAttrBT, Qt.SIGNAL("clicked()"), self.onFromAttr)
+-        self.connect(self.toAttrBT, Qt.SIGNAL("clicked()"), self.onToAttr)
++        self.fromFileBT.clicked.connect(self.onFromFile)
++        self.toFileBT.clicked.connect(self.onToFile)
++        self.fromAttrBT.clicked.connect(self.onFromAttr)
++        self.toAttrBT.clicked.connect(self.onToAttr)
+ 
+     def arrayEditor(self):
+         return self._arrayEditor
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusplot.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusplot.py	(refactored)
+@@ -207,8 +207,7 @@
+     def fireEvent(self,  evt_src, evt_type, evt_value):
+         """reimplemented because this cannot use signals(they are not QObjects).
+         see :meth:`TaurusBaseComponent.fireEvent`"""
+-        self._signalGen.emit(Qt.SIGNAL('taurusEvent'),
+-                             evt_src, evt_type, evt_value)
++        self._signalGen.taurusEvent.emit(evt_src, evt_type, evt_value)
+ 
+     def registerDataChanged(self, listener):
+         '''see :meth:`TaurusBaseComponent.registerDataChanged`'''
+@@ -578,8 +577,7 @@
+         if model is None:
+             self._xValues = numpy.zeros(0)
+             self._yValues = numpy.zeros(0)
+-            self._signalGen.emit(
+-                Qt.SIGNAL("dataChanged(const QString &)"), str(self.getModel()))
++            self._signalGen.dataChanged.emit(str(self.getModel()))
+             return
+ 
+         if evt_type == taurus.core.taurusbasetypes.TaurusEventType.Config:
+@@ -596,8 +594,7 @@
+             self._onDroppedEvent(reason=str(e))
+             return
+         self._updateMarkers()
+-        self._signalGen.emit(
+-            Qt.SIGNAL("dataChanged(const QString &)"), str(self.getModel()))
++        self._signalGen.dataChanged.emit(str(self.getModel()))
+ 
+     def _onDroppedEvent(self, reason='Unknown'):
+         '''inform the user about a dropped event
+@@ -884,8 +881,7 @@
+         :param listener: (QWidget) listener object
+         :param meth: (callable) callback method
+         '''
+-        listener.connect(self._signalGen, Qt.SIGNAL(
+-            "dataChanged(const QString &)"), meth)
++        self._signalGen.dataChanged.connect(meth)
+ 
+     def unregisterDataChanged(self, listener, meth):
+         '''unregisters the given listener and method from the DataChangedSignal
+@@ -894,8 +890,7 @@
+         :param listener: (QWidget) listener object
+         :param meth: (callable) callback method
+         '''
+-        listener.disconnect(self._signalGen, Qt.SIGNAL(
+-            "dataChanged(const QString &)"), meth)
++        self._signalGen.dataChanged.disconnect(meth)
+ 
+     def isReadOnly(self):
+         '''see :meth:`TaurusBaseComponent.isReadOnly`'''
+@@ -1146,8 +1141,7 @@
+ 
+         self._pickedMarker = TaurusCurveMarker("Picked", labelOpacity=0.8)
+         self._pickedCurveName = ""
+-        self.connect(self._pointPicker, Qt.SIGNAL(
+-            'selected(QwtPolygon)'), self.pickDataPoint)
++        self._pointPicker.selected.connect(self.pickDataPoint)
+ 
+         # xRegion picker
+         self._xRegionPicker = Qwt5.QwtPlotPicker(Qwt5.QwtPlot.xBottom,
+@@ -1156,8 +1150,7 @@
+                                                  Qwt5.QwtPicker.VLineRubberBand,
+                                                  Qwt5.QwtPicker.AlwaysOn, self.canvas())
+         self._xRegionPicker.setEnabled(False)
+-        self.connect(self._xRegionPicker, Qt.SIGNAL(
+-            'selected(QwtDoublePoint)'), self._onXRegionEvent)
++        self._xRegionPicker.selected.connect(self._onXRegionEvent)
+ 
+         # magnifier
+         self._magnifier = Qwt5.QwtPlotMagnifier(self.canvas())
+@@ -1172,8 +1165,7 @@
+         self._showLegend = False
+         self._legendDecissionIsForever = False
+         self.updateLegend()
+-        self.connect(self, Qt.SIGNAL('legendClicked(QwtPlotItem*)'),
+-                     self.toggleCurveState)
++        self.legendClicked.connect(self.toggleCurveState)
+ 
+         # datainspector mode
+         self._inspectorMode = False
+@@ -1211,93 +1203,76 @@
+         self._dataInspectorAction.setShortcut(Qt.Qt.Key_I)
+         self._dataInspectorAction.setCheckable(True)
+         self._dataInspectorAction.setChecked(self._pointPicker.isEnabled())
+-        self.connect(self._dataInspectorAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.toggleDataInspectorMode)
++        self._dataInspectorAction.toggled.connect(self.toggleDataInspectorMode)
+ 
+         self._curveStatsAction = Qt.QAction("Calculate statistics", None)
+         self._curveStatsAction.setShortcut(Qt.Qt.Key_S)
+-        self.connect(self._curveStatsAction, Qt.SIGNAL(
+-            "triggered()"), self.onCurveStatsAction)
++        self._curveStatsAction.triggered.connect(self.onCurveStatsAction)
+ 
+         self._pauseAction = Qt.QAction("&Pause", None)
+         self._pauseAction.setShortcuts([Qt.Qt.Key_P, Qt.Qt.Key_Pause])
+         self._pauseAction.setCheckable(True)
+         self._pauseAction.setChecked(self.isPaused())
+-        self.connect(self._pauseAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.setPaused)
++        self._pauseAction.toggled.connect(self.setPaused)
+ 
+         self._autoscaleAllAxisAction = Qt.QAction("Autoscale all axes", None)
+         self._autoscaleAllAxisAction.setShortcut(Qt.Qt.Key_Escape)
+-        self.connect(self._autoscaleAllAxisAction,  Qt.SIGNAL(
+-            "triggered()"), self.autoScaleAllAxes)
++        self._autoscaleAllAxisAction.triggered.connect(self.autoScaleAllAxes)
+ 
+         self._toggleZoomAxisAction = Qt.QAction("Toggle Zoom-aware axis", None)
+         self._toggleZoomAxisAction.setShortcut(Qt.Qt.Key_Z)
+-        self.connect(self._toggleZoomAxisAction,  Qt.SIGNAL(
+-            "triggered()"), self.toggleZoomer)
++        self._toggleZoomAxisAction.triggered.connect(self.toggleZoomer)
+ 
+         self._configDialogAction = Qt.QAction("Plot configuration...", None)
+         self._configDialogAction.setShortcut(Qt.QKeySequence("Alt+C"))
+-        self.connect(self._configDialogAction, Qt.SIGNAL(
+-            "triggered()"), self.showConfigDialog)
++        self._configDialogAction.triggered.connect(self.showConfigDialog)
+ 
+         self._inputDataAction = Qt.QAction("Input data selection...", None)
+         self._inputDataAction.setShortcut(Qt.QKeySequence.New)
+-        self.connect(self._inputDataAction, Qt.SIGNAL(
+-            "triggered()"), self.showDataImportDlg)
++        self._inputDataAction.triggered.connect(self.showDataImportDlg)
+ 
+         self._saveConfigAction = Qt.QAction("Save current settings...", None)
+         self._saveConfigAction.setShortcut(Qt.QKeySequence.Save)
+-        self.connect(self._saveConfigAction, Qt.SIGNAL(
+-            "triggered()"), self.saveConfig)
++        self._saveConfigAction.triggered.connect(self.saveConfig)
+ 
+         self._loadConfigAction = Qt.QAction(
+             "&Retrieve saved settings...", None)
+         self._loadConfigAction.setShortcut(Qt.QKeySequence.Open)
+-        self.connect(self._loadConfigAction, Qt.SIGNAL(
+-            "triggered()"), self.loadConfig)
++        self._loadConfigAction.triggered.connect(self.loadConfig)
+ 
+         self._showLegendAction = Qt.QAction("Show &Legend", None)
+         self._showLegendAction.setShortcut(Qt.QKeySequence("Ctrl+L"))
+         self._showLegendAction.setCheckable(True)
+         self._showLegendAction.setChecked(self._showLegend)
+-        self.connect(self._showLegendAction, Qt.SIGNAL(
+-            "triggered(bool)"), self.showLegend)
++        self._showLegendAction.triggered.connect(self.showLegend)
+         self.canvas().addAction(self._showLegendAction)
+ 
+         self._showMaxAction = Qt.QAction("Show Max", None)
+         self._showMaxAction.setCheckable(True)
+         self._showMaxAction.setChecked(self._showMaxPeaks)
+-        self.connect(self._showMaxAction,  Qt.SIGNAL(
+-            "toggled(bool)"), self.showMaxPeaks)
++        self._showMaxAction.toggled.connect(self.showMaxPeaks)
+ 
+         self._showMinAction = Qt.QAction("Show Min", None)
+         self._showMinAction.setCheckable(True)
+         self._showMinAction.setChecked(self._showMinPeaks)
+-        self.connect(self._showMinAction,  Qt.SIGNAL(
+-            "toggled(bool)"), self.showMinPeaks)
++        self._showMinAction.toggled.connect(self.showMinPeaks)
+ 
+         self._printAction = Qt.QAction("&Print plot...", None)
+-        self.connect(self._printAction, Qt.SIGNAL(
+-            "triggered()"), self.exportPrint)
++        self._printAction.triggered.connect(self.exportPrint)
+ 
+         self._exportPdfAction = Qt.QAction("Export plot to PD&F...", None)
+-        self.connect(self._exportPdfAction, Qt.SIGNAL(
+-            "triggered()"), self.exportPdf)
++        self._exportPdfAction.triggered.connect(self.exportPdf)
+ 
+         self._exportAsciiAction = Qt.QAction("Export data to &ASCII...", None)
+-        self.connect(self._exportAsciiAction, Qt.SIGNAL(
+-            "triggered()"), self.exportAscii)
++        self._exportAsciiAction.triggered.connect(self.exportAscii)
+ 
+         self._setCurvesTitleAction = Qt.QAction(
+             "Change Curves Titles...", None)
+-        self.connect(self._setCurvesTitleAction, Qt.SIGNAL(
+-            "triggered()"), self.changeCurvesTitlesDialog)
++        self._setCurvesTitleAction.triggered.connect(self.changeCurvesTitlesDialog)
+ 
+         self._closeWindowAction = Qt.QAction(
+             getThemeIcon("process-stop"), 'Close Plot', self)
+-        self.connect(self._closeWindowAction,
+-                     Qt.SIGNAL("triggered()"), self.close)
++        self._closeWindowAction.triggered.connect(self.close)
+ 
+         # add all actions and limit the scope of the key shortcuts to the
+         # widget (default is Window)
+@@ -1812,7 +1787,7 @@
+                 self.setAxisScale(Qwt5.QwtPlot.xBottom, min, max)
+         finally:
+             self.curves_lock.release()
+-        self.emit(Qt.SIGNAL("dataChanged(const QString &)"), str(name))
++        self.dataChanged.emit(str(name))
+         self.replot()
+ 
+     def attachRawData(self, rawdata, properties=None, id=None):
+@@ -2241,23 +2216,20 @@
+ 
+         autoScaleThisAxis = lambda: self.setAxisAutoScale(axis=axis)
+         autoscaleAction = menu.addAction("AutoScale %s" % axisname)
+-        self.connect(autoscaleAction, Qt.SIGNAL(
+-            "triggered()"), autoScaleThisAxis)
++        autoscaleAction.triggered.connect(autoScaleThisAxis)
+ 
+         if not self.getXIsTime():
+             switchThisAxis = lambda: self.setAxisScaleType(
+                 axis=axis, scale=None)
+             switchThisAxisAction = menu.addAction(
+                 "Toggle linear/log for %s" % axisname)
+-            self.connect(switchThisAxisAction, Qt.SIGNAL(
+-                "triggered()"), switchThisAxis)
++            switchThisAxisAction.triggered.connect(switchThisAxis)
+ 
+         if axis in (Qwt5.QwtPlot.yLeft, Qwt5.QwtPlot.yRight):
+             zoomOnThisAxis = lambda: self.toggleZoomer(axis=axis)
+             zoomOnThisAxisAction = menu.addAction(
+                 "Zoom-to-region acts on %s" % axisname)
+-            self.connect(zoomOnThisAxisAction, Qt.SIGNAL(
+-                "triggered()"), zoomOnThisAxis)
++            zoomOnThisAxisAction.triggered.connect(zoomOnThisAxis)
+ 
+         elif axis in (Qwt5.QwtPlot.xBottom, Qwt5.QwtPlot.xTop):
+             if self.isXDynScaleSupported():
+@@ -2266,8 +2238,7 @@
+                     'If enabled, the scale of %s will be autoadjusted to provide a fixed window moving to show always the last value')
+                 xDynAction.setCheckable(True)
+                 xDynAction.setChecked(self.getXDynScale())
+-                self.connect(xDynAction, Qt.SIGNAL(
+-                    "toggled(bool)"), self.setXDynScale)
++                xDynAction.toggled.connect(self.setXDynScale)
+         return menu
+ 
+     def showConfigDialog(self):
+@@ -2853,12 +2824,9 @@
+             mainlayout = Qt.QVBoxLayout(self.DataImportDlg)
+             mainlayout.addWidget(tabs)
+ 
+-            self.connect(self.DataImportDlg.modelChooser,
+-                         Qt.SIGNAL("updateModels"), self.setModel)
+-            self.connect(self.DataImportDlg.rawDataChooser,
+-                         Qt.SIGNAL("ReadFromFiles"), self.readFromFiles)
+-            self.connect(self.DataImportDlg.rawDataChooser,
+-                         Qt.SIGNAL("AddCurve"), self.attachRawData)
++            self.DataImportDlg.modelChooser.updateModels.connect(self.setModel)
++            self.DataImportDlg.rawDataChooser.ReadFromFiles.connect(self.readFromFiles)
++            self.DataImportDlg.rawDataChooser.AddCurve.connect(self.attachRawData)
+ 
+         models_and_display = [(m, self.getCurveTitle(
+             m.split('|')[-1])) for m in self._modelNames]
+@@ -2941,7 +2909,7 @@
+         if self._pickedCurveName in curvesNamesList:
+             self._pickedMarker.setYAxis(axis)
+ 
+-        self.emit(Qt.SIGNAL('CurvesYAxisChanged'), curvesNamesList, axis)
++        self.CurvesYAxisChanged.emit(curvesNamesList, axis)
+ 
+         self.replot()
+ 
+@@ -3109,10 +3077,8 @@
+         if getattr(self, '_curveStatsDialog', None) is None:
+             from taurus.qt.qtgui.plot import CurveStatsDialog
+             self._curveStatsDialog = CurveStatsDialog(self)
+-            self.connect(self._curveStatsDialog, Qt.SIGNAL(
+-                'closed'), self._onCurveStatsDialogClosed)
+-            self.connect(self._curveStatsDialog, Qt.SIGNAL(
+-                'finished(int)'), self._onCurveStatsDialogClosed)
++            self._curveStatsDialog.closed.connect(self._onCurveStatsDialogClosed)
++            self._curveStatsDialog.finished.connect(self._onCurveStatsDialogClosed)
+         elif not self._curveStatsDialog.isVisible():
+             self._curveStatsDialog.refreshCurves()
+         # it will be reenabed by _onCurveStatsDialogClosed
+@@ -3305,7 +3271,7 @@
+         modelNames = self._splitModel(modelNames)
+         self._modelNames = self._lowerIfInsensitive(modelNames)
+         self.updateCurves(self._modelNames)
+-        self.emit(Qt.SIGNAL("modelChanged()"))
++        self.modelChanged.emit()
+         # update the modelchooser list
+         if self.DataImportDlg is not None:
+             self.DataImportDlg.modelChooser.setListedModels(self._modelNames)
+@@ -3374,13 +3340,9 @@
+         parent_widget = self.getParentTaurusComponent()
+         if parent_widget:
+             if yesno:
+-                self.connect(parent_widget,
+-                             Qt.SIGNAL('modelChanged(const QString &)'),
+-                             self.parentModelChanged)
++                parent_widget.modelChanged.connect(self.parentModelChanged)
+             else:
+-                self.disconnect(parent_widget,
+-                                Qt.SIGNAL('modelChanged(const QString &)'),
+-                                self.parentModelChanged)
++                parent_widget.modelChanged.disconnect(self.parentModelChanged)
+ 
+         self.curves_lock.acquire()
+         try:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusplotconf.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurusplotconf.py	(refactored)
+@@ -106,11 +106,10 @@
+         self.ui.tangoTree.setModel(host)
+ 
+         # Connections
+-        self.connect(self.ui.applyBT, Qt.SIGNAL("clicked()"), self.onApply)
+-        self.connect(self.ui.reloadBT, Qt.SIGNAL("clicked()"), self.onReload)
+-        self.connect(self.ui.cancelBT, Qt.SIGNAL("clicked()"), self.close)
+-        self.connect(self.ui.tangoTree, Qt.SIGNAL(
+-            "addModels"), self.onModelsAdded)
++        self.ui.applyBT.clicked.connect(self.onApply)
++        self.ui.reloadBT.clicked.connect(self.onReload)
++        self.ui.cancelBT.clicked.connect(self.close)
++        self.ui.tangoTree.addModels.connect(self.onModelsAdded)
+ 
+     def __replaceWidget(self, new, old, layout=None):
+         if layout is None:
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurustrend.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/plot/taurustrend.py	(refactored)
+@@ -271,12 +271,11 @@
+ 
+     def registerDataChanged(self, listener, meth):
+         '''see :meth:`TaurusBaseComponent.registerDataChanged`'''
+-        listener.connect(self, Qt.SIGNAL("dataChanged(const QString &)"), meth)
++        self.dataChanged.connect(meth)
+ 
+     def unregisterDataChanged(self, listener, meth):
+         '''see :meth:`TaurusBaseComponent.unregisterDataChanged`'''
+-        listener.disconnect(self, Qt.SIGNAL(
+-            "dataChanged(const QString &)"), meth)
++        self.dataChanged.disconnect(meth)
+ 
+     def _updateHistory(self, model, value):
+         '''Update the history data buffers using the latest value from the event
+@@ -429,8 +428,7 @@
+             c._xValues, c._yValues = self._xValues, self._yValues[:, i]
+             c._updateMarkers()
+ 
+-        self.emit(Qt.SIGNAL("dataChanged(const QString &)"),
+-                  Qt.QString(self.getModel()))
++        self.dataChanged.emit(Qt.QString(self.getModel()))
+ 
+     def _checkDataDimensions(self, value):
+         '''
+@@ -529,8 +527,7 @@
+         '''
+         if self.forcedReadingTimer is None:
+             self.forcedReadingTimer = Qt.QTimer()
+-            self.connect(self.forcedReadingTimer, Qt.SIGNAL(
+-                'timeout()'), self.forceReading)
++            self.forcedReadingTimer.timeout.connect(self.forceReading)
+ 
+         # stop the timer and remove the __ONLY_OWN_EVENTS filter
+         self.forcedReadingTimer.stop()
+@@ -757,8 +754,7 @@
+                     curve.setAppearanceProperties(prop)
+                     self.addCurve(name, curve)
+         self.parent().autoShowYAxes()
+-        self.emit(Qt.SIGNAL("dataChanged(const QString &)"),
+-                  Qt.QString(self.getModel()))
++        self.dataChanged.emit(Qt.QString(self.getModel()))
+ 
+     def _scanLineReceived(self, recordData):
+         '''Receives a recordData dictionary and updates the curves associated to it
+@@ -816,8 +812,7 @@
+                 c._yValues = numpy.append(c._yValues, v)
+                 c._updateMarkers()
+ 
+-        self.emit(Qt.SIGNAL("dataChanged(const QString &)"),
+-                  Qt.QString(self.getModel()))
++        self.dataChanged.emit(Qt.QString(self.getModel()))
+ 
+     def connectWithQDoor(self, qdoor):
+         '''connects this ScanTrendsSet to a QDoor
+@@ -827,8 +822,7 @@
+         from sardana.taurus.qt.qtcore.tango.sardana.macroserver import QDoor
+         if not isinstance(qdoor, QDoor):
+             qdoor = taurus.Device(qdoor)
+-        self.connect(qdoor, Qt.SIGNAL("recordDataUpdated"),
+-                     self.scanDataReceived)
++        qdoor.recordDataUpdated.connect(self.scanDataReceived)
+ 
+     def disconnectQDoor(self, qdoor):
+         '''connects this ScanTrendsSet to a QDoor
+@@ -838,8 +832,7 @@
+         from sardana.taurus.qt.qtcore.tango.sardana.macroserver import QDoor
+         if not isinstance(qdoor, QDoor):
+             qdoor = taurus.Device(qdoor)
+-        self.disconnect(qdoor, Qt.SIGNAL(
+-            "recordDataUpdated"), self.scanDataReceived)
++        qdoor.recordDataUpdated.disconnect(self.scanDataReceived)
+ 
+     def getModel(self):
+         return self.__model
+@@ -914,30 +907,24 @@
+         self._useArchivingAction = Qt.QAction("Use Archiver", None)
+         self._useArchivingAction.setCheckable(True)
+         self._useArchivingAction.setChecked(self.getUseArchiving())
+-        self.connect(self._useArchivingAction, Qt.SIGNAL(
+-            "toggled(bool)"), self._onUseArchivingAction)
++        self._useArchivingAction.toggled.connect(self._onUseArchivingAction)
+         self._usePollingBufferAction = Qt.QAction("Use Polling Buffer", None)
+         self._usePollingBufferAction.setCheckable(True)
+         self._usePollingBufferAction.setChecked(self.getUsePollingBuffer())
+-        self.connect(self._usePollingBufferAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.setUsePollingBuffer)
++        self._usePollingBufferAction.toggled.connect(self.setUsePollingBuffer)
+         self._setForcedReadingPeriodAction = Qt.QAction(
+             "Set forced reading period...", None)
+-        self.connect(self._setForcedReadingPeriodAction, Qt.SIGNAL(
+-            "triggered()"), self.setForcedReadingPeriod)
++        self._setForcedReadingPeriodAction.triggered.connect(self.setForcedReadingPeriod)
+         self._clearBuffersAction = Qt.QAction("Clear Buffers", None)
+-        self.connect(self._clearBuffersAction, Qt.SIGNAL(
+-            "triggered()"), self.clearBuffers)
++        self._clearBuffersAction.triggered.connect(self.clearBuffers)
+         self._setMaxBufferSizeAction = Qt.QAction(
+             "Change buffers size...", None)
+-        self.connect(self._setMaxBufferSizeAction, Qt.SIGNAL(
+-            "triggered()"), self.setMaxDataBufferSize)
++        self._setMaxBufferSizeAction.triggered.connect(self.setMaxDataBufferSize)
+         self._autoClearOnScanAction = Qt.QAction(
+             "Auto-clear on new scans", None)
+         self._autoClearOnScanAction.setCheckable(True)
+         self._autoClearOnScanAction.setChecked(True)
+-        self.connect(self._autoClearOnScanAction, Qt.SIGNAL(
+-            "toggled(bool)"), self._onAutoClearOnScanAction)
++        self._autoClearOnScanAction.toggled.connect(self._onAutoClearOnScanAction)
+ 
+     def isTimerNeeded(self, checkMinimized=True):
+         '''checks if it makes sense to activate the replot timer.
+@@ -996,8 +983,7 @@
+                               self._startingTime)  # Set a range of 1 min
+         else:
+             self.setAxisScale(axis, 0, 10)  # Set a range of 10 events
+-            self.disconnect(self.axisWidget(axis), Qt.SIGNAL(
+-                "scaleDivChanged ()"), self.rescheduleReplot)  # disconnects the previous axis
++            self.axisWidget(axis).scaleDivChanged.disconnect(self.rescheduleReplot)  # disconnects the previous axis
+         # enable/disable the archiving action
+         self._useArchivingAction.setEnabled(enable)
+         # call the parent class method
+@@ -1008,11 +994,9 @@
+             if self._replotTimer is None:
+                 self._dirtyPlot = True
+                 self._replotTimer = Qt.QTimer()
+-                self.connect(self._replotTimer, Qt.SIGNAL(
+-                    'timeout()'), self.doReplot)
++                self._replotTimer.timeout.connect(self.doReplot)
+             self.rescheduleReplot(axis)
+-            self.connect(self.axisWidget(axis), Qt.SIGNAL(
+-                "scaleDivChanged ()"), self.rescheduleReplot)  # connects the new axis
++            self.axisWidget(axis).scaleDivChanged.connect(self.rescheduleReplot)  # connects the new axis
+         else:
+             self._replotTimer = None
+ 
+@@ -1377,7 +1361,7 @@
+                         self.xBottom, currmin + step, currmax + step)
+         finally:
+             self.curves_lock.release()
+-        self.emit(Qt.SIGNAL("dataChanged(const QString &)"), Qt.QString(name))
++        self.dataChanged.emit(Qt.QString(name))
+         if not self.xIsTime:
+             self.replot()
+         else:
+@@ -1593,11 +1577,9 @@
+         if enable:
+             self._archivingWarningThresshold = self._startingTime - \
+                 600  # 10 min before the widget was created
+-            self.connect(self.axisWidget(self.xBottom), Qt.SIGNAL(
+-                "scaleDivChanged ()"), self._scaleChangeWarning)
+-        else:
+-            self.disconnect(self.axisWidget(self.xBottom), Qt.SIGNAL(
+-                "scaleDivChanged ()"), self._scaleChangeWarning)
++            self.axisWidget(self.xBottom).scaleDivChanged.connect(self._scaleChangeWarning)
++        else:
++            self.axisWidget(self.xBottom).scaleDivChanged.disconnect(self._scaleChangeWarning)
+             self._archivingWarningThresshold = None
+         self._useArchiving = enable
+         self.replot()
+@@ -1617,8 +1599,7 @@
+         # stop the scale change notification temporally (to avoid duplicate
+         # warnings)
+         self.setUseArchiving(False)
+-        self.disconnect(self.axisWidget(self.xBottom), Qt.SIGNAL(
+-            "scaleDivChanged ()"), self._scaleChangeWarning)
++        self.axisWidget(self.xBottom).scaleDivChanged.disconnect(self._scaleChangeWarning)
+         # show a dialog
+         dlg = Qt.QDialog(self)
+         dlg.setModal(True)
+@@ -1634,8 +1615,8 @@
+             '&Keep enabled'), buttonbox.RejectRole)
+         buttonbox.addButton(Qt.QPushButton('&Disable'), buttonbox.AcceptRole)
+         dlg.layout().addWidget(buttonbox)
+-        dlg.connect(buttonbox, Qt.SIGNAL('accepted()'), dlg.accept)
+-        dlg.connect(buttonbox, Qt.SIGNAL('rejected()'), dlg.reject)
++        buttonbox.accepted.connect(dlg.accept)
++        buttonbox.rejected.connect(dlg.reject)
+         dlg.layout().addWidget(rememberCB)
+         dlg.exec_()
+         # disable archiving if the user said so
+@@ -1646,8 +1627,7 @@
+         else:
+             self.setUseArchiving(True)
+             if not rememberCB.isChecked():
+-                self.connect(self.axisWidget(self.xBottom), Qt.SIGNAL(
+-                    "scaleDivChanged ()"), self._scaleChangeWarning)
++                self.axisWidget(self.xBottom).scaleDivChanged.connect(self._scaleChangeWarning)
+ 
+     def setMaxDataBufferSize(self, maxSize=None):
+         '''sets the maximum number of events that can be plotted in the trends
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/qdictionary.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/qdictionary.py	(refactored)
+@@ -192,11 +192,11 @@
+         self.layout().addWidget(self.baddRow, 7, 0, 1, 1)
+         self.layout().addWidget(self.baccept, 8, 3, 1, 1)
+         self.layout().addWidget(self.bcancel, 8, 4, 1, 1)
+-        self.connect(self.baccept, Qt.SIGNAL("clicked()"), self.save)
+-        self.connect(self.bcancel, Qt.SIGNAL("clicked()"), self.close)
+-        self.connect(self.baddRow, Qt.SIGNAL("clicked()"), self.addRow)
+-        self.connect(self.baddColumn, Qt.SIGNAL("clicked()"), self.addColumn)
+-        self.connect(self, Qt.SIGNAL("reject()"), self.close)
++        self.baccept.clicked.connect(self.save)
++        self.bcancel.clicked.connect(self.close)
++        self.baddRow.clicked.connect(self.addRow)
++        self.baddColumn.clicked.connect(self.addColumn)
++        self.reject.connect(self.close)
+ 
+     def addRow(self):
+         self.table.setRowCount(self.table.rowCount() + 1)
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/qlogtable.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/qlogtable.py	(refactored)
+@@ -396,7 +396,7 @@
+         self.addAction(self._scrollLockAction)
+ 
+     def onToggleScrollLock(self, yesno):
+-        self.emit(Qt.SIGNAL("scrollLockToggled(bool)"), yesno)
++        self.scrollLockToggled.emit(yesno)
+ 
+     def onLogLevelChanged(self, index):
+         self.onFilterChanged()
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusdevicepropertytable.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusdevicepropertytable.py	(refactored)
+@@ -195,14 +195,11 @@
+         self.info('TaurusPropTable.contextMenuEvent()')
+         menu = Qt.QMenu(self)
+         configDialogAction = menu.addAction("Add new property")
+-        self.connect(configDialogAction, QtCore.SIGNAL(
+-            "triggered()"), self.addProperty)
++        configDialogAction.triggered.connect(self.addProperty)
+         configDialogAction = menu.addAction("Delete property")
+-        self.connect(configDialogAction, QtCore.SIGNAL(
+-            "triggered()"), self.deleteProperty)
++        configDialogAction.triggered.connect(self.deleteProperty)
+         configDialogAction = menu.addAction("Edit property")
+-        self.connect(configDialogAction, QtCore.SIGNAL(
+-            "triggered()"), self.editProperty)
++        configDialogAction.triggered.connect(self.editProperty)
+         menu.addSeparator()
+         menu.exec_(event.globalPos())
+         del menu
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusgrid.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusgrid.py	(refactored)
+@@ -901,7 +901,7 @@
+                     # print 'In cell clicked'
+                     targets = set(str(child.getModelName()) for child in obj.children()
+                                   if hasattr(child, 'underMouse') and child.underMouse() and hasattr(child, 'getModelName'))
+-                    [obj.emit(Qt.SIGNAL("itemClicked(QString)"), t)
++                    [obj.itemClicked.emit(t)
+                      for t in targets]
+ 
+                 cell_frame.mousePressEvent = partial(
+@@ -916,7 +916,7 @@
+     def itemClicked(self, item_name):
+         self.trace('In TaurusGrid.itemClicked(%s)' % item_name)
+         self.setItemSelected(item_name)
+-        self.emit(QtCore.SIGNAL("itemClicked(QString)"), str(item_name))
++        self.itemClicked.emit(str(item_name))
+ 
+     def setItemSelected(self, item_name='', selected=True):
+         """ it adds a blue frame around a clicked item. """
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusvaluestable.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/table/taurusvaluestable.py	(refactored)
+@@ -200,8 +200,7 @@
+             rvalue = rvalue.to(units)
+         self._rtabledata = rvalue
+         self._editable = False
+-        self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"),
+-                  self.createIndex(0, 0), self.createIndex(rows - 1, columns - 1))
++        self.dataChanged.emit(self.createIndex(0, 0), self.createIndex(rows - 1, columns - 1))
+ 
+     def getStatus(self, index):
+         '''
+@@ -290,7 +289,7 @@
+     def clearChanges(self):
+         '''clears the dictionary of changed values'''
+         self._modifiedDict.clear()
+-        self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), self.createIndex(
++        self.dataChanged.emit(self.createIndex(
+             0, 0), self.createIndex(self.rowCount() - 1, self.columnCount() - 1))
+ 
+     def inAlarmRange(self, value):
+@@ -363,8 +362,7 @@
+             # In version 4.6 of Qt when whole table is updated it is
+             # recommended to use beginReset()
+             self._wtabledata = wvalue
+-        self.emit(Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"),
+-                  self.createIndex(0, 0), self.createIndex(self.rowCount() - 1,
++        self.dataChanged.emit(self.createIndex(0, 0), self.createIndex(self.rowCount() - 1,
+                                                            self.columnCount() - 1))
+ 
+     def getModifiedDict(self):
+@@ -471,7 +469,7 @@
+         else:
+             editor = TableInlineEdit(parent)
+             editor._updateValidator(index.model().getAttr())
+-        self.emit(Qt.SIGNAL('editorCreated'))
++        self.editorCreated.emit()
+         return editor
+ 
+     def setEditorData(self, editor, index):
+@@ -530,10 +528,8 @@
+ 
+     def __init__(self, parent=None):
+         super(Qt.QLineEdit, self).__init__(parent)
+-        self.connect(self, Qt.SIGNAL(
+-            'textEdited(const QString &)'), self.textEdited)
+-        self.connect(self, Qt.SIGNAL(
+-            'focusLost(const QString &)'), self.textEdited)
++        self.textEdited.connect(self.textEdited)
++        self.focusLost.connect(self.textEdited)
+         self.setValidator(None)
+         self._min_range = None
+         self._max_range = None
+@@ -614,8 +610,7 @@
+         self._tableView = TaurusValuesIOTable(self)
+         l = Qt.QGridLayout()
+         l.addWidget(self._tableView, 1, 0)
+-        self.connect(self._tableView.itemDelegate(), Qt.SIGNAL("editorCreated"),
+-                     self._onEditorCreated)
++        self._tableView.itemDelegate().editorCreated.connect(self._onEditorCreated)
+ 
+         if defaultWriteMode is None:
+             self.defaultWriteMode = "rw"
+@@ -630,14 +625,12 @@
+ 
+         self._applyBT = Qt.QPushButton('Apply')
+         self._cancelBT = Qt.QPushButton('Cancel')
+-        self.connect(self._applyBT, Qt.SIGNAL("clicked()"), self.okClicked)
+-        self.connect(self._cancelBT, Qt.SIGNAL(
+-            "clicked()"), self.cancelClicked)
++        self._applyBT.clicked.connect(self.okClicked)
++        self._cancelBT.clicked.connect(self.cancelClicked)
+ 
+         self._rwModeCB = Qt.QCheckBox()
+         self._rwModeCB.setText('Write mode')
+-        self.connect(self._rwModeCB, Qt.SIGNAL("toggled(bool)"),
+-                     self.setWriteMode)
++        self._rwModeCB.toggled.connect(self.setWriteMode)
+ 
+         lv = Qt.QHBoxLayout()
+         lv.addWidget(self._label)
+@@ -660,13 +653,11 @@
+         self._pauseAction.setCheckable(True)
+         self._pauseAction.setChecked(False)
+         self.addAction(self._pauseAction)
+-        self.connect(self._pauseAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.setPaused)
++        self._pauseAction.toggled.connect(self.setPaused)
+         self.chooseModelAction = Qt.QAction("Choose &Model", self)
+         self.chooseModelAction.setEnabled(self.isModifiableByUser())
+         self.addAction(self.chooseModelAction)
+-        self.connect(self.chooseModelAction, Qt.SIGNAL(
+-            "triggered()"), self.chooseModel)
++        self.chooseModelAction.triggered.connect(self.chooseModel)
+ 
+     def getModelClass(self):
+         '''see :meth:`TaurusWidget.getModelClass`'''
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/appsettingswizard.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/appsettingswizard.py	(refactored)
+@@ -83,8 +83,7 @@
+ 
+     def valueChanged(self):
+         if not (self.trueButton.isChecked() == self._actualValue):
+-            self.emit(Qt.SIGNAL("valueChanged"),
+-                      self._actualValue, not self._actualValue)
++            self.valueChanged.emit(self._actualValue, not self._actualValue)
+         self._actualValue = self.trueButton.isChecked()
+ 
+     def setValue(self, value):
+@@ -129,7 +128,7 @@
+ 
+     def checkData(self):
+         self._valid = True
+-        self.emit(Qt.SIGNAL('completeChanged()'))
++        self.completeChanged.emit()
+ 
+     def isComplete(self):
+         return self._valid
+@@ -360,7 +359,7 @@
+         else:
+             self._markBlack(self._guiNameLabel)
+ 
+-        self.emit(Qt.SIGNAL('completeChanged()'))
++        self.completeChanged.emit()
+ 
+         if not self._valid:
+             self._setStatus("Please type the name of the GUI")
+@@ -1016,8 +1015,8 @@
+             "textChanged(const QString&)"), self._setDefaultText)
+         Qt.QObject.connect(self._iconLogo, Qt.SIGNAL(
+             "clicked()"), self._selectIcon)
+-        self.connect(self._dlgBox, Qt.SIGNAL('accepted()'), self.accept)
+-        self.connect(self._dlgBox, Qt.SIGNAL('rejected()'), self.reject)
++        self._dlgBox.accepted.connect(self.accept)
++        self._dlgBox.rejected.connect(self.reject)
+         self.checkData()
+         self._setIcon(ExternalAppAction.DEFAULT_ICON_NAME)
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/macrolistener.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/macrolistener.py	(refactored)
+@@ -174,10 +174,8 @@
+                     self.warning('Cannot create plot for %s', chname)
+ 
+         new1d, removed1d = self._updateTemporaryTrends1D(trends1d)
+-        self.emit(Qt.SIGNAL("newShortMessage"),
+-                  "Changed panels (%i new, %i removed)" % (len(new1d),
+-                                                           len(removed1d))
+-                  )
++        self.newShortMessage.emit("Changed panels (%i new, %i removed)" % (len(new1d),
++                                                           len(removed1d)))
+ #        self._updateTemporaryTrends2D(trends2d)
+ 
+     def _updateTemporaryTrends1D(self, trends1d):
+@@ -531,7 +529,7 @@
+             except:
+                 self.info('%s command failed on %s', cmd, pool.getFullName(),
+                           exc_info=1)
+-        self.emit(Qt.SIGNAL("newShortMessage"), "%s command sent to all pools" %
++        self.newShortMessage.emit("%s command sent to all pools" %
+                   cmd)
+         self.__lastAbortTime = now
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/paneldescriptionwizard.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/paneldescriptionwizard.py	(refactored)
+@@ -78,14 +78,11 @@
+         self.setLayout(layout)
+ 
+         # connections
+-        self.connect(self.moduleNameLE, Qt.SIGNAL(
+-            'editingFinished()'), self.onModuleSelected)
+-        self.connect(self.moduleNameLE, Qt.SIGNAL(
+-            'textEdited(QString)'), self.onModuleEdited)
+-        self.connect(self.membersCB, Qt.SIGNAL(
+-            'activated(QString)'), self.onMemberSelected)
+-        self.connect(self.dlgBox, Qt.SIGNAL('accepted()'), self.accept)
+-        self.connect(self.dlgBox, Qt.SIGNAL('rejected()'), self.reject)
++        self.moduleNameLE.editingFinished.connect(self.onModuleSelected)
++        self.moduleNameLE.textEdited.connect(self.onModuleEdited)
++        self.membersCB.activated.connect(self.onMemberSelected)
++        self.dlgBox.accepted.connect(self.accept)
++        self.dlgBox.rejected.connect(self.reject)
+ 
+     def onModuleEdited(self):
+         self.dlgBox.button(Qt.QDialogButtonBox.Ok).setEnabled(False)
+@@ -123,7 +120,7 @@
+             return
+         self.dlgBox.button(Qt.QDialogButtonBox.Ok).setEnabled(True)
+         # emit a signal with a dictionary that can be used to initialize
+-        self.emit(Qt.SIGNAL('memberSelected'), self.getMemberDescription())
++        self.memberSelected.emit(self.getMemberDescription())
+ 
+     def getMemberDescription(self):
+         try:
+@@ -166,7 +163,7 @@
+         else:
+             state = self.Acceptable
+         if state != self._previousState:
+-            self.emit(Qt.SIGNAL('stateChanged'), state, self._previousState)
++            self.stateChanged.emit(state, self._previousState)
+             self._previousState = state
+         if self._oldMode:  # for backwards compatibility with older versions of PyQt
+             return state, pos
+@@ -275,8 +272,7 @@
+ 
+         self.widgetTypeLB = Qt.QLabel("<b>Widget Type:</b>")
+ 
+-        self.connect(self.choiceWidget, Qt.SIGNAL(
+-            'choiceMade'), self.onChoiceMade)
++        self.choiceWidget.choiceMade.connect(self.onChoiceMade)
+ 
+         layout = Qt.QVBoxLayout()
+         layout.addLayout(nameLayout)
+@@ -290,8 +286,7 @@
+             pnames = gui.getPanelNames()
+             v = BlackListValidator(blackList=pnames, parent=self.nameLE)
+             self.nameLE.setValidator(v)
+-            self.connect(v, Qt.SIGNAL('stateChanged'),
+-                         self._onValidatorStateChanged)
++            v.stateChanged.connect(self._onValidatorStateChanged)
+ 
+     def validatePage(self):
+         paneldesc = self.wizard().getPanelDescription()
+@@ -361,10 +356,8 @@
+ #        self.modelChooser = TaurusModelChooser()
+ 
+         # connections
+-        self.connect(self.modelChooserBT, Qt.SIGNAL(
+-            'clicked()'), self.showModelChooser)
+-        self.connect(self.modelLE, Qt.SIGNAL(
+-            'editingFinished()'), self.onModelEdited)
++        self.modelChooserBT.clicked.connect(self.showModelChooser)
++        self.modelLE.editingFinished.connect(self.onModelEdited)
+ 
+         # layout
+         layout1 = Qt.QHBoxLayout()
+@@ -398,11 +391,9 @@
+         self.commGB.setLayout(layout2)
+ 
+         # connections
+-        self.connect(self.addBT, Qt.SIGNAL(
+-            'clicked()'), self.commModel.insertRows)
+-        self.connect(self.removeBT, Qt.SIGNAL('clicked()'), self.onRemoveRows)
+-        self.connect(self.commLV.selectionModel(), Qt.SIGNAL(
+-            'currentRowChanged(QModelIndex, QModelIndex)'), self.onCommRowSelectionChanged)
++        self.addBT.clicked.connect(self.commModel.insertRows)
++        self.removeBT.clicked.connect(self.onRemoveRows)
++        self.commLV.selectionModel().currentRowChanged.connect(self.onCommRowSelectionChanged)
+ 
+         layout.addWidget(self.modelGB)
+         layout.addWidget(self.commGB)
+@@ -525,8 +516,7 @@
+             column = index.column()
+             value = Qt.from_qvariant(value, str)
+             self.__table[row][column] = value
+-            self.emit(
+-                Qt.SIGNAL("dataChanged(QModelIndex,QModelIndex)"), index, index)
++            self.dataChanged.emit(index, index)
+             return True
+         return False
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/taurusgui.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/taurusgui/taurusgui.py	(refactored)
+@@ -67,11 +67,9 @@
+         self.loadUi()
+ 
+         self.refresh()
+-        self.connect(self.ui.instrumentCB, Qt.SIGNAL(
+-            'activated (QString)'), self.onInstrumentChanged)
+-        self.connect(self.ui.buttonBox, Qt.SIGNAL(
+-            "clicked(QAbstractButton *)"), self.onDialogButtonClicked)
+-        self.connect(self.ui.refreshBT, Qt.SIGNAL("clicked()"), self.refresh)
++        self.ui.instrumentCB.activated.connect(self.onInstrumentChanged)
++        self.ui.buttonBox.clicked.connect(self.onDialogButtonClicked)
++        self.ui.refreshBT.clicked.connect(self.refresh)
+ 
+     def refresh(self):
+         currentinstrument = self.ui.instrumentCB.currentText()
+@@ -323,7 +321,7 @@
+ 
+         # emit a short message informing that we are ready to go
+         msg = '%s is ready' % Qt.qApp.applicationName()
+-        self.emit(Qt.SIGNAL('newShortMessage'), msg)
++        self.newShortMessage.emit(msg)
+ 
+         if self.defaultConfigRecursionDepth >= 0:
+             Qt.QMessageBox.information(self, "Fail-proof mode",
+@@ -380,12 +378,10 @@
+         self.__panelsMenu.addSeparator()
+         self.__permPanelsMenu = Qt.QMenu('Permanent Panels', self)
+         self.__panelsMenu.addMenu(self.__permPanelsMenu)
+-        self.connect(self.__permPanelsMenu, Qt.SIGNAL(
+-            'aboutToShow()'), self.__updatePanelsMenu)
++        self.__permPanelsMenu.aboutToShow.connect(self.__updatePanelsMenu)
+         self.__tempPanelsMenu = Qt.QMenu('Temporary Panels', self)
+         self.__panelsMenu.addMenu(self.__tempPanelsMenu)
+-        self.connect(self.__tempPanelsMenu, Qt.SIGNAL(
+-            'aboutToShow()'), self.__updatePanelsMenu)
++        self.__tempPanelsMenu.aboutToShow.connect(self.__updatePanelsMenu)
+         self.__panelsMenu.addSeparator()
+ 
+     def __initViewMenu(self):
+@@ -396,8 +392,7 @@
+         self._lockviewAction = Qt.QAction(getThemeIcon(
+             "system-lock-screen"), "Lock View", self)
+         self._lockviewAction.setCheckable(True)
+-        self.connect(self._lockviewAction, Qt.SIGNAL(
+-            "toggled(bool)"), self.setLockView)
++        self._lockviewAction.toggled.connect(self.setLockView)
+         self._lockviewAction.setChecked(not self.isModifiableByUser())
+         self.viewMenu.addAction(self._lockviewAction)
+ 
+@@ -660,8 +655,7 @@
+         self.__panels[name] = panel
+ 
+         # connect the panel visibility changes
+-        self.connect(panel, Qt.SIGNAL('visibilityChanged(bool)'),
+-                     self._onPanelVisibilityChanged)
++        panel.visibilityChanged.connect(self._onPanelVisibilityChanged)
+ 
+         return panel
+ 
+@@ -803,7 +797,7 @@
+                          registerconfig=False, instrumentkey=paneldesc.instrumentkey,
+                          permanent=False)
+         msg = 'Panel %s created. Drag items to it or use the context menu to customize it' % w.name
+-        self.emit(Qt.SIGNAL('newShortMessage'), msg)
++        self.newShortMessage.emit(msg)
+ 
+     def createMainSynoptic(self, synopticname):
+         '''
+@@ -1086,12 +1080,12 @@
+             from taurus.qt.qtgui.taurusgui import MacroBroker
+             self.__macroBroker = MacroBroker(self)
+         if MACROSERVER_NAME:
+-            self.emit(Qt.SIGNAL("macroserverNameChanged"), MACROSERVER_NAME)
++            self.macroserverNameChanged.emit(MACROSERVER_NAME)
+ 
+         DOOR_NAME = getattr(conf, 'DOOR_NAME',
+                             self.__getVarFromXML(xmlroot, "DOOR_NAME", ''))
+         if DOOR_NAME:
+-            self.emit(Qt.SIGNAL("doorNameChanged"), DOOR_NAME)
++            self.doorNameChanged.emit(DOOR_NAME)
+ 
+         MACROEDITORS_PATH = getattr(conf, 'MACROEDITORS_PATH', self.__getVarFromXML(
+             xmlroot, "MACROEDITORS_PATH", ''))
+@@ -1412,7 +1406,7 @@
+             panelname = unicode(self.sender().objectName())
+             instrumentname = self.__panelToInstrumentMap.get(panelname)
+             if instrumentname is not None:
+-                self.emit(Qt.SIGNAL('SelectedInstrument'), instrumentname)
++                self.SelectedInstrument.emit(instrumentname)
+ 
+     def onSelectedInstrument(self, instrumentname):
+         ''' Slot to be called when the selected instrument has changed (e.g. by user
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/tree/qtree.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/tree/qtree.py	(refactored)
+@@ -115,13 +115,13 @@
+         return self._goUpAction
+ 
+     def goInto(self):
+-        self.emit(Qt.SIGNAL("goIntoTriggered"))
++        self.goIntoTriggered.emit()
+ 
+     def goUp(self):
+-        self.emit(Qt.SIGNAL("goUpTriggered"))
++        self.goUpTriggered.emit()
+ 
+     def goTop(self):
+-        self.emit(Qt.SIGNAL("goTopTriggered"))
++        self.goTopTriggered.emit()
+ 
+ 
+ class ExpansionBar(BaseToolBar):
+@@ -157,16 +157,16 @@
+         self.addAction(self._collapseSelectionAction)
+ 
+     def onExpandAll(self):
+-        self.emit(Qt.SIGNAL("expandTriggered"))
++        self.expandTriggered.emit()
+ 
+     def onCollapseAll(self):
+-        self.emit(Qt.SIGNAL("collapseTriggered"))
++        self.collapseTriggered.emit()
+ 
+     def onExpandSelection(self):
+-        self.emit(Qt.SIGNAL("expandSelectionTriggered"))
++        self.expandSelectionTriggered.emit()
+ 
+     def onCollapseSelection(self):
+-        self.emit(Qt.SIGNAL("collapseSelectionTriggered"))
++        self.collapseSelectionTriggered.emit()
+ 
+ 
+ class QBaseTreeWidget(QBaseModelWidget):
+@@ -194,21 +194,18 @@
+         ta = QBaseModelWidget.createToolArea(self)
+ 
+         e_bar = self._expandBar = ExpansionBar(view=self, parent=self)
+-        self.connect(e_bar, Qt.SIGNAL("expandTriggered"), self.expandAllTree)
+-        self.connect(e_bar, Qt.SIGNAL(
+-            "collapseTriggered"), self.collapseAllTree)
+-        self.connect(e_bar, Qt.SIGNAL("expandSelectionTriggered"),
+-                     self.expandSelectionTree)
+-        self.connect(e_bar, Qt.SIGNAL("collapseSelectionTriggered"),
+-                     self.collapseSelectionTree)
++        e_bar.expandTriggered.connect(self.expandAllTree)
++        e_bar.collapseTriggered.connect(self.collapseAllTree)
++        e_bar.expandSelectionTriggered.connect(self.expandSelectionTree)
++        e_bar.collapseSelectionTriggered.connect(self.collapseSelectionTree)
+         ta.append(e_bar)
+ 
+         if self._with_navigation_bar:
+             n_bar = self._navigationToolBar = self._with_navigation_bar(
+                 view=self, parent=self)
+-            self.connect(n_bar, Qt.SIGNAL("goIntoTriggered"), self.goIntoTree)
+-            self.connect(n_bar, Qt.SIGNAL("goTopTriggered"), self.goTopTree)
+-            self.connect(n_bar, Qt.SIGNAL("goUpTriggered"), self.goUpTree)
++            n_bar.goIntoTriggered.connect(self.goIntoTree)
++            n_bar.goTopTriggered.connect(self.goTopTree)
++            n_bar.goUpTriggered.connect(self.goUpTree)
+             ta.append(n_bar)
+         else:
+             self._navigationToolBar = None
+@@ -227,10 +224,9 @@
+         tree.setDragEnabled(True)
+         tree.setDropIndicatorShown(True)
+ 
+-        self.connect(tree, Qt.SIGNAL("expanded(QModelIndex)"), self.onExpanded)
+-        self.connect(tree, Qt.SIGNAL("clicked(QModelIndex)"), self._onClicked)
+-        self.connect(tree, Qt.SIGNAL(
+-            "doubleClicked(QModelIndex)"), self._onDoubleClicked)
++        tree.expanded.connect(self.onExpanded)
++        tree.clicked.connect(self._onClicked)
++        tree.doubleClicked.connect(self._onDoubleClicked)
+         h = tree.header()
+         h.setResizeMode(0, Qt.QHeaderView.Stretch)
+         return tree
+
+SKIPPING non trivial signal:
+ f.emit(Qt.SIGNAL(s), args)
+
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/tree/taurusdevicetree.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/tree/taurusdevicetree.py	(refactored)
+@@ -280,8 +280,7 @@
+ 
+     def addAttrToPlot(self, attr):
+         """ This method will send a signal with the given attr name, in a separate method to be called with a pre-filled list  """
+-        self.emit(Qt.SIGNAL("addAttrSelected(QStringList)"),
+-                  Qt.QStringList([str(attr)]))
++        self.addAttrSelected.emit(Qt.QStringList([str(attr)]))
+ 
+     def removeFromPlot(self):
+         """ This method will send a signal with the current selected node """
+@@ -295,8 +294,7 @@
+ 
+     def removeAttrFromPlot(self, attr):
+         """ This method will send a signal with the given attr name, in a separate method to be called with a pre-filled list """
+-        self.emit(Qt.SIGNAL("removeAttrSelected(QStringList)"),
+-                  Qt.QStringList([str(attr)]))
++        self.removeAttrSelected.emit(Qt.QStringList([str(attr)]))
+ 
+ 
+ ###############################################################################
+@@ -509,8 +507,7 @@
+         self.setGeometry(Qt.QRect(90, 60, 256, 192))
+         self.actionFindInTree = Qt.QAction(self)
+         self.actionFindInTree.setShortcut(Qt.QKeySequence.Find)
+-        self.connect(self.actionFindInTree, Qt.SIGNAL(
+-            "triggered()"), self.findDialog)
++        self.actionFindInTree.triggered.connect(self.findDialog)
+         #self.connect(self, Qt.SIGNAL("itemClicked"), self.clickedEvent)
+         from taurus.qt.qtgui.table.qdictionary import QDictionaryEditor, QListEditor
+         self.ExpertMenu.append(
+@@ -707,7 +704,7 @@
+ 
+     def refreshTree(self):
+         self.loadTree(self._filters)
+-        self.emit(Qt.SIGNAL("refreshTree"))
++        self.refreshTree.emit()
+ 
+     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+     # @name Methods for building server/devices/attributes tree
+@@ -1127,8 +1124,7 @@
+             # Signal
+             self.trace('TaurusTree emit deviceSelected(%s) signal ...' %
+                        device_name)
+-            self.emit(Qt.SIGNAL("deviceSelected(QString)"),
+-                      Qt.QString(device_name))
++            self.deviceSelected.emit(Qt.QString(device_name))
+         except:
+             self.error(traceback.format_exc())
+             pass
+@@ -1290,8 +1286,7 @@
+                     if k:
+                         configDialogAction = menu.addAction(k)
+                         if action:
+-                            self.connect(configDialogAction,
+-                                         Qt.SIGNAL("triggered()"), action)
++                            configDialogAction.triggered.connect(action)
+                         else:
+                             configDialogAction.setEnabled(False)
+                         last_was_separator = False
+@@ -1312,8 +1307,7 @@
+                     if k:
+                         configDialogAction = expert.addAction(k)
+                         if action:
+-                            self.connect(configDialogAction,
+-                                         Qt.SIGNAL("triggered()"), action)
++                            configDialogAction.triggered.connect(action)
+                         else:
+                             configDialogAction.setEnabled(False)
+                         last_was_separator = False
+@@ -1499,9 +1493,8 @@
+         self._edit = Qt.QLineEdit()
+         self._button = Qt.QPushButton()
+         self._button.setText('Search')
+-        self.connect(self._edit, Qt.SIGNAL(
+-            'returnPressed()'), self._button.animateClick)
+-        self.connect(self._button, Qt.SIGNAL('clicked()'), self._emitSearch)
++        self._edit.returnPressed.connect(self._button.animateClick)
++        self._button.clicked.connect(self._emitSearch)
+         self.layout().addWidget(self._edit)
+         self.layout().addWidget(self._button)
+ 
+@@ -1511,7 +1504,7 @@
+     def _emitSearch(self):
+         text = self._edit.text()
+         if text:
+-            self.emit(Qt.SIGNAL("search(QString)"), text)
++            self.search.emit(text)
+         return
+ 
+ SearchEdit = TaurusDevTreeOptions
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusaction.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusaction.py	(refactored)
+@@ -74,7 +74,7 @@
+         self.interactive = interactive
+         self._process = []
+         self.setCmdArgs(cmdargs)
+-        self.connect(self, Qt.SIGNAL("triggered()"), self.actionTriggered)
++        self.triggered.connect(self.actionTriggered)
+         self.setToolTip("Launches %s (external application)" % text)
+         self.registerConfigProperty(self.cmdArgs, self.setCmdArgs, 'cmdArgs')
+ 
+@@ -93,7 +93,7 @@
+             cmdargs = shlex.split(str(cmdargs))
+         self.__cmdargs = cmdargs
+         if emitsignal:
+-            self.emit(Qt.SIGNAL("cmdArgsChanged"), self.__cmdargs)
++            self.cmdArgsChanged.emit(self.__cmdargs)
+ 
+     def cmdArgs(self):
+         return self.__cmdargs
+@@ -192,9 +192,8 @@
+ 
+         Qt.QAction.__init__(self, parent)
+ 
+-        self.connect(parent, Qt.SIGNAL(
+-            'modelChanged(const QString &)'), self.modelChanged)
+-        self.connect(self, Qt.SIGNAL("triggered()"), self.actionTriggered)
++        parent.modelChanged.connect(self.modelChanged)
++        self.triggered.connect(self.actionTriggered)
+ 
+         self.update()
+ 
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusactionfactory.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusactionfactory.py	(refactored)
+@@ -125,9 +125,9 @@
+         """Create a QAction"""
+         action = Qt.QAction(text, parent)
+         if triggered is not None:
+-            parent.connect(action, Qt.SIGNAL("triggered()"), triggered)
++            action.triggered.connect(triggered)
+         if toggled is not None:
+-            parent.connect(action, Qt.SIGNAL("toggled(bool)"), toggled)
++            action.toggled.connect(toggled)
+             action.setCheckable(True)
+         if icon is not None:
+             if isinstance(icon, (str, unicode)):
+--- /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusscreenshot.py	(original)
++++ /home/cpascual/src/taurus/lib/taurus/qt/qtgui/util/taurusscreenshot.py	(refactored)
+@@ -74,10 +74,10 @@
+         Logger.__init__(self)
+         self._widget = widget
+         self._fileName = fileName
+-        self.connect(self, Qt.SIGNAL("grab"), self.onGrab)
++        self.grab.connect(self.onGrab)
+ 
+     def grabTrigger(self):
+-        self.emit(Qt.SIGNAL("grab"))
++        self.grab.emit()
+ 
+     def onGrab(self):
+         Grabber._grabWidget(self._widget, self._fileName)

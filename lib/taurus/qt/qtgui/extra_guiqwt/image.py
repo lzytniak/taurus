@@ -514,8 +514,7 @@ class TaurusTrend2DScanItem(TaurusTrend2DItem):
         :param doorname: (str) the QDoor name
         '''
         qdoor = taurus.Device(doorname)
-        qdoor.connect(qdoor, Qt.SIGNAL("recordDataUpdated"),
-                      self.scanDataReceived)
+        qdoor.recordDataUpdated.connect(self.scanDataReceived)
 
     def getModel(self):
         return self.__model
@@ -572,8 +571,7 @@ def taurusImageMain():
         plot.add_item(img)
         # IMPORTANT: connect the cross section plots to the taurusimage so that
         # they are updated when the taurus data changes
-        win.connect(img.getSignaller(), Qt.SIGNAL(
-            "dataChanged"), win.update_cross_sections)
+        img.getSignaller().dataChanged.connect(win.update_cross_sections)
 
     win.exec_()
 

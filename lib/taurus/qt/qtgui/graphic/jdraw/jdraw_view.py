@@ -150,7 +150,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
                     continue
                 item_colors[item._name] = item._currBgBrush.color().name()
             if emit:
-                self.emit(Qt.SIGNAL("itemsChanged"), self.modelName.split(
+                self.itemsChanged.emit(self.modelName.split(
                     '/')[-1].split('.')[0], item_colors)
         except:
             self.warning('Unable to emitColors: %s' % traceback.format_exc())
@@ -164,17 +164,17 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
 
     def _graphicItemSelected(self, item_name):
         self.debug(' => graphicItemSelected(QString)(%s)' % item_name)
-        self.emit(Qt.SIGNAL("graphicItemSelected(QString)"), item_name)
+        self.graphicItemSelected.emit(item_name)
 
     def _graphicSceneClicked(self, point):
         self.debug('In TaurusJDrawSynopticsView.graphicSceneClicked(%s,%s)' % (
             point.x(), point.y()))
-        self.emit(Qt.SIGNAL("graphicSceneClicked(QPoint)"), point)
+        self.graphicSceneClicked.emit(point)
 
     def modelsChanged(self):
         items = self.get_item_list()
         self.debug('modelsChanged(%s)' % len(items))
-        self.emit(Qt.SIGNAL("modelsChanged"), items)
+        self.modelsChanged.emit(items)
 
     def emitColors(self):
         '''emit signal which is used to refresh the tree and colors of icons depend of the current status in jdrawSynoptic'''

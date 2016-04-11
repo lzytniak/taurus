@@ -139,13 +139,13 @@ class TaurusValueComboBox(Qt.QComboBox, TaurusBaseWritableWidget):
         '''slot called to emit a valueChanged signal when the currentIndex is changed'''
         self.emitValueChanged()
         if self.getAutoApply():
-            self.emit(Qt.SIGNAL("applied()"))
+            self.applied.emit()
 
     def keyPressEvent(self, event):
         '''reimplemented to emit an 'applied()' signal when Enter (or Return)
         key is pressed'''
         if event.key() in [Qt.Qt.Key_Return, Qt.Qt.Key_Enter]:
-            self.emit(Qt.SIGNAL("applied()"))
+            self.applied.emit()
             event.accept()
         else:
             return Qt.QComboBox.keyPressEvent(self, event)

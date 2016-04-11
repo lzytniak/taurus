@@ -83,8 +83,7 @@ class BooleanWidget(Qt.QWidget):
 
     def valueChanged(self):
         if not (self.trueButton.isChecked() == self._actualValue):
-            self.emit(Qt.SIGNAL("valueChanged"),
-                      self._actualValue, not self._actualValue)
+            self.valueChanged.emit(self._actualValue, not self._actualValue)
         self._actualValue = self.trueButton.isChecked()
 
     def setValue(self, value):
@@ -129,7 +128,7 @@ class BasePage(Qt.QWizardPage):
 
     def checkData(self):
         self._valid = True
-        self.emit(Qt.SIGNAL('completeChanged()'))
+        self.completeChanged.emit()
 
     def isComplete(self):
         return self._valid
@@ -360,7 +359,7 @@ class GeneralSettings(BasePage):
         else:
             self._markBlack(self._guiNameLabel)
 
-        self.emit(Qt.SIGNAL('completeChanged()'))
+        self.completeChanged.emit()
 
         if not self._valid:
             self._setStatus("Please type the name of the GUI")
@@ -1016,8 +1015,8 @@ class ExternalAppEditor(Qt.QDialog):
             "textChanged(const QString&)"), self._setDefaultText)
         Qt.QObject.connect(self._iconLogo, Qt.SIGNAL(
             "clicked()"), self._selectIcon)
-        self.connect(self._dlgBox, Qt.SIGNAL('accepted()'), self.accept)
-        self.connect(self._dlgBox, Qt.SIGNAL('rejected()'), self.reject)
+        self._dlgBox.accepted.connect(self.accept)
+        self._dlgBox.rejected.connect(self.reject)
         self.checkData()
         self._setIcon(ExternalAppAction.DEFAULT_ICON_NAME)
 

@@ -74,10 +74,10 @@ class Grabber(Qt.QObject, Logger):
         Logger.__init__(self)
         self._widget = widget
         self._fileName = fileName
-        self.connect(self, Qt.SIGNAL("grab"), self.onGrab)
+        self.grab.connect(self.onGrab)
 
     def grabTrigger(self):
-        self.emit(Qt.SIGNAL("grab"))
+        self.grab.emit()
 
     def onGrab(self):
         Grabber._grabWidget(self._widget, self._fileName)

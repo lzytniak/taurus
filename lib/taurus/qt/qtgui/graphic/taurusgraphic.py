@@ -123,7 +123,7 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
 
             for v in p.views():
                 # p.debug("emit('updateView')")
-                emitter.emit(Qt.SIGNAL("updateView"), v)
+                emitter.updateView.emit(v)
             # This sleep is needed to reduce CPU usage of the application!
             self.sleep(self.period)
             # End of while
@@ -367,7 +367,7 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
     def getItemClicked(self, mouseEvent):
         pos = mouseEvent.scenePos()
         x, y = pos.x(), pos.y()
-        self.emit(Qt.SIGNAL("graphicSceneClicked(QPoint)"), Qt.QPoint(x, y))
+        self.graphicSceneClicked.emit(Qt.QPoint(x, y))
         obj = self.getItemByPosition(x, y)
         #self.debug('mouse clicked on %s(%s) at (%s,%s)'%(type(obj).__name__,getattr(obj,'_name',''),x,y))
         return obj
@@ -385,19 +385,17 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
                 if self.selectGraphicItem(obj_name):
                     self.debug(
                         ' => graphicItemSelected(QString)(%s)' % obj_name)
-                    self.emit(
-                        Qt.SIGNAL("graphicItemSelected(QString)"), obj_name)
+                    self.graphicItemSelected.emit(obj_name)
                 else:
                     # It should send None but the signature do not allow it
-                    self.emit(Qt.SIGNAL("graphicItemSelected(QString)"), "")
+                    self.graphicItemSelected.emit("")
 
             def addMenuAction(menu, k, action, last_was_separator=False):
                 try:
                     if k:
                         configDialogAction = menu.addAction(k)
                         if action:
-                            self.connect(configDialogAction, Qt.SIGNAL(
-                                "triggered()"), lambda dev=obj_name, act=action: act(dev))
+                            configDialogAction.triggered.connect(lambda dev=obj_name, act=action: act(dev))
                         else:
                             configDialogAction.setEnabled(False)
                         last_was_separator = False

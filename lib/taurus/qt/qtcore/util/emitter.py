@@ -219,7 +219,7 @@ class TaurusEmitterThread(Qt.QThread):
             except:
                 self.log.error('At TaurusEmitterThread._doSomething(%s): \n%s' % (
                     map(str, args), traceback.format_exc()))
-        self.emitter.emit(Qt.SIGNAL("somethingDone"))
+        self.emitter.somethingDone.emit()
         self._done += 1
         return
 
@@ -262,7 +262,7 @@ class TaurusEmitterThread(Qt.QThread):
                 else:
                     continue
             self.log.debug('Emitting doSomething signal ...')
-            self.emitter.emit(Qt.SIGNAL("doSomething"), item)
+            self.emitter.doSomething.emit(item)
             # End of while
         self.log.info(
             '#' * 80 + '\nOut of TaurusEmitterThread.run()' + '\n' + '#' * 80)
@@ -330,7 +330,7 @@ class SingletonWorker():  # Qt.QObject):
                     self.thread.getQueue().put(item)
                 i += 1
             self.log.info('%d Items added to emitter queue' % i)
-            self.thread.emitter.emit(Qt.SIGNAL("newQueue"))
+            self.thread.emitter.newQueue.emit()
         except Queue.Empty:
             self.log.warning(traceback.format_exc())
         except:

@@ -120,26 +120,22 @@ class TaurusForm(TaurusWidget):
 
         self.chooseModelsAction = Qt.QAction('Modify Contents', self)
         self.addAction(self.chooseModelsAction)
-        self.connect(self.chooseModelsAction, Qt.SIGNAL(
-            "triggered()"), self.chooseModels)
+        self.chooseModelsAction.triggered.connect(self.chooseModels)
 
         self.showButtonsAction = Qt.QAction('Show Buttons', self)
         self.showButtonsAction.setCheckable(True)
         self.addAction(self.showButtonsAction)
-        self.connect(self.showButtonsAction, Qt.SIGNAL(
-            "triggered(bool)"), self.setWithButtons)
+        self.showButtonsAction.triggered.connect(self.setWithButtons)
         self.setWithButtons(withButtons)
 
         self.changeLabelsAction = Qt.QAction('Change labels (all items)', self)
         self.addAction(self.changeLabelsAction)
-        self.connect(self.changeLabelsAction, Qt.SIGNAL(
-            "triggered()"), self.onChangeLabelsAction)
+        self.changeLabelsAction.triggered.connect(self.onChangeLabelsAction)
 
         self.compactModeAction = Qt.QAction('Compact mode (all items)', self)
         self.compactModeAction.setCheckable(True)
         self.addAction(self.compactModeAction)
-        self.connect(self.compactModeAction, Qt.SIGNAL(
-            "triggered(bool)"), self.setCompact)
+        self.compactModeAction.triggered.connect(self.setCompact)
 
         self.resetModifiableByUser()
         self.setSupportedMimeTypes([TAURUS_MODEL_LIST_MIME_TYPE, TAURUS_DEV_MIME_TYPE,
@@ -207,8 +203,7 @@ class TaurusForm(TaurusWidget):
             layout = Qt.QVBoxLayout()
             layout.addWidget(self.__modelChooserDlg.modelChooser)
             self.__modelChooserDlg.setLayout(layout)
-            self.connect(self.__modelChooserDlg.modelChooser,
-                         Qt.SIGNAL("updateModels"), self.setModel)
+            self.__modelChooserDlg.modelChooser.updateModels.connect(self.setModel)
 
         models_and_labels = []
         models = [m.lower() for m in self.getModel()]
@@ -584,8 +579,7 @@ class TaurusCommandsForm(TaurusWidget):
         self._operatorViewFilter = lambda x: x.disp_level == PyTango.DispLevel.OPERATOR
 
         # self.setLayout(Qt.QGridLayout())
-        self.connect(self, Qt.SIGNAL(
-            'modelChanged(const QString &)'), self._updateCommandWidgets)
+        self.modelChanged.connect(self._updateCommandWidgets)
 
     def createConfig(self, allowUnpickable=False):
         '''
@@ -646,8 +640,7 @@ class TaurusCommandsForm(TaurusWidget):
             layout.addWidget(button, row, 0)
             button.setUseParentModel(True)
             self._cmdWidgets.append(button)
-            self.connect(button, Qt.SIGNAL('commandExecuted'),
-                         self._onCommandExecuted)
+            button.commandExecuted.connect(self._onCommandExecuted)
 
             if c.in_type != PyTango.CmdArgType.DevVoid:
                 self.debug('Adding arguments for command %s' % c.cmd_name)
@@ -662,14 +655,10 @@ class TaurusCommandsForm(TaurusWidget):
                         pwidget.setEditable(False)
                         button.setParameters(self._defaultParameters[
                                              c.cmd_name.lower()][0])
-                self.connect(pwidget, Qt.SIGNAL(
-                    'editTextChanged (const QString&)'), button.setParameters)
-                self.connect(pwidget, Qt.SIGNAL(
-                    'currentIndexChanged (const QString&)'), button.setParameters)
-                self.connect(pwidget, Qt.SIGNAL(
-                    'activated (int)'), button.setFocus)
-                self.connect(button, Qt.SIGNAL('commandExecuted'),
-                             pwidget.rememberCurrentText)
+                pwidget.editTextChanged.connect(button.setParameters)
+                pwidget.currentIndexChanged.connect(button.setParameters)
+                pwidget.activated.connect(button.setFocus)
+                button.commandExecuted.connect(pwidget.rememberCurrentText)
                 layout.addWidget(pwidget, row, 1)
                 self._paramWidgets.append(pwidget)
 
@@ -792,8 +781,7 @@ class TaurusAttrForm(TaurusWidget):
         self.layout().addWidget(self._form)
         self.registerConfigDelegate(self._form)
 
-        self.connect(self, Qt.SIGNAL(
-            'modelChanged(const QString &)'), self._updateAttrWidgets)
+        self.modelChanged.connect(self._updateAttrWidgets)
 
         self._sortKey = lambda x: x.name
 
@@ -1022,18 +1010,15 @@ def taurusFormMain():
     from taurus.qt.qtgui.resource import getThemeIcon
     quitApplicationAction = Qt.QAction(
         getThemeIcon("process-stop"), 'Close Form', dialog)
-    dialog.connect(quitApplicationAction, Qt.SIGNAL(
-        "triggered()"), dialog.close)
+    quitApplicationAction.triggered.connect(dialog.close)
 
     saveConfigAction = Qt.QAction("Save current settings...", dialog)
     saveConfigAction.setShortcut(Qt.QKeySequence.Save)
-    dialog.connect(saveConfigAction, Qt.SIGNAL(
-        "triggered()"), dialog.saveConfigFile)
+    saveConfigAction.triggered.connect(dialog.saveConfigFile)
 
     loadConfigAction = Qt.QAction("&Retrieve saved settings...", dialog)
     loadConfigAction.setShortcut(Qt.QKeySequence.Open)
-    dialog.connect(loadConfigAction, Qt.SIGNAL(
-        "triggered()"), dialog.loadConfigFile)
+    loadConfigAction.triggered.connect(dialog.loadConfigFile)
 
     dialog.addActions(
         (saveConfigAction, loadConfigAction, quitApplicationAction))

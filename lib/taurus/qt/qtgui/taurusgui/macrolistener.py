@@ -174,10 +174,8 @@ class DynamicPlotManager(Qt.QObject, TaurusBaseComponent):
                     self.warning('Cannot create plot for %s', chname)
 
         new1d, removed1d = self._updateTemporaryTrends1D(trends1d)
-        self.emit(Qt.SIGNAL("newShortMessage"),
-                  "Changed panels (%i new, %i removed)" % (len(new1d),
-                                                           len(removed1d))
-                  )
+        self.newShortMessage.emit("Changed panels (%i new, %i removed)" % (len(new1d),
+                                                           len(removed1d)))
 #        self._updateTemporaryTrends2D(trends2d)
 
     def _updateTemporaryTrends1D(self, trends1d):
@@ -531,7 +529,7 @@ class MacroBroker(DynamicPlotManager):
             except:
                 self.info('%s command failed on %s', cmd, pool.getFullName(),
                           exc_info=1)
-        self.emit(Qt.SIGNAL("newShortMessage"), "%s command sent to all pools" %
+        self.newShortMessage.emit("%s command sent to all pools" %
                   cmd)
         self.__lastAbortTime = now
 

@@ -115,13 +115,13 @@ class NavigationToolBar(BaseToolBar):
         return self._goUpAction
 
     def goInto(self):
-        self.emit(Qt.SIGNAL("goIntoTriggered"))
+        self.goIntoTriggered.emit()
 
     def goUp(self):
-        self.emit(Qt.SIGNAL("goUpTriggered"))
+        self.goUpTriggered.emit()
 
     def goTop(self):
-        self.emit(Qt.SIGNAL("goTopTriggered"))
+        self.goTopTriggered.emit()
 
 
 class ExpansionBar(BaseToolBar):
@@ -157,16 +157,16 @@ class ExpansionBar(BaseToolBar):
         self.addAction(self._collapseSelectionAction)
 
     def onExpandAll(self):
-        self.emit(Qt.SIGNAL("expandTriggered"))
+        self.expandTriggered.emit()
 
     def onCollapseAll(self):
-        self.emit(Qt.SIGNAL("collapseTriggered"))
+        self.collapseTriggered.emit()
 
     def onExpandSelection(self):
-        self.emit(Qt.SIGNAL("expandSelectionTriggered"))
+        self.expandSelectionTriggered.emit()
 
     def onCollapseSelection(self):
-        self.emit(Qt.SIGNAL("collapseSelectionTriggered"))
+        self.collapseSelectionTriggered.emit()
 
 
 class QBaseTreeWidget(QBaseModelWidget):
@@ -194,21 +194,18 @@ class QBaseTreeWidget(QBaseModelWidget):
         ta = QBaseModelWidget.createToolArea(self)
 
         e_bar = self._expandBar = ExpansionBar(view=self, parent=self)
-        self.connect(e_bar, Qt.SIGNAL("expandTriggered"), self.expandAllTree)
-        self.connect(e_bar, Qt.SIGNAL(
-            "collapseTriggered"), self.collapseAllTree)
-        self.connect(e_bar, Qt.SIGNAL("expandSelectionTriggered"),
-                     self.expandSelectionTree)
-        self.connect(e_bar, Qt.SIGNAL("collapseSelectionTriggered"),
-                     self.collapseSelectionTree)
+        e_bar.expandTriggered.connect(self.expandAllTree)
+        e_bar.collapseTriggered.connect(self.collapseAllTree)
+        e_bar.expandSelectionTriggered.connect(self.expandSelectionTree)
+        e_bar.collapseSelectionTriggered.connect(self.collapseSelectionTree)
         ta.append(e_bar)
 
         if self._with_navigation_bar:
             n_bar = self._navigationToolBar = self._with_navigation_bar(
                 view=self, parent=self)
-            self.connect(n_bar, Qt.SIGNAL("goIntoTriggered"), self.goIntoTree)
-            self.connect(n_bar, Qt.SIGNAL("goTopTriggered"), self.goTopTree)
-            self.connect(n_bar, Qt.SIGNAL("goUpTriggered"), self.goUpTree)
+            n_bar.goIntoTriggered.connect(self.goIntoTree)
+            n_bar.goTopTriggered.connect(self.goTopTree)
+            n_bar.goUpTriggered.connect(self.goUpTree)
             ta.append(n_bar)
         else:
             self._navigationToolBar = None
@@ -227,10 +224,9 @@ class QBaseTreeWidget(QBaseModelWidget):
         tree.setDragEnabled(True)
         tree.setDropIndicatorShown(True)
 
-        self.connect(tree, Qt.SIGNAL("expanded(QModelIndex)"), self.onExpanded)
-        self.connect(tree, Qt.SIGNAL("clicked(QModelIndex)"), self._onClicked)
-        self.connect(tree, Qt.SIGNAL(
-            "doubleClicked(QModelIndex)"), self._onDoubleClicked)
+        tree.expanded.connect(self.onExpanded)
+        tree.clicked.connect(self._onClicked)
+        tree.doubleClicked.connect(self._onDoubleClicked)
         h = tree.header()
         h.setResizeMode(0, Qt.QHeaderView.Stretch)
         return tree

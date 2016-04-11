@@ -54,41 +54,41 @@ class QButtonBox(Qt.QDialogButtonBox):
 
     def onClicked(self, button):
         if self.standardButton(button) == Qt.QDialogButtonBox.Ok:
-            self.emit(Qt.SIGNAL("okClicked()"))
+            self.okClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Open:
-            self.emit(Qt.SIGNAL("openClicked()"))
+            self.openClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Save:
-            self.emit(Qt.SIGNAL("saveClicked()"))
+            self.saveClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Cancel:
-            self.emit(Qt.SIGNAL("cancelClicked()"))
+            self.cancelClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Close:
-            self.emit(Qt.SIGNAL("closeClicked()"))
+            self.closeClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Discard:
-            self.emit(Qt.SIGNAL("discardClicked()"))
+            self.discardClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Apply:
-            self.emit(Qt.SIGNAL("applyClicked()"))
+            self.applyClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Reset:
-            self.emit(Qt.SIGNAL("resetClicked()"))
+            self.resetClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.RestoreDefaults:
-            self.emit(Qt.SIGNAL("restoreDefaultsClicked()"))
+            self.restoreDefaultsClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Help:
-            self.emit(Qt.SIGNAL("helpClicked()"))
+            self.helpClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.SaveAll:
-            self.emit(Qt.SIGNAL("saveAllClicked()"))
+            self.saveAllClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Yes:
-            self.emit(Qt.SIGNAL("yesClicked()"))
+            self.yesClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.YesToAll:
-            self.emit(Qt.SIGNAL("yesToAllClicked()"))
+            self.yesToAllClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.No:
-            self.emit(Qt.SIGNAL("noClicked()"))
+            self.noClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.NoToAll:
-            self.emit(Qt.SIGNAL("noToAllClicked()"))
+            self.noToAllClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Abort:
-            self.emit(Qt.SIGNAL("abortClicked()"))
+            self.abortClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Retry:
-            self.emit(Qt.SIGNAL("retryClicked()"))
+            self.retryClicked.emit()
         elif self.standardButton(button) == Qt.QDialogButtonBox.Ignore:
-            self.emit(Qt.SIGNAL("ignoreClicked()"))
+            self.ignoreClicked.emit()
 
 
 if __name__ == "__main__":

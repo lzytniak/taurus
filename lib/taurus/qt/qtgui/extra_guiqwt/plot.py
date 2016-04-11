@@ -158,7 +158,7 @@ class TaurusCurveDialog(CurveDialog, TaurusBaseWidget):
                               linestyle=linestyle, linewidth=2)
             item.set_readonly(not self.isModifiableByUser())
             plot.add_item(item)
-        self.emit(Qt.SIGNAL("modelChanged()"))
+        self.modelChanged.emit()
 
     def getModel(self):
         """reimplemented from :class:`TaurusBaseWidget`"""
@@ -292,7 +292,7 @@ class TaurusTrendDialog(CurveDialog, TaurusBaseWidget):
             item.update_params()
 
         self.setStackMode(self.defaultTaurusparam.stackMode)
-        self.emit(Qt.SIGNAL("modelChanged()"))
+        self.modelChanged.emit()
 
     def getModel(self):
         """reimplemented from :class:`TaurusBaseWidget`"""
@@ -485,8 +485,7 @@ class TaurusImageDialog(ImageDialog, TaurusBaseWidget):
         self.imgItem.set_readonly(not self.isModifiableByUser())
         # IMPORTANT: connect the cross section plots to the taurusimage so that
         # they are updated when the taurus data changes
-        self.connect(self.imgItem.getSignaller(), Qt.SIGNAL(
-            "dataChanged"), self.update_cross_sections)
+        self.imgItem.getSignaller().dataChanged.connect(self.update_cross_sections)
 
     def getModel(self):
         '''reimplemented from :class:`TaurusBaseWidget`'''

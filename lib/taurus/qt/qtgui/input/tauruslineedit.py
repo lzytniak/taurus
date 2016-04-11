@@ -52,13 +52,10 @@ class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
         self.setAlignment(Qt.Qt.AlignRight)
         self.setValidator(None)
 
-        self.connect(self, Qt.SIGNAL(
-            'textChanged(const QString &)'), self.valueChanged)
-        self.connect(self, Qt.SIGNAL('returnPressed()'), self.writeValue)
-        self.connect(self, Qt.SIGNAL('valueChanged'),
-                     self.updatePendingOperations)
-        self.connect(self, Qt.SIGNAL('editingFinished()'),
-                     self._onEditingFinished)
+        self.textChanged.connect(self.valueChanged)
+        self.returnPressed.connect(self.writeValue)
+        self.valueChanged.connect(self.updatePendingOperations)
+        self.editingFinished.connect(self._onEditingFinished)
 
     def _updateValidator(self, value):
         '''This method sets a validator depending on the data type'''

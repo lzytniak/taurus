@@ -51,8 +51,7 @@ class TaurusValueSpinBox(Qt.QAbstractSpinBox):
         lineEdit = TaurusValueLineEdit(designMode=designMode)
         self.setLineEdit(lineEdit)
         self.setAccelerated(True)
-        self.connect(self, Qt.SIGNAL("editingFinished()"),
-                     self.writeValue)
+        self.editingFinished.connect(self.writeValue)
 
     def __getattr__(self, name):
         return getattr(self.lineEdit(), name)

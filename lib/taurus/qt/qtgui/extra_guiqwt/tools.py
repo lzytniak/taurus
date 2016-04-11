@@ -222,11 +222,9 @@ class AutoScrollTool(ToggleTool):
         # retrieve current Taurus curves
         for item in self.getScrollItems(plot):
             if checked:
-                self.connect(item.getSignaller(), Qt.SIGNAL(
-                    'scrollRequested'), self.onScrollRequested)
+                item.getSignaller().scrollRequested.connect(self.onScrollRequested)
             else:
-                self.disconnect(item.getSignaller(), Qt.SIGNAL(
-                    'scrollRequested'), self.onScrollRequested)
+                item.getSignaller().scrollRequested.disconnect(self.onScrollRequested)
 
     def getScrollItems(self, plot):
         return [item for item in plot.get_items() if isinstance(item, (TaurusTrendItem, TaurusTrend2DItem))]

@@ -280,8 +280,7 @@ class TaurusTreeNodeContainer(object):
 
     def addAttrToPlot(self, attr):
         """ This method will send a signal with the given attr name, in a separate method to be called with a pre-filled list  """
-        self.emit(Qt.SIGNAL("addAttrSelected(QStringList)"),
-                  Qt.QStringList([str(attr)]))
+        self.addAttrSelected.emit(Qt.QStringList([str(attr)]))
 
     def removeFromPlot(self):
         """ This method will send a signal with the current selected node """
@@ -295,8 +294,7 @@ class TaurusTreeNodeContainer(object):
 
     def removeAttrFromPlot(self, attr):
         """ This method will send a signal with the given attr name, in a separate method to be called with a pre-filled list """
-        self.emit(Qt.SIGNAL("removeAttrSelected(QStringList)"),
-                  Qt.QStringList([str(attr)]))
+        self.removeAttrSelected.emit(Qt.QStringList([str(attr)]))
 
 
 ###############################################################################
@@ -509,8 +507,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
         self.setGeometry(Qt.QRect(90, 60, 256, 192))
         self.actionFindInTree = Qt.QAction(self)
         self.actionFindInTree.setShortcut(Qt.QKeySequence.Find)
-        self.connect(self.actionFindInTree, Qt.SIGNAL(
-            "triggered()"), self.findDialog)
+        self.actionFindInTree.triggered.connect(self.findDialog)
         #self.connect(self, Qt.SIGNAL("itemClicked"), self.clickedEvent)
         from taurus.qt.qtgui.table.qdictionary import QDictionaryEditor, QListEditor
         self.ExpertMenu.append(
@@ -707,7 +704,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
 
     def refreshTree(self):
         self.loadTree(self._filters)
-        self.emit(Qt.SIGNAL("refreshTree"))
+        self.refreshTree.emit()
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # @name Methods for building server/devices/attributes tree
@@ -1127,8 +1124,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
             # Signal
             self.trace('TaurusTree emit deviceSelected(%s) signal ...' %
                        device_name)
-            self.emit(Qt.SIGNAL("deviceSelected(QString)"),
-                      Qt.QString(device_name))
+            self.deviceSelected.emit(Qt.QString(device_name))
         except:
             self.error(traceback.format_exc())
             pass
@@ -1290,8 +1286,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
                     if k:
                         configDialogAction = menu.addAction(k)
                         if action:
-                            self.connect(configDialogAction,
-                                         Qt.SIGNAL("triggered()"), action)
+                            configDialogAction.triggered.connect(action)
                         else:
                             configDialogAction.setEnabled(False)
                         last_was_separator = False
@@ -1312,8 +1307,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
                     if k:
                         configDialogAction = expert.addAction(k)
                         if action:
-                            self.connect(configDialogAction,
-                                         Qt.SIGNAL("triggered()"), action)
+                            configDialogAction.triggered.connect(action)
                         else:
                             configDialogAction.setEnabled(False)
                         last_was_separator = False
@@ -1499,9 +1493,8 @@ class TaurusDevTreeOptions(Qt.QWidget):
         self._edit = Qt.QLineEdit()
         self._button = Qt.QPushButton()
         self._button.setText('Search')
-        self.connect(self._edit, Qt.SIGNAL(
-            'returnPressed()'), self._button.animateClick)
-        self.connect(self._button, Qt.SIGNAL('clicked()'), self._emitSearch)
+        self._edit.returnPressed.connect(self._button.animateClick)
+        self._button.clicked.connect(self._emitSearch)
         self.layout().addWidget(self._edit)
         self.layout().addWidget(self._button)
 
@@ -1511,7 +1504,7 @@ class TaurusDevTreeOptions(Qt.QWidget):
     def _emitSearch(self):
         text = self._edit.text()
         if text:
-            self.emit(Qt.SIGNAL("search(QString)"), text)
+            self.search.emit(text)
         return
 
 SearchEdit = TaurusDevTreeOptions

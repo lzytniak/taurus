@@ -76,10 +76,8 @@ class TaurusMessageBox(Qt.QDialog):
                                self, designMode)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._panel)
-        self.connect(self.panel().buttonBox(), Qt.SIGNAL("accepted()"),
-                     self.accept)
-        self.connect(self._panel, Qt.SIGNAL("toggledDetails(bool)"),
-                     self._onShowDetails)
+        self.panel().buttonBox().accepted.connect(self.accept)
+        self._panel.toggledDetails.connect(self._onShowDetails)
 
     def _onShowDetails(self, show):
         self.adjustSize()
