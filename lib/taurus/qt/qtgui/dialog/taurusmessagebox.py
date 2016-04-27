@@ -79,7 +79,7 @@ class TaurusMessageBox(Qt.QDialog):
         self.panel().buttonBox().accepted.connect(self.accept)
         self._panel.toggledDetails.connect(self._onShowDetails)
 
-    def _onShowDetails(self, show):
+    def _onShowDetails(self):
         self.adjustSize()
 
     def panel(self):

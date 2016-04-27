@@ -40,7 +40,10 @@ from taurus.core import DataType, DataFormat, TaurusEventType
 
 class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
 
+    # ... who and where is __pyqtSignals__ used?
     __pyqtSignals__ = ("modelChanged(const QString &)",)
+
+    _valueChanged = Qt.pyqtSignal()
 
     def __init__(self, qt_parent=None, designMode=False):
         name = self.__class__.__name__
@@ -54,7 +57,7 @@ class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
 
         self.textChanged.connect(self.valueChanged)
         self.returnPressed.connect(self.writeValue)
-        self.valueChanged.connect(self.updatePendingOperations)
+        self._valueChanged.connect(self.updatePendingOperations)
         self.editingFinished.connect(self._onEditingFinished)
 
     def _updateValidator(self, value):
