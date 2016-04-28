@@ -45,6 +45,8 @@ class DataModel(QtCore.QObject):
     DataModels are singletons.
     '''
 
+    dataChanged = QtCore.pyqtSignal(object)
+
     def __init__(self, parent, dataUID, defaultData=None):
         '''
         creator
