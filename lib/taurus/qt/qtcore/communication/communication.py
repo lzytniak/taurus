@@ -122,7 +122,7 @@ class DataModel(QtCore.QObject):
 
         .. seealso:: :meth:`connectReader`, :meth:`setData`
         '''
-        self.connect(writer, QtCore.SIGNAL(signalname), self.setData)
+        getattr(writer, signalname).connect(self.setData)
         self.__writerSignals.append((weakref.ref(writer), signalname))
 
     def disconnectWriter(self, writer, signalname):
@@ -133,7 +133,7 @@ class DataModel(QtCore.QObject):
 
         .. seealso:: :meth:`SharedDataManager.disconnectWriter`
         '''
-        ok = self.disconnect(writer, QtCore.SIGNAL(signalname), self.setData)
+        ok = getattr(writer, signalname).disconnect(self.setData)
         self.__writerSignals.remove((weakref.ref(writer), signalname))
 
     def disconnectReader(self, slot):

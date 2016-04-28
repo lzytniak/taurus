@@ -1,13 +1,4 @@
 NEEDS_DECLARE:
-  DataModel:         self.dataChanged
-
-NOT_CONVERTED:
-         self.connect(writer, QtCore.SIGNAL(signalname), self.setData)
-
-NOT_CONVERTED:
-  self.disconnect(writer, QtCore.SIGNAL(signalname), self.setData)
-
-NEEDS_DECLARE:
   TaurusEmitterThread: self.emitter.somethingDone
 
 NEEDS_DECLARE:
