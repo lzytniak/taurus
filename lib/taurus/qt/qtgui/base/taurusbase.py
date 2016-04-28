@@ -70,8 +70,6 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
     _showQuality = True
     _eventBufferPeriod = 0
 
-    #_valueChanged = Qt.pyqtSignal()
-
     def __init__(self, name, parent=None, designMode=False):
         """Initialization of TaurusBaseComponent"""
         self.modelObj = None
@@ -1124,10 +1122,8 @@ class TaurusBaseWidget(TaurusBaseComponent):
         self._disconnect_on_hide = False
         self._supportedMimeTypes = None
         self._autoTooltip = True
-
         self.call__init__(TaurusBaseComponent, name,
                           parent=parent, designMode=designMode)
-
         self._setText = self._findSetTextMethod()
 
     # It makes the GUI to hang... If this needs implementing, we should
@@ -1596,7 +1592,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
     def emitValueChanged(self, *args):
         """Connect the specific XXXXChanged signals from derived classes to this
         method in order to have a unified signal which can be used by Taurus Widgets"""
-        self._valueChanged.emit()
+        self.valueChanged.emit()
         self.updatePendingOpsStyle()  # by default, update its own style
 
     def safeApplyOperations(self, ops=None):
@@ -1695,9 +1691,8 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
     appliedSignalSignature = 'applied'
 
     def __init__(self, name, taurus_parent=None, designMode=False):
-
         self.call__init__(TaurusBaseWidget, name,
-                         parent=taurus_parent, designMode=designMode)
+                          parent=taurus_parent, designMode=designMode)
 
         self._lastValue = None
 
@@ -1711,8 +1706,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         # operations
         self._forcedApply = False
 
-        # Is this really needed here? It's aslo done in tauruslineedit.__init__
-        # self._valueChanged.connect(self.updatePendingOperations)
+        self.valueChanged.connect(self.updatePendingOperations)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWidget overwriting

@@ -257,8 +257,6 @@ class TaurusMessagePanel(Qt.QWidget):
             msgbox = TaurusMessagePanel(*exc_info)
             msgbox.show()"""
 
-    toggledDetails = Qt.pyqtSignal()
-
     def __init__(self, err_type=None, err_value=None, err_traceback=None, parent=None, designMode=False):
         Qt.QWidget.__init__(self, parent)
         self.loadUi()
@@ -311,7 +309,7 @@ class TaurusMessagePanel(Qt.QWidget):
             text = "Show details..."
         self._ui._showDetailsButton.setText(text)
         self.adjustSize()
-        self.toggledDetails.emit()
+        self.toggledDetails.emit(show)
 
     def reportComboBox(self):
         return self._ui._reportComboBox

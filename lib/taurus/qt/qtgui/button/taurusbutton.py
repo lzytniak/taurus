@@ -38,8 +38,7 @@ from taurus.core.taurusdevice import TaurusDevice
 from taurus.qt.qtgui.base import TaurusBaseWidget
 from taurus.core.util import eventfilters
 from taurus.qt.qtgui.resource import getIcon
-# from taurus.qt.qtgui.dialog import ProtectTaurusMessageBox
-#from taurus.qt.qtgui.dialog import protectTaurusMessageBox
+from taurus.qt.qtgui.dialog import ProtectTaurusMessageBox
 
 
 class _ButtonDialog(Qt.QDialog):
@@ -270,9 +269,6 @@ class TaurusCommandButton(Qt.QPushButton, TaurusBaseWidget):
 
     __pyqtSignals__ = ("commandExecuted",)
 
-    # What should we return? ... so far, bool for our test.
-    _commandExecuted = Qt.pyqtSignal(bool)
-
     def __init__(self, parent=None, designMode=False, command=None,
                  parameters=None, icon=None, text=None,
                  timeout=None):
@@ -315,8 +311,7 @@ class TaurusCommandButton(Qt.QPushButton, TaurusBaseWidget):
             return '---'
         return self._command
 
-#    @ProtectTaurusMessageBox(title="Unexpected error when executing command")
-    #@protectTaurusMessageBox
+    @ProtectTaurusMessageBox(title="Unexpected error when executing command")
     def onClicked(self):
         return self._onClicked()
 
@@ -362,8 +357,7 @@ class TaurusCommandButton(Qt.QPushButton, TaurusBaseWidget):
         finally:
             modelobj.set_timeout_millis(orig_timeout)
 
-        # For testing purposes is sending a bool ... to be changed.
-        self._commandExecuted[bool].emit(result)
+        self.commandExecuted.emit(result)
         return result
 
     def _castParameters(self, parameters=None, command=None, dev=None):
@@ -667,14 +661,14 @@ def commandButtonMain():
 
     app = TaurusApplication()
     form = TaurusCommandButton(parent=None, designMode=False, command='DevBoolean', parameters=[
-                               1], icon=':/taurus.png', text='launch: DevBoolean 123')
+                               123], icon=':/taurus.png', text='launch: DevBoolean 123')
     form.setModel('sys/tg_test/1')
     form.setDangerMessage(
         'Booo scary command!!\n Maybe you should think twice!')
 
     def f(*a):
         print a
-    form._commandExecuted[bool].connect(f)
+    form.commandExecuted.connect(f)
     form.show()
     sys.exit(app.exec_())
 
@@ -722,5 +716,5 @@ def demo():
 
 if __name__ == '__main__':
     # lockButtonMain()
-    # launcherButtonMain()
-    commandButtonMain()
+    launcherButtonMain()
+    # commandButtonMain()
