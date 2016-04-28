@@ -60,60 +60,6 @@ NEEDS_DECLARE:
   TaurusQAttribute:         self.dataChanged
 
 NEEDS_DECLARE:
-  QButtonBox: self.okClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.openClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.saveClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.cancelClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.closeClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.discardClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.applyClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.resetClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.restoreDefaultsClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.helpClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.saveAllClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.yesClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.yesToAllClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.noClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.noToAllClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.abortClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.retryClicked
-
-NEEDS_DECLARE:
-  QButtonBox: self.ignoreClicked
-
-NEEDS_DECLARE:
   TaurusCommandButton: self.commandExecuted
 
 NOT_CONVERTED:
@@ -264,7 +210,7 @@ NEEDS_DECLARE:
   TaurusModelSelectorTree: self.addModels
 
 NOT_CONVERTED:
- 
+
         # self.tree.setUseParentModel(True)  #It does not work!!!!
         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
         self.connect(self, Qt.SIGNAL(
@@ -301,7 +247,7 @@ NEEDS_DECLARE:
   CurvesAppearanceChooser:             self.curvesLW.CurveTitleEdited
 
 NEEDS_DECLARE:
-  CurvesAppearanceChooser: 
+  CurvesAppearanceChooser:
         self.controlChanged
 
 NEEDS_DECLARE:
@@ -436,4 +382,3 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   Grabber: self.grab
-

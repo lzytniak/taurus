@@ -35,11 +35,27 @@ from taurus.external.qt import Qt
 
 
 class QButtonBox(Qt.QDialogButtonBox):
-    __pyqtSignals__ = ("okClicked()", "openClicked()", "saveClicked()", "cancelClicked()",
-                       "closeClicked()", "discardClicked()", "applyClicked()", "resetClicked()",
-                       "restoreDefaultsClicked()", "helpClicked()", "resetClicked()", "saveAllClicked()",
-                       "yesClicked()", "yesToAllClicked()", "noClicked()", "abortClicked()",
-                       "retryClicked()", "ignoreClicked()")
+
+    # PyQt Signals
+
+    okClicked = Qt.pyqtSignal()
+    openClicked = Qt.pyqtSignal()
+    saveClicked = Qt.pyqtSignal()
+    cancelClicked = Qt.pyqtSignal()
+    closeClicked = Qt.pyqtSignal()
+    discardClicked = Qt.pyqtSignal()
+    applyClicked = Qt.pyqtSignal()
+    resetClicked = Qt.pyqtSignal()
+    restoreDefaultsClicked = Qt.pyqtSignal()
+    helpClicked = Qt.pyqtSignal()
+    resetClicked = Qt.pyqtSignal()
+    saveAllClicked = Qt.pyqtSignal()
+    yesClicked = Qt.pyqtSignal()
+    yesToAllClicked = Qt.pyqtSignal()
+    noClicked = Qt.pyqtSignal()
+    abortClicked = Qt.pyqtSignal()
+    retryClicked = Qt.pyqtSignal()
+    ignoreClicked = Qt.pyqtSignal()
 
     def __init__(self, parent=None, designMode=False, buttons=None,
                  orientation=Qt.Qt.Horizontal):
@@ -49,8 +65,7 @@ class QButtonBox(Qt.QDialogButtonBox):
 
         Qt.QDialogButtonBox.__init__(self, buttons, orientation, parent)
 
-        Qt.QObject.connect(self, Qt.SIGNAL(
-            "clicked(QAbstractButton *)"), self.onClicked)
+        self.clicked.connect(self.onClicked)
 
     def onClicked(self, button):
         if self.standardButton(button) == Qt.QDialogButtonBox.Ok:
@@ -94,8 +109,16 @@ class QButtonBox(Qt.QDialogButtonBox):
 if __name__ == "__main__":
     import sys
 
+    def on_ok():
+        print('OK!')
+
+    def on_cancel():
+        print('Cancel!')
+
     app = Qt.QApplication(sys.argv)
-    bb = TaurusButtonBox()
+    bb = QButtonBox()
+    bb.okClicked.connect(on_ok)
+    bb.cancelClicked.connect(on_cancel)
     bb.show()
 
     sys.exit(app.exec_())
