@@ -1,12 +1,3 @@
-NEEDS_DECLARE:
-  TaurusEmitterThread: self.emitter.somethingDone
-
-NEEDS_DECLARE:
-  TaurusEmitterThread:             self.emitter.doSomething
-
-NEEDS_DECLARE:
-  SingletonWorker:             self.thread.emitter.newQueue
-
 NOT_CONVERTED:
  signaller.emit(Qt.SIGNAL('taurusEvent'), *evt)
 

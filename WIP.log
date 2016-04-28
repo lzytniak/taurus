@@ -2,4 +2,5 @@ Vincent M:
   - QButtonBox: done!
   - QTaurusBaseListemer: done!
   - DataModel: done!
-  - TaurusEmitterThread: in progress
+  - TaurusEmitterThread: done!
+  - SingletonWorker: done!
