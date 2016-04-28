@@ -1,7 +1,4 @@
 NEEDS_DECLARE:
-  QTaurusBaseListener:             emmiter.taurusEvent
-
-NEEDS_DECLARE:
   DataModel:         self.dataChanged
 
 NOT_CONVERTED:

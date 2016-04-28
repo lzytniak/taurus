@@ -40,13 +40,20 @@ class QTaurusBaseListener(TaurusListener):
     instanciable! Use a class that inherits from Qt class and from this class
     (example: :class:`QObjectTaurusListener`)"""
 
+    @property
+    def taurusEvent(self):
+        raise NotImplementedError("""\
+A subclass of `QTaurusBaseListener` should override `taurusEvent` with a \
+pyqtSignal using the following syntax:
+    taurusEvent = Qt.pyqtSignal(object, object, object)
+It is also possible to subclass `QOjbectTaurusListener` instead.""")
+
     def __init__(self, name=None, parent=None):
         if name is None:
             name = self.__class__.__name__
         super(QTaurusBaseListener, self).__init__(name, parent=parent)
         self._eventFilters = []
-        Qt.QObject.connect(self.getSignaller(), Qt.SIGNAL('taurusEvent'),
-                           self.filterEvent)
+        self.getSignaller().taurusEvent.connect(self.filterEvent)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # Event handling chain
@@ -172,6 +179,8 @@ class QTaurusBaseListener(TaurusListener):
 
 
 class QObjectTaurusListener(Qt.QObject, QTaurusBaseListener):
+
+    taurusEvent = Qt.pyqtSignal(object, object, object)
 
     def __init__(self, name=None, parent=None):
         self.call__init__wo_kw(Qt.QObject, parent)
