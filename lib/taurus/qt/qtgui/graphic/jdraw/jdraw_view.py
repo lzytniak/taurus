@@ -77,6 +77,11 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
     __pyqtSignals__ = ("itemsChanged", "modelsChanged",
                        "graphicItemSelected(QString)", "graphicSceneClicked(QPoint)")
 
+        itemsChanged = Qt.pyqtSignal()
+        modelsChanged = Qt.pyqtSignal()
+        graphicItemSelected = Qt.pyqtSignal('QString')
+        graphicSceneClicked = Qt.pyqtSignal('QPoint')
+
     def __init__(self, parent=None, designMode=False, updateMode=None, alias=None, resizable=True, panelClass=None):
         name = self.__class__.__name__
         self.call__init__wo_kw(Qt.QGraphicsView, parent)
@@ -390,10 +395,8 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
                 else:
                     self.debug('JDrawView.sceneRect() is NONE!!!')
                 self.setScene(scene)
-                Qt.QObject.connect(self.scene(), Qt.SIGNAL(
-                    "graphicItemSelected(QString)"), self._graphicItemSelected)
-                Qt.QObject.connect(self.scene(), Qt.SIGNAL(
-                    "graphicSceneClicked(QPoint)"), self._graphicSceneClicked)
+                self.scene().graphicItemSelected.connect(self._graphicItemSelected)
+                self.scene().graphicSceneClicked.connect(self._graphicSceneClicked)
                 # Qt.QObject.connect(Qt.QApplication.instance(),
                 # Qt.SIGNAL("lastWindowClosed()"), self.close) #It caused a
                 # segfault!

@@ -69,6 +69,8 @@ class GrabberThread(threading.Thread):
 
 class Grabber(Qt.QObject, Logger):
 
+    grab = Qt.pyqtSignal()
+
     def __init__(self, widget, fileName):
         Qt.QObject.__init__(self)
         Logger.__init__(self)

@@ -7,3 +7,11 @@ Vincent M:
   - TaurusBaseComponent: in progress
   - TaurusBaseWidget: in progress
   - TaurusBaseWritableWidget: in progress
+Gara S:
+ - Grabber: done!
+ - ExternalAppAction: done!
+ - TaurusJDrawSynopticsView: done!
+ - TaurusSearchTree: done!
+ - TaurusDevTreeOptions: done!
+ - TaurusDevTree: done!
+ - TaurusTreeNodeContainer: done!
