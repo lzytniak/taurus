@@ -18,20 +18,25 @@ def baseSignal(name, *args):
     attrs = {name: Qt.pyqtSignal(*args, name=name)}
     signaller_type = type(classname, (Qt.QObject,), attrs)
 
-    def get_signal(self):
+    def get_lock(self):
         with main_lock:
             if self not in lock_dict:
                 lock_dict[self] = Lock()
-        with lock_dict[self]:
+        return lock_dict[self]
+
+    def get_signaller(self):
+        with get_lock(self):
             if not hasattr(self, '_signallers'):
                 self._signallers = {}
             if (name, args) not in self._signallers:
                 self._signallers[name, args] = signaller_type()
-        return getattr(self._signallers[name, args], name)
+        return self._signallers[name, args]
+
+    def get_signal(self):
+        return getattr(get_signaller(self), name)
 
     doc = "Base signal {}".format(name)
     return property(get_signal, doc=doc)
-
 
 if __name__ == '__main__':
 
