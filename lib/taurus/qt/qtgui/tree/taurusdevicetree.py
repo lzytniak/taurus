@@ -74,6 +74,9 @@ class TaurusTreeNodeContainer(object):
     """
     _icon_map = {}  # A dictionary like {device_regexp:pixmap_url}
 
+    addAttrSelected = Qt.pyqtSignal('QStringList')
+    removeAttrSelected = Qt.pyqtSignal('QStringList')
+
     def __init__(self):
         raise Exception(
             'This class is just an interface, do not instantiate it!')
@@ -343,6 +346,9 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
 
     TRACE_ALL = False
 
+    refreshTree = Qt.pyqtSignal()
+    deviceSelected = Qt.pyqtSignal('QString')
+
     def __init__(self, parent=None, designMode=False):
         name = "TaurusDevTree"
         self._useParentModel = True
@@ -384,11 +390,8 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
         self.initConfig()
 
         # Signal
-        Qt.QObject.connect(self, Qt.SIGNAL(
-            "itemClicked(QTreeWidgetItem *,int)"), self.deviceClicked)
-        Qt.QObject.connect(self, Qt.SIGNAL("nodeFound"),
-                           self, Qt.SLOT("expandNode"))
-
+        self.itemclicked.connect(self.deviceClicked)
+        self.nodeFound.connect(self.expandNode)
         self.setDragDropMode(Qt.QAbstractItemView.DragDrop)
         self.setModifiableByUser(True)
         self.setModelInConfig(False)  # We store Filters instead!
@@ -1478,6 +1481,8 @@ class TaurusDevTreeOptions(Qt.QWidget):
         "hideUnarchived",
     )
 
+    search = Qt.pyqtSignal('QString')
+
     def __init__(self, parent=None, icon=None):
         Qt.QWidget.__init__(self, parent)
 
@@ -1667,10 +1672,8 @@ class TaurusSearchTree(TaurusWidget):
                 self.warning('Unable to add slot %s: %s' % (k, e))
         # Event forwarding ...
         for signal in TaurusDevTree.__pyqtSignals__:
-            # Qt.QObject.connect(self,Qt.SIGNAL("search(QString)"),tree.findInTree)
-            #self.emit(Qt.SIGNAL("search(QString)"), text)
-            Qt.QObject.connect(self.tree, Qt.SIGNAL(
-                signal), lambda args, f=self, s=signal: f.emit(Qt.SIGNAL(s), args))
+            getattr(self.tree, signal).connect(
+                lambda args, f=self, s=signal: getattr(f, signal).emit(args))
         self.edit.connectWithTree(self)
         return
 

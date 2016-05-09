@@ -87,18 +87,6 @@ NEEDS_DECLARE:
   TaurusGraphicsScene: self.graphicItemSelected
 
 NEEDS_DECLARE:
-  TaurusJDrawSynopticsView: self.itemsChanged
-
-NEEDS_DECLARE:
-  TaurusJDrawSynopticsView:         self.graphicItemSelected
-
-NEEDS_DECLARE:
-  TaurusJDrawSynopticsView:         self.graphicSceneClicked
-
-NEEDS_DECLARE:
-  TaurusJDrawSynopticsView:         self.modelsChanged
-
-NEEDS_DECLARE:
   GraphicalChoiceWidget:         self.choiceMade
 
 NOT_CONVERTED:
@@ -337,27 +325,3 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   ExpansionBar: self.collapseSelectionTriggered
-
-NEEDS_DECLARE:
-  TaurusTreeNodeContainer:         self.addAttrSelected
-
-NEEDS_DECLARE:
-  TaurusTreeNodeContainer:         self.removeAttrSelected
-
-NEEDS_DECLARE:
-  TaurusDevTree:         self.refreshTree
-
-NEEDS_DECLARE:
-  TaurusDevTree:             self.deviceSelected
-
-NEEDS_DECLARE:
-  TaurusDevTreeOptions: self.search
-
-NOT_CONVERTED:
-  f.emit(Qt.SIGNAL(s), args)
-
-NEEDS_DECLARE:
-  ExternalAppAction: self.cmdArgsChanged
-
-NEEDS_DECLARE:
-  Grabber: self.grab
