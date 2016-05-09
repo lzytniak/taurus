@@ -46,9 +46,9 @@ class TaurusWheelEdit(QWheelEdit, TaurusBaseWritableWidget):
         self.call__init__(TaurusBaseWritableWidget,
                           name, designMode=designMode)
         self.connect(self, Qt.SIGNAL(
-            QWheelEdit.NumberChangedStr), self.valueChanged)
+            QWheelEdit.NumberChangedStr), self.notifyValueChanged)
         self.returnPressed.connect(self.writeValue)
-        self.valueChanged.connect(self.updatePendingOperations)
+        self.valueChangedSignal.connect(self.updatePendingOperations)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWidget overwriting

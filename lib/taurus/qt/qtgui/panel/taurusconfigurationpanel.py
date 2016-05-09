@@ -49,7 +49,7 @@ class TangoConfigLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
         self.call__init__(TaurusBaseWritableWidget,
                           name, designMode=designMode)
 
-        self.textChanged.connect(self.valueChanged)
+        self.textChanged.connect(self.notifyValueChanged)
         self.returnPressed.connect(self.writeValue)
         self.editingFinished.connect(self._onEditingFinished)
 
@@ -58,7 +58,7 @@ class TangoConfigLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
             self.writeValue()
 
     def handleEvent(self, evt_src, evt_type, evt_value):
-        self.valueChanged()
+        self.notifyValueChanged()
 
     def getModelClass(self):
         return TaurusAttribute
@@ -120,7 +120,7 @@ class TangoConfigLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
             return None
         return self._getAttrInfoExMember(self.modelFragmentName)
 
-    def valueChanged(self):
+    def notifyValueChanged(self):
         if str(self.text()) != str(self.getValue()):
             style = 'TangoConfigLineEdit {color: %s; font-weight: %s}' %\
                     ('blue', 'bold')
@@ -139,7 +139,7 @@ class TangoConfigLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
 
     def setModel(self, model):
         TaurusBaseWritableWidget.setModel(self, model)
-        self.valueChanged()
+        self.notifyValueChanged()
 
     @classmethod
     def getQtDesignerPluginInfo(cls):

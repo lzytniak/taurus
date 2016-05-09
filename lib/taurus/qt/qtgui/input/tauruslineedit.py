@@ -52,9 +52,9 @@ class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
         self.setAlignment(Qt.Qt.AlignRight)
         self.setValidator(None)
 
-        self.textChanged.connect(self.valueChanged)
+        self.textChanged.connect(self.notifyValueChanged)
         self.returnPressed.connect(self.writeValue)
-        self.valueChanged.connect(self.updatePendingOperations)
+        self.valueChangedSignal.connect(self.updatePendingOperations)
         self.editingFinished.connect(self._onEditingFinished)
 
     def _updateValidator(self, value):
@@ -98,7 +98,7 @@ class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWritableWidget overwriting
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
-    def valueChanged(self, *args):
+    def notifyValueChanged(self, *args):
         '''reimplement to avoid autoapply on every partial edition'''
         self.emitValueChanged()
 

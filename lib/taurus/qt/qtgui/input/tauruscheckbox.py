@@ -46,7 +46,7 @@ class TaurusValueCheckBox(Qt.QCheckBox, TaurusBaseWritableWidget):
 
         self.setObjectName(name)
         self.updateStyle()
-        self.stateChanged.connect(self.valueChanged)
+        self.stateChanged.connect(self.notifyValueChanged)
 
     def keyPressEvent(self, event):
         if event.key() in (Qt.Qt.Key_Return, Qt.Qt.Key_Enter):
