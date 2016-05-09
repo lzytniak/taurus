@@ -46,8 +46,7 @@ class TaurusCurveItem(CurveItem, TaurusBaseComponent):
         self._signalGen = Qt.QObject()
         # I need to do this because I am not using the standard model attach
         # mechanism
-        self._signalGen.connect(self._signalGen, Qt.SIGNAL(
-            'taurusEvent'), self.filterEvent)
+        self.taurusEvent.connect(self.filterEvent)
         self._xcomp = None
         self._ycomp = None
         if taurusparam is None:

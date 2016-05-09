@@ -31,29 +31,29 @@ __all__ = ["QTaurusBaseListener", "QObjectTaurusListener"]
 
 __docformat__ = 'restructuredtext'
 
+from taurus.qt.qtcore.util import baseSignal
+from taurus.core.util.log import deprecation_decorator
 from taurus.core.tauruslistener import TaurusListener
 from taurus.external.qt import Qt
 
 
 class QTaurusBaseListener(TaurusListener):
-    """Base class for QObjects listening to taurus events. It is not
-    instanciable! Use a class that inherits from Qt class and from this class
-    (example: :class:`QObjectTaurusListener`)"""
+    """Base class for QObjects listening to taurus events.
 
-    @property
-    def taurusEvent(self):
-        raise NotImplementedError("""\
-A subclass of `QTaurusBaseListener` should override `taurusEvent` with a \
-pyqtSignal using the following syntax:
-    taurusEvent = Qt.pyqtSignal(object, object, object)
-It is also possible to subclass `QOjbectTaurusListener` instead.""")
+    .. note::
+           :meth:`getSignaller` is now unused and deprecated. This is because
+           `taurusEvent` is implemented using :func:`baseSignal`, that doesn't
+           require the class to inherit from QObject.
+    """
+
+    taurusEvent = baseSignal('taurusEvent', object, object, object)
 
     def __init__(self, name=None, parent=None):
         if name is None:
             name = self.__class__.__name__
         super(QTaurusBaseListener, self).__init__(name, parent=parent)
         self._eventFilters = []
-        self.getSignaller().taurusEvent.connect(self.filterEvent)
+        self.taurusEvent.connect(self.filterEvent)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # Event handling chain
@@ -94,8 +94,7 @@ It is also possible to subclass `QOjbectTaurusListener` instead.""")
         :param evt_value: (object or None) event value
         """
         try:
-            emmiter = self.getSignaller()
-            emmiter.taurusEvent.emit(evt_src, evt_type, evt_value)
+            self.taurusEvent.emit(evt_src, evt_type, evt_value)
         except:
             pass
 
@@ -170,17 +169,12 @@ It is also possible to subclass `QOjbectTaurusListener` instead.""")
         """
         self._eventFilters.insert(index, filter)
 
+    @deprecation_decorator
     def getSignaller(self):
-        '''Reimplement this method if your derived class does not inherit from
-        QObject. The return value should be a permanent object capable of
-        emitting Qt signals. See :class:`TaurusImageItem` as an example
-        '''
         return self
 
 
 class QObjectTaurusListener(Qt.QObject, QTaurusBaseListener):
-
-    taurusEvent = Qt.pyqtSignal(object, object, object)
 
     def __init__(self, name=None, parent=None):
         self.call__init__wo_kw(Qt.QObject, parent)

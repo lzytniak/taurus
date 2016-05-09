@@ -123,11 +123,6 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
 
     @deprecation_decorator
     def getSignaller(self):
-        '''
-        Reimplement this method if your derived class does not inherit from
-        QObject. The return value should be a permanent object capable of
-        emitting Qt signals. See :class:`TaurusImageItem` as an example
-        '''
         return self
 
     def deleteLater(self):

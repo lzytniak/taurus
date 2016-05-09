@@ -28,3 +28,4 @@
 __docformat__ = 'restructuredtext'
 
 from tauruslog import *
+from basesignal import *

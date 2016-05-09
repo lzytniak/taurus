@@ -1,5 +1,7 @@
 """Provide a Signal class for non-QObject objects"""
 
+__all__ = ['baseSignal']
+
 from PyQt4 import Qt
 from threading import Lock
 from weakref import WeakKeyDictionary
