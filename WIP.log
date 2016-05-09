@@ -4,9 +4,9 @@ Vincent M:
   - DataModel: done!
   - TaurusEmitterThread: done!
   - SingletonWorker: done!
-  - TaurusBaseComponent: in progress
-  - TaurusBaseWidget: in progress
-  - TaurusBaseWritableWidget: in progress
+  - TaurusBaseComponent: done!
+  - TaurusBaseWidget: done!
+  - TaurusBaseWritableWidget: done!
 Gara S:
  - Grabber: done!
  - ExternalAppAction: done!

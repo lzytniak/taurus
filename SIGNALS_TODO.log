@@ -1,37 +1,3 @@
-NOT_CONVERTED:
- signaller.emit(Qt.SIGNAL('taurusEvent'), *evt)
-
-NOT_CONVERTED:
- self.connect(parent_widget,
-                             Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
-                             self.parentModelChanged)
-
-NOT_CONVERTED:
- self.disconnect(parent_widget,
-                                Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
-                                self.parentModelChanged)
-
-NOT_CONVERTED:
- self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
-
-NOT_CONVERTED:
- self.disconnect(self._parentTaurusComponent,
-                                    Qt.SIGNAL(
-                                        TaurusBaseWidget.ModelChangedSignal),
-                                    self.parentModelChanged)
-
-NOT_CONVERTED:
-             self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
-
-NEEDS_DECLARE:
-  TaurusBaseWidget:         self.valueChanged
-
-NOT_CONVERTED:
- self.emit(Qt.SIGNAL(self.appliedSignalSignature))
-
-NOT_CONVERTED:
- self.emit(Qt.SIGNAL(self.appliedSignalSignature))
-
 NEEDS_DECLARE:
   TaurusQAttribute:             self.dataChanged
 
