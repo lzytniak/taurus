@@ -49,6 +49,8 @@ from taurus.core.taurusconfiguration import (TaurusConfiguration,
 from taurus.core.tauruslistener import TaurusListener, TaurusExceptionListener
 from taurus.core.taurusoperation import WriteAttrOperation
 from taurus.core.util.eventfilters import filterEvent
+from taurus.core.util.log import deprecation_decorator
+from taurus.qt.qtcore.util import baseSignal
 from taurus.qt.qtcore.configuration import BaseConfigurableClass
 from taurus.qt.qtcore.mimetypes import TAURUS_ATTR_MIME_TYPE, TAURUS_DEV_MIME_TYPE, TAURUS_MODEL_MIME_TYPE
 from taurus.qt.qtgui.util import ActionFactory
@@ -61,14 +63,18 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
 
        .. note::
            Any class which inherits from TaurusBaseComponent is expected to also
-           inherit from QObject (or from a QObject derived class) If this is not
-           fullfilled, at least the class should reimplement the :meth:`getSignaller`
-           method to return a QObject to be used for emitting and connecting
-           signals.
+           inherit from QObject (or from a QObject derived class).
+       .. note::
+           :meth:`getSignaller` is now unused and deprecated. This is because
+           `taurusEvent` is implemented using :func:`baseSignal`, that doesn't
+           require the class to inherit from QObject.
+
     """
     _modifiableByUser = False
     _showQuality = True
     _eventBufferPeriod = 0
+
+    taurusEvent = baseSignal('taurusEvent', object, object, object)
 
     def __init__(self, name, parent=None, designMode=False):
         """Initialization of TaurusBaseComponent"""
@@ -115,6 +121,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
             self.getModelInConfig, self.setModelInConfig, "ModelInConfig")
         self.resetModelInConfig()
 
+    @deprecation_decorator
     def getSignaller(self):
         '''
         Reimplement this method if your derived class does not inherit from
@@ -277,8 +284,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         else:
             # if we are not buffering, directly emit the signal
             try:
-                self.getSignaller().emit(Qt.SIGNAL('taurusEvent'),
-                                         evt_src, evt_type, evt_value)
+                self.taurusEvent.emit(evt_src, evt_type, evt_value)
             except:
                 pass  # self.error('%s.fireEvent(...) failed!'%type(self))
 
@@ -288,10 +294,9 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         Note: this method is normally called from an event buffer timer thread
               but it can also be called any time the buffer needs to be flushed
         '''
-        signaller = self.getSignaller()
         with self._eventsBufferLock:
             for evt in self._bufferedEvents.values():
-                signaller.emit(Qt.SIGNAL('taurusEvent'), *evt)
+                self.taurusEvent.emit(*evt)
             self._bufferedEvents = {}
 
     def filterEvent(self, evt_src=-1, evt_type=-1, evt_value=-1):
@@ -716,8 +721,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         Override when necessary.
         """
         try:
-            Qt.QObject.connect(self.getSignaller(), Qt.SIGNAL(
-                'taurusEvent'), self.filterEvent)
+            self.taurusEvent.connect(self.filterEvent)
         except:
             # self.error("In %s.preAttach() ... failed!" % str(type(self)))
             pass
@@ -737,8 +741,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         Override when necessary.
         """
         try:
-            Qt.QObject.disconnect(self.getSignaller(), Qt.SIGNAL(
-                'taurusEvent'), self.filterEvent)
+            self.taurusEvent.disconnect(self.filterEvent)
         except:
             # self.error("In %s.preDetach() ... failed!" % str(type(self)))
             pass
@@ -1115,7 +1118,9 @@ class TaurusBaseWidget(TaurusBaseComponent):
         Any class which inherits from TaurusBaseWidget is expected to also
         inherit from QWidget (or from a QWidget derived class)"""
 
-    ModelChangedSignal = 'modelChanged(const QString &)'
+    modelChanged = baseSignal('modelChanged', 'QString')
+    valueChangedSignal = baseSignal('valueChanged')
+
     _dragEnabled = False
 
     def __init__(self, name, parent=None, designMode=False):
@@ -1191,13 +1196,9 @@ class TaurusBaseWidget(TaurusBaseComponent):
         parent_widget = self.getParentTaurusComponent()
         if parent_widget:
             if yesno:
-                self.connect(parent_widget,
-                             Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
-                             self.parentModelChanged)
+                parent_widget.modelChanged.connect(self.parentModelChanged)
             else:
-                self.disconnect(parent_widget,
-                                Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal),
-                                self.parentModelChanged)
+                parent_widget.modelChanged.disconnect(self.parentModelChanged)
 
     def recheckTaurusParent(self):
         '''
@@ -1231,7 +1232,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
         if send_signal:
             # emit a signal informing the child widgets that the model has
             # changed
-            self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+            self.modelChanged.emit(model)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # Default Qt signal handlers. Overwrite them as necessary
@@ -1247,10 +1248,8 @@ class TaurusBaseWidget(TaurusBaseComponent):
             if evt_type == Qt.QEvent.ParentChange:
                 # disconnect from old parent
                 if self._parentTaurusComponent:
-                    self.disconnect(self._parentTaurusComponent,
-                                    Qt.SIGNAL(
-                                        TaurusBaseWidget.ModelChangedSignal),
-                                    self.parentModelChanged)
+                    self._parentTaurusComponent.modelChanged.disconnect(
+                        self.parentModelChanged)
                 self._updateUseParentModel(True)
                 self.setModelCheck(self.getModel(), False)
         self.getQtClass().changeEvent(self, evt)
@@ -1266,7 +1265,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
             # force an update of the interpretation of the model property
             model = self.getModel()
             self.setModelCheck(model, False)
-            self.emit(Qt.SIGNAL(TaurusBaseWidget.ModelChangedSignal), model)
+            self.modelChanged.emit(model)
         else:
             self.debug(
                 "received event from parent although not using parent model")
@@ -1592,7 +1591,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
     def emitValueChanged(self, *args):
         """Connect the specific XXXXChanged signals from derived classes to this
         method in order to have a unified signal which can be used by Taurus Widgets"""
-        self.valueChanged.emit()
+        self.valueChangedSignal.emit()
         self.updatePendingOpsStyle()  # by default, update its own style
 
     def safeApplyOperations(self, ops=None):
@@ -1688,7 +1687,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
     it emits the applied signal when the value has been applied.
     """
 
-    appliedSignalSignature = 'applied'
+    applied = baseSignal('applied')
 
     def __init__(self, name, taurus_parent=None, designMode=False):
         self.call__init__(TaurusBaseWidget, name,
@@ -1706,7 +1705,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         # operations
         self._forcedApply = False
 
-        self.valueChanged.connect(self.updatePendingOperations)
+        self.valueChangedSignal.connect(self.updatePendingOperations)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWidget overwriting
@@ -1728,7 +1727,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         '''
         Sets autoApply mode. In autoApply mode, the widget writes the value
         automatically whenever it is changed by the user (e.g., when
-        :meth:`valueChanged` is called). If False, a value changed just
+        :meth:`notifyValueChanged` is called). If False, a value changed just
         flags a "pending operation" which needs to be applied manually by
         the user before the value gets written.
 
@@ -1769,7 +1768,11 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         '''resets the forcedApply mode (i.e.: sets it to False)'''
         self.setForcedApply(False)
 
+    @deprecation_decorator(alt='notifyValueChanged')
     def valueChanged(self, *args):
+        return self.notifyValueChanged(*args)
+
+    def notifyValueChanged(self, *args):
         '''Subclasses should connect some particular signal to this method for
         indicating that something has changed.
         e.g., a QLineEdit should connect its "textChanged" signal...
@@ -1792,7 +1795,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
         if self.hasPendingOperations():
             applied = self.safeApplyOperations()
             if applied:
-                self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+                self.applied.emit()
             return
 
         # maybe we want to force an apply even if there are no pending ops...
@@ -1818,7 +1821,7 @@ class TaurusBaseWritableWidget(TaurusBaseWidget):
             op.setDangerMessage(self.getDangerMessage())
             applied = self.safeApplyOperations([op])
             if applied:
-                self.emit(Qt.SIGNAL(self.appliedSignalSignature))
+                self.applied.emit()
             self.info('Force-Applied value = %s' % str(v))
         except:
             self.error('Unexpected exception in forceApply')
