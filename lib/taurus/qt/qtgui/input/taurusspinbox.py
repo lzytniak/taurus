@@ -38,7 +38,7 @@ from taurus.qt.qtgui.resource import getStandardIcon
 
 class TaurusValueSpinBox(Qt.QAbstractSpinBox):
 
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, qt_parent=None, designMode=False):
         Qt.QAbstractSpinBox.__init__(self, qt_parent)
@@ -71,7 +71,7 @@ class TaurusValueSpinBox(Qt.QAbstractSpinBox):
         self.setValue(self.getValue() + self.getSingleStep() * steps)
 
         if self.lineEdit().getAutoApply():
-            self.lineEdit().emit(Qt.SIGNAL('editingFinished()'))
+            self.lineEdit().editingFinished.emit()
         else:
             kmods = Qt.QCoreApplication.instance().keyboardModifiers()
             controlpressed = bool(kmods & Qt.Qt.ControlModifier)

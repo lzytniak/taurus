@@ -33,7 +33,7 @@ from taurus.external.qt import QtCore, QtGui, Qt
 
 class QXTermWidget(QtGui.QWidget):
 
-    __pyqtSignals__ = ("commandFinished(int)")
+    commandFinished = Qt.pyqtSignal(int)
 
     def __init__(self, parent=None, designMode=False):
         QtGui.QWidget.__init__(self, parent)
@@ -44,8 +44,7 @@ class QXTermWidget(QtGui.QWidget):
         self._proc = None
         if not designMode:
             self._proc = QtCore.QProcess(self)
-            QtCore.QObject.connect(self._proc, QtCore.SIGNAL(
-                "finished(int, QProcess::ExitStatus)"), self._commandFinished)
+            self._proc.finished.connect(self._commandFinished)
 
     def closeEvent(self, event):
         self._endTheProcess()

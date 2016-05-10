@@ -150,10 +150,12 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
      allows to configure custom context menus for graphic items using a list
      of tuples. Empty tuples will insert separators in the menu.
     '''
-    __pyqtSignals__ = (
-        "refreshTree2", "graphicItemSelected(QString)", "graphicSceneClicked(QPoint)")
     ANY_ATTRIBUTE_SELECTS_DEVICE = True
     TRACE_ALL = False
+
+    refreshTree2 = Qt.pyqtSignal()
+    graphicItemSelected = Qt.pyqtSignal('QString')
+    graphicSceneClicked = Qt.pyqtSignal('QPoint')
 
     def __init__(self, parent=None, strt=True):
         name = self.__class__.__name__

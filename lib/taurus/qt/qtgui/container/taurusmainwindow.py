@@ -174,7 +174,7 @@ class TaurusMainWindow(Qt.QMainWindow, TaurusBaseContainer):
             - Help (accessible by derived classes  as `self.helpMenu`)
 
     '''
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     # customization options:
     # blinking semi-period in ms. Set to None for not showing the Heart beat

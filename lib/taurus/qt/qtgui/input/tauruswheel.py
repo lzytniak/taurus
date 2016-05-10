@@ -38,15 +38,14 @@ from qwheel import QWheelEdit
 
 
 class TaurusWheelEdit(QWheelEdit, TaurusBaseWritableWidget):
-    __pyqtSignals__ = ('modelChanged(const QString &)',)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, qt_parent=None, designMode=False):
         name = self.__class__.__name__
         self.call__init__wo_kw(QWheelEdit, qt_parent)
         self.call__init__(TaurusBaseWritableWidget,
                           name, designMode=designMode)
-        self.connect(self, Qt.SIGNAL(
-            QWheelEdit.NumberChangedStr), self.notifyValueChanged)
+        self.numberChanged.connect(self.notifyValueChanged)
         self.returnPressed.connect(self.writeValue)
         self.valueChangedSignal.connect(self.updatePendingOperations)
 

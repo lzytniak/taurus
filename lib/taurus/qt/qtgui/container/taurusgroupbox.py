@@ -50,9 +50,8 @@ class TaurusGroupBox(Qt.QGroupBox, TaurusBaseContainer):
         layout.addWidget(stateWidget)
         stateWidget.useParentModel = True
         stateWidget.model = '/state'"""
-
-    __pyqtSignals__ = ("modelChanged(const QString &)",
-                       "pendingOperationsChanged(bool)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
+    pendingOperationsChanged = Qt.pyqtSignal(bool)
 
     def __init__(self, parent=None, designMode=False):
         name = self.__class__.__name__

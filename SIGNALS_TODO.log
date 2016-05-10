@@ -38,31 +38,10 @@ NOT_CONVERTED:
          self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
 
 NEEDS_DECLARE:
-  QXTermWidget: self.commandFinished
-
-NEEDS_DECLARE:
   TaurusGraphicsUpdateThread: emitter.updateView
 
 NEEDS_DECLARE:
-  TaurusGraphicsScene:         self.graphicSceneClicked
-
-NEEDS_DECLARE:
-  TaurusGraphicsScene:                     self.graphicItemSelected
-
-NEEDS_DECLARE:
-  TaurusGraphicsScene: self.graphicItemSelected
-
-NEEDS_DECLARE:
   GraphicalChoiceWidget:         self.choiceMade
-
-NOT_CONVERTED:
- self.emit(Qt.SIGNAL(QWheelEdit.NumberChangedStr), v)
-
-NOT_CONVERTED:
- self.emit(Qt.SIGNAL(QWheelEdit.NumberEditedStr), v)
-
-NEEDS_DECLARE:
-  QWheelEdit: self.returnPressed
 
 NEEDS_DECLARE:
   TaurusValueComboBox: self.applied
@@ -70,45 +49,6 @@ NEEDS_DECLARE:
 NOT_CONVERTED:
          self.connect(self, Qt.SIGNAL(
             QWheelEdit.NumberChangedStr), self.valueChanged)
-
-NEEDS_DECLARE:
-  FilterToolBar:         self.clearFilterTriggered
-
-NEEDS_DECLARE:
-  FilterToolBar:         self.filterChanged
-
-NEEDS_DECLARE:
-  FilterToolBar:         self.filterEdited
-
-NEEDS_DECLARE:
-  EditorToolBar: self.addTriggered
-
-NEEDS_DECLARE:
-  EditorToolBar: self.removeTriggered
-
-NEEDS_DECLARE:
-  EditorToolBar: self.moveTopTriggered
-
-NEEDS_DECLARE:
-  EditorToolBar: self.moveUpTriggered
-
-NEEDS_DECLARE:
-  EditorToolBar: self.moveDownTriggered
-
-NEEDS_DECLARE:
-  EditorToolBar: self.moveBottomTriggered
-
-NEEDS_DECLARE:
-  SelectionToolBar: self.selectAllTriggered
-
-NEEDS_DECLARE:
-  SelectionToolBar: self.clearSelectionTriggered
-
-NEEDS_DECLARE:
-  RefreshToolBar: self.refreshTriggered
-
-NEEDS_DECLARE:
-  PerspectiveToolBar:         self.perspectiveChanged
 
 NEEDS_DECLARE:
   QBaseModelWidget:         self.itemClicked
@@ -196,15 +136,6 @@ NEEDS_DECLARE:
   TaurusCurve:         self._signalGen.dataChanged
 
 NEEDS_DECLARE:
-  TaurusPlot: self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusPlot: self.CurvesYAxisChanged
-
-NEEDS_DECLARE:
-  TaurusPlot:         self.modelChanged
-
-NEEDS_DECLARE:
   TaurusTrendsSet: self.dataChanged
 
 NEEDS_DECLARE:
@@ -218,12 +149,6 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   LoggingToolBar: self.scrollLockToggled
-
-NEEDS_DECLARE:
-  TaurusGrid: obj.itemClicked
-
-NEEDS_DECLARE:
-  TaurusGrid:         self.itemClicked
 
 NEEDS_DECLARE:
   TaurusValuesIOTableModel:         self.dataChanged
@@ -270,24 +195,3 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   TaurusGui: self.SelectedInstrument
-
-NEEDS_DECLARE:
-  NavigationToolBar: self.goIntoTriggered
-
-NEEDS_DECLARE:
-  NavigationToolBar: self.goUpTriggered
-
-NEEDS_DECLARE:
-  NavigationToolBar: self.goTopTriggered
-
-NEEDS_DECLARE:
-  ExpansionBar: self.expandTriggered
-
-NEEDS_DECLARE:
-  ExpansionBar: self.collapseTriggered
-
-NEEDS_DECLARE:
-  ExpansionBar: self.expandSelectionTriggered
-
-NEEDS_DECLARE:
-  ExpansionBar: self.collapseSelectionTriggered

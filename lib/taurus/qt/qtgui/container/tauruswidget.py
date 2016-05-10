@@ -51,7 +51,7 @@ class TaurusWidget(Qt.QWidget, TaurusBaseContainer):
         stateWidget.useParentModel = True
         stateWidget.model = '/state'"""
 
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         name = self.__class__.__name__

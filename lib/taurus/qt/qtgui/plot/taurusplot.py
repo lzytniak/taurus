@@ -1019,7 +1019,9 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
                  :ref:`TaurusPlot User's Interface Guide <taurusplot_ui>`,
                  :ref:`The TaurusPlot coding examples <examples_taurusplot>`
     '''
-    __pyqtSignals__ = ("dataChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
+    dataChanged = Qt.pyqtSignal('const QString &')
+    CurvesYAxisChanged = Qt.pyqtSignal('QStringList', int)
 
     def __init__(self, parent=None, designMode=False):
         name = "TaurusPlot"

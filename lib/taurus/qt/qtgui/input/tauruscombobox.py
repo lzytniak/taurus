@@ -42,7 +42,7 @@ class TaurusValueComboBox(Qt.QComboBox, TaurusBaseWritableWidget):
     '''This widget shows a combobox that offers a limited choice of values that
     can be set on an attribute.'''
 
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         self._previousModelName = None
@@ -278,7 +278,7 @@ class TaurusValueComboBox(Qt.QComboBox, TaurusBaseWritableWidget):
 
 class TaurusAttrListComboBox(Qt.QComboBox, TaurusBaseWidget):
 
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         name = self.__class__.__name__

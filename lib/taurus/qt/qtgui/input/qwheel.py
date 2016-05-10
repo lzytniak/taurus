@@ -183,13 +183,12 @@ class QWheelEdit(Qt.QFrame):
     """A widget designed to handle numeric scalar values. It allows interaction
     based on single digit as well as normal value edition."""
 
-    NumberChangedStr = 'numberChanged(double)'
-    NumberEditedStr = 'numberEdited(double)'
+    numberChanged = Qt.pyqtSignal(double)
+    numberEdited = Qt.pyqtSignal(double)
+    returnPressed = Qt.pyqtSignal()
 
     DefaultIntDigitCount = 6
     DefaultDecDigitCount = 2
-
-    __pyqtSignals__ = (NumberChangedStr, NumberEditedStr)
 
     def __init__(self, parent=None):
         """__init__(self, parent = None) -> QWheelEdit
@@ -456,10 +455,10 @@ class QWheelEdit(Qt.QFrame):
             self._digitLabels[i].setText(c)
 
         if trigValueChanged:
-            self.emit(Qt.SIGNAL(QWheelEdit.NumberChangedStr), v)
+            self.numberChanged.emit(v)
 
         if trigValueEdited:
-            self.emit(Qt.SIGNAL(QWheelEdit.NumberEditedStr), v)
+            self.numberEdited.emit(v)
 
     def setRoundFunc(self, roundFunc):
         """setRoundFunc(self, roundFunc) -> None

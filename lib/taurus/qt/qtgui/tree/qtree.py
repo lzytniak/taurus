@@ -82,6 +82,10 @@ class _NavigationWidget(Qt.QFrame):
 
 class NavigationToolBar(BaseToolBar):
 
+    goIntoTriggered = Qt.pyqtSignal()
+    goUpTriggered = Qt.pyqtSignal()
+    goTopTriggered = Qt.pyqtSignal()
+
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus selection toolbar", view=view,
                              parent=parent, designMode=designMode)
@@ -125,6 +129,11 @@ class NavigationToolBar(BaseToolBar):
 
 
 class ExpansionBar(BaseToolBar):
+
+    expandTriggered = Qt.pyqtSignal()
+    collapseTriggered = Qt.pyqtSignal()
+    expandSelectionTriggered = Qt.pyqtSignal()
+    collapseSelectionTriggered = Qt.pyqtSignal()
 
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus selection toolbar", view=view,

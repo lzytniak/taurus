@@ -57,6 +57,10 @@ class BaseToolBar(Qt.QToolBar):
 class FilterToolBar(BaseToolBar):
     """Internal widget providing quick filter to be placed in a _QToolArea"""
 
+    filterEdited = Qt.pyqtSignal('const QString &')
+    filterChanged = Qt.pyqtSignal('const QString &')
+    clearFilterTriggered = Qt.pyqtSignal()
+
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus filter toolbar", view=view,
                              parent=parent, designMode=designMode)
@@ -64,12 +68,8 @@ class FilterToolBar(BaseToolBar):
         filterLineEdit.setSizePolicy(Qt.QSizePolicy(Qt.QSizePolicy.Preferred,
                                                     Qt.QSizePolicy.Preferred))
         filterLineEdit.setToolTip("Quick filter")
-        Qt.QObject.connect(filterLineEdit,
-                           Qt.SIGNAL("textChanged(const QString &)"),
-                           self.onFilterChanged)
-        Qt.QObject.connect(filterLineEdit,
-                           Qt.SIGNAL("textEdited(const QString &)"),
-                           self.onFilterEdited)
+        filterLineEdit.textChanged.connect(self.onFilterChanged)
+        filterLineEdit.textEdited.connect(self.onFilterEdited)
         self.addWidget(filterLineEdit)
 
         af = ActionFactory()
@@ -102,6 +102,13 @@ class FilterToolBar(BaseToolBar):
 class EditorToolBar(BaseToolBar):
     """Internal widget to be placed in a _QToolArea providing buttons for
     moving, adding and removing items from a view based widget"""
+
+    addTriggered = Qt.pyqtSignal()
+    removeTriggered  = Qt.pyqtSignal()
+    moveTopTriggered = Qt.pyqtSignal()
+    moveDownTriggered = Qt.pyqtSignal()
+    moveUpTriggered = Qt.pyqtSignal()
+    moveBottomTriggered = Qt.pyqtSignal()
 
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus editor toolbar", view=view,
@@ -162,6 +169,9 @@ class EditorToolBar(BaseToolBar):
 
 class SelectionToolBar(BaseToolBar):
 
+    selectAllTriggered = Qt.pyqtSignal()
+    clearSelectionTriggered = Qt.pyqtSignal()
+
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus selection toolbar", view=view,
                              parent=parent, designMode=designMode)
@@ -190,6 +200,8 @@ class SelectionToolBar(BaseToolBar):
 
 class RefreshToolBar(BaseToolBar):
 
+    refreshTriggered = Qt.pyqtSignal()
+
     def __init__(self, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus refresh toolbar", view=view,
                              parent=parent, designMode=designMode)
@@ -207,6 +219,8 @@ class RefreshToolBar(BaseToolBar):
 
 
 class PerspectiveToolBar(BaseToolBar):
+
+    perspectiveChanged = Qt.pyqtSignal(str)
 
     def __init__(self, perspective, view=None, parent=None, designMode=False):
         BaseToolBar.__init__(self, name="Taurus refresh toolbar", view=view,

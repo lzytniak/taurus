@@ -15,3 +15,30 @@ Gara S:
  - TaurusDevTreeOptions: done!
  - TaurusDevTree: done!
  - TaurusTreeNodeContainer: done!
+ - QXTermWidget: done!
+ - tauruswidget_template: done!
+ - TaurusGrid: done!
+ - TaurusPropTable: done!
+ - TaurusPlot: wip
+ - TaurusValue: done!
+ - QWheel: done!
+ - TaurusWheelEdit: done!
+ - TaurusValueSpinBox: done!
+ - TaurusValueLineEdit: done!
+ - TaurusValueComboBox: done!
+ - TaurusGraphicsScene: done!
+ - TaurusLinearGauge: done!
+ - TaurusWidget: done!
+ - TaurusScrollArea: done!
+ - TaurusMainWindow: done!
+ - TaurusGroupWidget: done!
+ - TaurusGroupBox: done!
+ - TaurusFrame: done!
+ - TaurusCommandButton: done!
+ - ExpansionBar: done!
+ - NavigationToolBar: done!
+ - EditorToolBar: done!
+ - SelectionToolBar: done!
+ - FilterTollBar: done!
+ - RefreshToolBar: done!
+ - PerspectiveToolBar: done!

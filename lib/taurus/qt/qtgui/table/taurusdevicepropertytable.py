@@ -42,7 +42,7 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
     @todo add a frame for Add, Delete and Refresh buttons!
     '''
     # TODO This widget is Tango-centric
-    __pyqtSignals__ = ("modelChanged(const QString &)",)
+    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         try:
@@ -126,8 +126,7 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
         elif self.db is None:
             self.warning('Model must be set before calling setTable')
             return
-        QtCore.QObject.disconnect(self, QtCore.SIGNAL("cellChanged(int, int)"),
-                                  self.valueChanged)
+	    self.cellChanged.disconnect(self.valueChanged)
         dev_name = str(dev_name)
         self.list_prop = list(self.db.get_device_property_list(dev_name, '*'))
         self.setRowCount(len(self.list_prop))
@@ -370,10 +369,9 @@ class EditTextDialog(QtGui.QDialog):
         self.show()
         self.result = 0
         # Signals
-        QtCore.QObject.connect(
-            self.buttonBox, QtCore.SIGNAL("accepted()"), self.pressOK)
-        QtCore.QObject.connect(
-            self.buttonBox, QtCore.SIGNAL("rejected()"), self.close)
+        
+        self.buttonBox.accepted.connect(self.pressOK)
+        self.buttonBox.rejected.connect(self.close)
 
     def initComponents(self):
         widgetLayout = QtGui.QVBoxLayout(self)
