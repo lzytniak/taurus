@@ -145,6 +145,8 @@ class TaurusCurveItemTableModel(Qt.QAbstractTableModel):
     ''' A Qt data model for describing curves
     '''
 
+    dataChanged = Qt.pyqtSignal('QModelIndex', 'QModelIndex')
+
     def __init__(self, curves=None):
         if curves is None:
             curves = []
@@ -343,6 +345,9 @@ class CurveItemConfDlg(Qt.QWidget):
     Provides a browser for Taurus models and an editable table for the sources
     and title of data
     '''
+
+    dataChanged = Qt.pyqtSignal('QModelIndex', 'QModelIndex')
+    applied = Qt.pyqtSignal()
 
     def __init__(self, parent=None, curves=None, showXcol=True):
         super(CurveItemConfDlg, self).__init__(parent)

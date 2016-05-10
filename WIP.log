@@ -54,3 +54,5 @@ Gara S:
  - TaurusValuesIOTableModel: done!
  - TaurusValuesIOTableDelegate: done!
  - LoggingToolBar: done!
+ - CurveItemConfDlg: done!
+ - TaurusCurveItemTableModel: done!

@@ -68,6 +68,8 @@ class DynamicPlotManager(Qt.QObject, TaurusBaseComponent):
     used.
     '''
 
+    newShortMessage = Qt.pyqtSignal(str)
+
     def __init__(self, parent=None):
         Qt.QObject.__init__(self, parent)
         TaurusBaseComponent.__init__(self, self.__class__.__name__)
@@ -321,8 +323,6 @@ class MacroBroker(DynamicPlotManager):
         - Macro "panic" button (to abort macros)
         - Dynamic plots (see :class:`DynamicPlotManager`)
     '''
-
-    newShortMessage = Qt.pyqtSignal(str)
 
     def __init__(self, parent):
         '''Passing the parent object (the main window) is mandatory'''

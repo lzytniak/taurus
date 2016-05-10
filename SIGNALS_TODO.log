@@ -5,15 +5,6 @@ NOT_CONVERTED:
  self.connect(self.writeWidget, sig, self.exitEdit)
 
 NEEDS_DECLARE:
-  TaurusCurveItemTableModel: self.dataChanged
-
-NEEDS_DECLARE:
-  CurveItemConfDlg:                 self.dataChanged
-
-NEEDS_DECLARE:
-  CurveItemConfDlg: self.applied
-
-NEEDS_DECLARE:
   TaurusCurveDialog: self.modelChanged
 
 NEEDS_DECLARE:
