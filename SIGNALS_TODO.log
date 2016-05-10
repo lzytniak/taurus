@@ -4,20 +4,11 @@ NEEDS_DECLARE:
 NEEDS_DECLARE:
   TaurusQAttribute:         self.dataChanged
 
-NEEDS_DECLARE:
-  TaurusCommandButton: self.commandExecuted
-
 NOT_CONVERTED:
  self.connect(self.readWidget, sig, self.enterEdit)
 
 NOT_CONVERTED:
  self.connect(self.writeWidget, sig, self.exitEdit)
-
-NEEDS_DECLARE:
-  TaurusGroupBox:         self.pendingOperationsChanged
-
-NEEDS_DECLARE:
-  TaurusMainWindow:         self.perspectiveChanged
 
 NEEDS_DECLARE:
   TaurusCurveItemTableModel: self.dataChanged
@@ -42,9 +33,6 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   GraphicalChoiceWidget:         self.choiceMade
-
-NEEDS_DECLARE:
-  TaurusValueComboBox: self.applied
 
 NOT_CONVERTED:
          self.connect(self, Qt.SIGNAL(
@@ -183,15 +171,3 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   CommTableModel:             self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusGui:         self.newShortMessage
-
-NEEDS_DECLARE:
-  TaurusGui: self.macroserverNameChanged
-
-NEEDS_DECLARE:
-  TaurusGui: self.doorNameChanged
-
-NEEDS_DECLARE:
-  TaurusGui: self.SelectedInstrument

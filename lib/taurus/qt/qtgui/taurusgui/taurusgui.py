@@ -272,6 +272,11 @@ class TaurusGui(TaurusMainWindow):
 
     '''
 
+    SelectedInstrument = Qt.pyqtSignal(str)
+    doorNameChanged = Qt.pyqtSignal(str)
+    macroserverNameChanged = Qt.pyqtSignal(str)
+    newShortMessage = Qt.pyqtSignal(str)
+
     IMPLICIT_ASSOCIATION = '__[IMPLICIT]__'
 
     def __init__(self, parent=None, confname=None, configRecursionDepth=None):
