@@ -106,6 +106,8 @@ class BasePage(Qt.QWizardPage):
         This class represents the base page for all of the pages in the wizard
     """
 
+    completeChanged = Qt.pyqtSignal()
+
     def __init__(self, parent=None):
         Qt.QWizardPage.__init__(self, parent)
         self._item_funcs = {}

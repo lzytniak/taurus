@@ -322,6 +322,8 @@ class MacroBroker(DynamicPlotManager):
         - Dynamic plots (see :class:`DynamicPlotManager`)
     '''
 
+    newShortMessage = Qt.pyqtSignal(str)
+
     def __init__(self, parent):
         '''Passing the parent object (the main window) is mandatory'''
         DynamicPlotManager.__init__(self, parent)

@@ -1,9 +1,3 @@
-NEEDS_DECLARE:
-  TaurusQAttribute:             self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusQAttribute:         self.dataChanged
-
 NOT_CONVERTED:
  self.connect(self.readWidget, sig, self.enterEdit)
 
@@ -33,10 +27,6 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   GraphicalChoiceWidget:         self.choiceMade
-
-NOT_CONVERTED:
-         self.connect(self, Qt.SIGNAL(
-            QWheelEdit.NumberChangedStr), self.valueChanged)
 
 NEEDS_DECLARE:
   QBaseModelWidget:         self.itemClicked
@@ -136,38 +126,4 @@ NEEDS_DECLARE:
   TaurusTrend: self.dataChanged
 
 NEEDS_DECLARE:
-  LoggingToolBar: self.scrollLockToggled
-
-NEEDS_DECLARE:
-  TaurusValuesIOTableModel:         self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusValuesIOTableModel: self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusValuesIOTableDelegate: self.editorCreated
-
-NEEDS_DECLARE:
   BooleanWidget: self.valueChanged
-
-NEEDS_DECLARE:
-  BasePage:         self.completeChanged
-
-NEEDS_DECLARE:
-  GeneralSettings: self.completeChanged
-
-NEEDS_DECLARE:
-  DynamicPlotManager:         self.newShortMessage
-
-NEEDS_DECLARE:
-  MacroBroker: self.newShortMessage
-
-NEEDS_DECLARE:
-  ExpertWidgetChooserDlg:         # emit a signal with a dictionary that can be used to initialize
-        self.memberSelected
-
-NEEDS_DECLARE:
-  BlackListValidator: self.stateChanged
-
-NEEDS_DECLARE:
-  CommTableModel:             self.dataChanged

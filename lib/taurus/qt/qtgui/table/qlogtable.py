@@ -367,6 +367,8 @@ class QLoggingTable(Qt.QTableView):
 
 class LoggingToolBar(FilterToolBar):
 
+    scrollLockToggled = Qt.pyqtSignal(bool)
+
     def __init__(self, view=None, parent=None, designMode=False):
         FilterToolBar.__init__(self, view=view, parent=parent,
                                designMode=designMode)
@@ -498,8 +500,7 @@ class QLoggingWidget(QBaseTableWidget):
     def createToolArea(self):
         tb = QBaseTableWidget.createToolArea(self)
         filterBar = self.getFilterBar()
-        Qt.QObject.connect(filterBar, Qt.SIGNAL("scrollLockToggled(bool)"),
-                           self.onScrollLockToggled)
+        filterBar.scrollLockToggled.connect(self.onScrollLockToggled)
         return tb
 
     def onScrollLockToggled(self, yesno):

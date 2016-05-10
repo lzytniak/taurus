@@ -47,6 +47,8 @@ import copy
 class ExpertWidgetChooserDlg(Qt.QDialog):
     CHOOSE_TYPE_TXT = '(choose type)'
 
+    memberSelected = Qt.pyqtSignal(dict)
+
     def __init__(self, parent=None):
         Qt.QDialog.__init__(self, parent)
 
@@ -144,6 +146,8 @@ class ExpertWidgetChooserDlg(Qt.QDialog):
 
 
 class BlackListValidator(Qt.QValidator):
+
+    stateChanged = Qt.pyqtSignal(int, int)
 
     def __init__(self, blackList=None, parent=None):
         Qt.QValidator.__init__(self, parent)
@@ -458,6 +462,8 @@ class AdvSettingsPage(Qt.QWizardPage):
 class CommTableModel(Qt.QAbstractTableModel):
     NUMCOLS = 3
     UID, R, W = range(NUMCOLS)
+
+    dataChanged = Qt.pyqtSignal(int, int)
 
     def __init__(self, parent=None):
         Qt.QAbstractTableModel.__init__(self, parent)

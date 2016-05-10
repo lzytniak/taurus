@@ -70,6 +70,9 @@ class TaurusQAttribute(Qt.QObject, TaurusBaseComponent):
     It stores the value in a numpy array and emits a
     dataChanged signal when the data has changed.
     '''
+
+    dataChanged = Qt.pyqtSignal()
+
     pyVar_RegExp = re.compile(
         "[a-zA-Z_][a-zA-Z0-9_]*")  # regexp for a variable/method name (symbol)
     # regexp for references to qAttrs in extended models

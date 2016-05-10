@@ -62,6 +62,8 @@ class TaurusValuesIOTableModel(Qt.QAbstractTableModel):
                       'u': int, 'i': int, 'S': str, 'U': unicode}
     # Need to have an array
 
+    dataChanged = Qt.pyqtSignal('QModelIndex', 'QModelIndex')
+
     def __init__(self, size, parent=None):
         Qt.QAbstractTableModel.__init__(self, parent)
         self._parent = parent
@@ -451,6 +453,8 @@ class TaurusValuesIOTable(Qt.QTableView):
 
 
 class TaurusValuesIOTableDelegate(Qt.QStyledItemDelegate):
+
+    editorCreated = Qt.pyqtSignal()
 
     def __init__(self, parent=None):
         Qt.QStyledItemDelegate.__init__(self, parent)

@@ -19,7 +19,7 @@ Gara S:
  - tauruswidget_template: done!
  - TaurusGrid: done!
  - TaurusPropTable: done!
- - TaurusPlot: wip
+ - TaurusPlot: done!
  - TaurusValue: done!
  - QWheel: done!
  - TaurusWheelEdit: done!
@@ -43,3 +43,14 @@ Gara S:
  - RefreshToolBar: done!
  - PerspectiveToolBar: done!
  - TaurusGui: done!
+ - TaurusQAttribute: done!
+ - CommTableMOdel: done!
+ - ExpertWidgetChooserDlg: done!
+ - BlackListValidator: done!
+ - MacroBroker: done!
+ - DynamicPlotManager: done!
+ - BasePage: done!
+ - GeneralSettings: done!
+ - TaurusValuesIOTableModel: done!
+ - TaurusValuesIOTableDelegate: done!
+ - LoggingToolBar: done!
