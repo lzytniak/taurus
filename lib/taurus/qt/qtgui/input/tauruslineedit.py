@@ -40,8 +40,6 @@ from taurus.core import DataType, DataFormat, TaurusEventType
 
 class TaurusValueLineEdit(Qt.QLineEdit, TaurusBaseWritableWidget):
 
-    modelChanged = Qt.pyqtSignal('const QString &')
-
     def __init__(self, qt_parent=None, designMode=False):
         name = self.__class__.__name__
         self.call__init__wo_kw(Qt.QLineEdit, qt_parent)

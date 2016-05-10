@@ -42,7 +42,6 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
     @todo add a frame for Add, Delete and Refresh buttons!
     '''
     # TODO This widget is Tango-centric
-    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         try:

@@ -40,8 +40,6 @@ from taurus.qt.qtgui.base import TaurusBaseWidget
 
 class TaurusLinearGauge(qtcontrols.ELinearGauge, TaurusBaseWidget):
 
-    modelChanged = Qt.pyqtSignal('const QString &')
-
     def __init__(self, parent=None, designMode=False):
         name = self.__class__.__name__
         self.call__init__wo_kw(qtcontrols.ELinearGauge, parent)
@@ -130,8 +128,6 @@ class TaurusLinearGauge(qtcontrols.ELinearGauge, TaurusBaseWidget):
 
 
 class TaurusCircularGauge(qtcontrols.ECircularGauge, TaurusBaseWidget):
-
-    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         name = self.__class__.__name__

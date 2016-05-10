@@ -343,7 +343,6 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
     deviceSelected = Qt.pyqtSignal('QString')
     addAttrSelected = Qt.pyqtSignal('QStringList')
     removeAttrSelected = Qt.pyqtSignal('QStringList')
-    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, parent=None, designMode=False):
         name = "TaurusDevTree"

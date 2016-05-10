@@ -38,7 +38,6 @@ from qwheel import QWheelEdit
 
 
 class TaurusWheelEdit(QWheelEdit, TaurusBaseWritableWidget):
-    modelChanged = Qt.pyqtSignal('const QString &')
 
     def __init__(self, qt_parent=None, designMode=False):
         name = self.__class__.__name__

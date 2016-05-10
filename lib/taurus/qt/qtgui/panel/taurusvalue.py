@@ -302,7 +302,6 @@ class TaurusValue(Qt.QWidget, TaurusBaseWidget):
         It is designed to be instantiated by a :class:`TaurusForm` class, since it
         breaks some conventions on the way it manages layouts of its parent model.
     '''
-    modelChanged = Qt.pyqtSignal('const QString &')
     _compact = False
 
     def __init__(self, parent=None, designMode=False, customWidgetMap=None):
