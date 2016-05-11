@@ -61,3 +61,8 @@ Gara S:
  - QRawDataWidget: done!
  - QBaseModelWidget: done!
  - GraphicalChoiceWidget: done!
+ - ControllerBox: done!
+ - CurveStatsDialog: done!
+ - CurvesTableModel: done!
+ - CurvesAppearanceChooser: partially done! - signal CurveTitleEdited - is emitted by a sub-object, need discussion
+ - BooleanWidget: done!

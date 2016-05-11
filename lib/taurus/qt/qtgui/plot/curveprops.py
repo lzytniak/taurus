@@ -150,6 +150,8 @@ class CurvesTableModel(Qt.QAbstractTableModel):
     ''' A model to manage information about curves to be plotted an their appearance
     '''
 
+    dataChanged = Qt.pyqtSignal('QModelIndex', 'QModelIndex')
+
     def __init__(self, curves=None):
         if curves is None:
             curves = []

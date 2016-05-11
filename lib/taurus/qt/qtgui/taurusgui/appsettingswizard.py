@@ -66,6 +66,8 @@ class BooleanWidget(Qt.QWidget):
     It change the value by using getValue and setValue methods
     """
 
+    valueChanged = Qt.pyqtSignal(bool, bool)
+
     def __init__(self, parent=None):
         Qt.QWidget.__init__(self, parent)
         self._formLayout = Qt.QHBoxLayout(self)
@@ -75,10 +77,8 @@ class BooleanWidget(Qt.QWidget):
         self._formLayout.addWidget(self.falseButton)
         self.trueButton.setText("Yes")
         self.falseButton.setText("No")
-        Qt.QObject.connect(self.trueButton, Qt.SIGNAL(
-            "clicked()"), self.valueChanged)
-        Qt.QObject.connect(self.falseButton, Qt.SIGNAL(
-            "clicked()"), self.valueChanged)
+        self.trueButton.clicked.connect(self.valueChanged)
+        self.falseButton.clicked.connect(self.valueChanged)
         self.setValue(self.getDefaultValue())
 
     def valueChanged(self):
