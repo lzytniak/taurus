@@ -105,6 +105,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
 
     controlChanged = Qt.pyqtSignal()
     curveAppearanceChanged = Qt.pyqtSignal(tuple, list)
+    CurveTitleEdited = Qt.pyqtSignal('QString', 'QString')
 
     def __init__(self, parent=None, curvePropDict={}, showButtons=False, autoApply=False, designMode=False):
         # try:
@@ -180,7 +181,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
         currentTitle = item.text()
         if previousTitle != currentTitle:
             self.curvePropDict[name].title = currentTitle
-            self.curvesLW.CurveTitleEdited.emit(name, currentTitle)
+            self.CurveTitleEdited.emit(name, currentTitle)
 
     def updateTitles(self, newTitlesDict=None):
         '''

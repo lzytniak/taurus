@@ -207,7 +207,7 @@ class TaurusPlotConfigDialog(Qt.QDialog):
         self.curvesAppearanceChooser.assignToY2BT.clicked.connect(self.setCurvesYAxis)
         self.curvesAppearanceChooser.bckgndBT.clicked.connect(self.changeBackgroundColor)
         self.curvesAppearanceChooser.changeTitlesBT.clicked.connect(self.onChangeTitles)
-        self.curvesAppearanceChooser.curvesLW.CurveTitleEdited.connect(self.onCurveTitleEdited)
+        self.curvesAppearanceChooser.CurveTitleEdited.connect(self.onCurveTitleEdited)
 
         # finally adjust size
         self.adjustSize()
