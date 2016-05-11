@@ -119,6 +119,8 @@ class GraphicalChoiceDlg(Qt.QDialog):
 class GraphicalChoiceWidget(Qt.QScrollArea):
     '''A widget that presents a 2D grid of buttons'''
 
+    choiceMade = Qt.pyqtSignal(str)
+
     def __init__(self, parent=None, designMode=False, choices=None, pixmaps=None, iconSize=128,
                  defaultPixmap=None, horizontalScrollBarPolicy=Qt.Qt.ScrollBarAsNeeded,
                  verticalScrollBarPolicy=Qt.Qt.ScrollBarAsNeeded):
