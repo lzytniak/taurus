@@ -169,7 +169,7 @@ class QTaurusBaseListener(TaurusListener):
         """
         self._eventFilters.insert(index, filter)
 
-    @deprecation_decorator
+    @deprecation_decorator(rel='4.0')
     def getSignaller(self):
         return self
 

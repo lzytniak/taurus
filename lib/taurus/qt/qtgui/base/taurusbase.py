@@ -121,7 +121,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
             self.getModelInConfig, self.setModelInConfig, "ModelInConfig")
         self.resetModelInConfig()
 
-    @deprecation_decorator
+    @deprecation_decorator(rel='4.0')
     def getSignaller(self):
         return self
 
