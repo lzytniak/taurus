@@ -235,10 +235,8 @@ class TaurusForm(TaurusWidget):
         return Qt.QWidget.sizeHint(self)
 
     def _connectButtons(self):
-        Qt.QObject.connect(self.buttonBox, Qt.SIGNAL(
-            "applyClicked()"), self.apply)
-        Qt.QObject.connect(self.buttonBox, Qt.SIGNAL(
-            "resetClicked()"), self.reset)
+        self.buttonBox.applyClicked.connect(self.apply)
+        self.buttonBox.resetClicked.connect(self.reset)
 
     def getModel(self):
         return self._model
