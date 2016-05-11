@@ -69,18 +69,14 @@ class TaurusValueComboBox(Qt.QComboBox, TaurusBaseWritableWidget):
     def preAttach(self):
         '''reimplemented from :class:`TaurusBaseWritableWidget`'''
         TaurusBaseWritableWidget.preAttach(self)
-        Qt.QObject.connect(self, Qt.SIGNAL("currentIndexChanged(int)"),
-                           self.writeIndexValue)
-        Qt.QObject.connect(self, Qt.SIGNAL("applied()"),
-                           self.writeValue)
+        self.currentIndexChanged.connect(self.writeIndexValue)
+        self.applied.connect(self.writeValue)
 
     def postDetach(self):
         '''reimplemented from :class:`TaurusBaseWritableWidget`'''
         TaurusBaseWritableWidget.postDetach(self)
-        Qt.QObject.disconnect(self, Qt.SIGNAL("currentIndexChanged(int)"),
-                              self.writeIndexValue)
-        Qt.QObject.disconnect(self, Qt.SIGNAL("applied()"),
-                              self.writeValue)
+        self.currentIndexChanged.disconnect(self.writeIndexValue)
+        self.applied.disconnect(self.writeValue)
 
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
     # TaurusBaseWritableWidget overwriting / Pending operations
