@@ -16,9 +16,6 @@ NOT_CONVERTED:
 NEEDS_DECLARE:
   TaurusGraphicsUpdateThread: emitter.updateView
 
-NEEDS_DECLARE:
-  GraphicalChoiceWidget:         self.choiceMade
-
 NOT_CONVERTED:
          # @todo: This is Workaround because UseSetParentModel is giving trouble again!
         self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
