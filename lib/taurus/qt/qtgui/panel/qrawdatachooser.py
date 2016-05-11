@@ -37,6 +37,9 @@ from taurus.qt.qtgui.util.ui import UILoadable
 @UILoadable
 class QRawDataWidget(Qt.QWidget):
 
+    ReadFromFiles = Qt.pyqtSignal(int, int)
+    AddCurve = Qt.pyqtSignal(dict)
+
     def __init__(self, parent=None):
         super(QRawDataWidget, self).__init__(parent)
         self.loadUi()

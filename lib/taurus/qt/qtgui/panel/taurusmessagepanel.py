@@ -257,6 +257,8 @@ class TaurusMessagePanel(Qt.QWidget):
             msgbox = TaurusMessagePanel(*exc_info)
             msgbox.show()"""
 
+    toggledDetails = Qt.pyqtSignal(bool)
+
     def __init__(self, err_type=None, err_value=None, err_traceback=None, parent=None, designMode=False):
         Qt.QWidget.__init__(self, parent)
         self.loadUi()
@@ -267,10 +269,8 @@ class TaurusMessagePanel(Qt.QWidget):
         self._ui._checkBox.setCheckState(Qt.Qt.Unchecked)
         self._initReportCombo()
 
-        Qt.QObject.connect(self._ui._showDetailsButton,
-                           Qt.SIGNAL("toggled(bool)"), self._onShowDetails)
-        Qt.QObject.connect(self._ui._reportComboBox,
-                           Qt.SIGNAL("activated(int)"), self._onReportTriggered)
+        self._ui._showDetailsButton.toggled.connect(self._onShowDetails)
+        self._ui._reportComboBox.activated.connect(self._onReportTriggered)
 
         pixmap = getThemePixmap("emblem-important")
         self.setIconPixmap(pixmap)

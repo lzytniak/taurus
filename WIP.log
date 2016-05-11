@@ -56,3 +56,7 @@ Gara S:
  - LoggingToolBar: done!
  - CurveItemConfDlg: done!
  - TaurusCurveItemTableModel: done!
+ - TaurusMessagePanel: done!
+ - QConfigEditorModel: done!
+ - QRawDataWidget: done!
+ - QBaseModelWidget: done!

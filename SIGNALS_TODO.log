@@ -19,30 +19,6 @@ NEEDS_DECLARE:
 NEEDS_DECLARE:
   GraphicalChoiceWidget:         self.choiceMade
 
-NEEDS_DECLARE:
-  QBaseModelWidget:         self.itemClicked
-
-NEEDS_DECLARE:
-  QBaseModelWidget:         self.itemDoubleClicked
-
-NEEDS_DECLARE:
-  QBaseModelWidget: self.itemSelectionChanged
-
-NEEDS_DECLARE:
-  QBaseModelWidget: self.currentItemChanged
-
-NEEDS_DECLARE:
-  QRawDataWidget:         self.ReadFromFiles
-
-NEEDS_DECLARE:
-  QRawDataWidget:         self.AddCurve
-
-NEEDS_DECLARE:
-  QConfigEditorModel: self.showError
-
-NEEDS_DECLARE:
-  TaurusMessagePanel:         self.toggledDetails
-
 NOT_CONVERTED:
          # @todo: This is Workaround because UseSetParentModel is giving trouble again!
         self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),

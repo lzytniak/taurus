@@ -44,6 +44,8 @@ import shutil
 class QConfigEditorModel(Qt.QStandardItemModel):
     '''A custom Model for QConfigEditor'''
 
+    showError = Qt.pyqtSignal(str, str)
+
     def __init__(self, parent=None, designMode=False):
         super(Qt.QStandardItemModel, self).__init__()
         self._temporaryFile = None

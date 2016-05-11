@@ -274,6 +274,11 @@ class QBaseModelWidget(Qt.QMainWindow):
     KnownPerspectives = {}
     DftPerspective = None
 
+    itemClicked = Qt.pyqtSignal(object, int)
+    itemDoubleClicked = Qt.pyqtSignal(object, int)
+    itemSelectionChanged = Qt.pyqtSignal()
+    currentItemChanged = Qt.pyqtSignal(object, object)
+
     def __init__(self, parent=None, designMode=False, with_filter_widget=True,
                  with_selection_widget=True, with_refresh_widget=True,
                  perspective=None, proxy=None):
@@ -344,8 +349,7 @@ class QBaseModelWidget(Qt.QMainWindow):
         if self._with_filter_widget:
             f_bar = self._filterBar = self._with_filter_widget(
                 view=self, parent=self)
-            Qt.QObject.connect(f_bar, Qt.SIGNAL("filterChanged"),
-                               self.onFilterChanged)
+            f_bar.filterChanged.connect(self.onFilterChanged)
             tb.append(f_bar)
         else:
             self._filterBar = None
@@ -353,10 +357,8 @@ class QBaseModelWidget(Qt.QMainWindow):
         if self._with_selection_widget:
             s_bar = self._selectionBar = self._with_selection_widget(
                 view=self, parent=self)
-            Qt.QObject.connect(s_bar, Qt.SIGNAL("selectAllTriggered"),
-                               self.onSelectAll)
-            Qt.QObject.connect(s_bar, Qt.SIGNAL("clearSelectionTriggered"),
-                               self.onClearSelection)
+            s_bar.selectAllTriggered.connect(self.onSelectAll)
+            s_bar.clearSelectionTriggered.connect(self.onClearSelection)
             tb.append(s_bar)
         else:
             self._selectionBar = None
@@ -364,8 +366,7 @@ class QBaseModelWidget(Qt.QMainWindow):
         if self._with_refresh_widget:
             r_bar = self._refreshBar = self._with_refresh_widget(
                 view=self, parent=self)
-            Qt.QObject.connect(r_bar, Qt.SIGNAL("refreshTriggered"),
-                               self.onRefreshModel)
+            r_bar.refreshTriggered.connect(self.onRefreshModel)
             tb.append(r_bar)
         else:
             self._refreshBar = None
@@ -439,16 +440,16 @@ class QBaseModelWidget(Qt.QMainWindow):
         CC = 'currentChanged(const QModelIndex &,const QModelIndex &)'
         SC = 'selectionChanged(QItemSelection &, QItemSelection &)'
         if old_selection_model is not None:
-            Qt.QObject.disconnect(old_selection_model, Qt.SIGNAL(CC),
+            old_selection_model.currentChanged.disconnect(
                                   self.viewCurrentIndexChanged)
-            Qt.QObject.disconnect(old_selection_model, Qt.SIGNAL(SC),
+            old_selection_model.selectionChanged.disconnect(
                                   self.viewSelectionChanged)
         view.setModel(qmodel)
         new_selection_model = view.selectionModel()
         if new_selection_model is not None:
-            Qt.QObject.connect(new_selection_model, Qt.SIGNAL(CC),
+            new_selection_model.currentChanged.connect(
                                self.viewCurrentIndexChanged)
-            Qt.QObject.connect(new_selection_model, Qt.SIGNAL(SC),
+            new_selection_model.selectionChanged.connect(
                                self.viewSelectionChanged)
         view.setCurrentIndex(view.rootIndex())
         self._updateToolBar()
