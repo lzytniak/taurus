@@ -43,6 +43,8 @@ from taurus.core.tango.tangodatabase import TangoDevInfo, TangoAttrInfo
 
 class TaurusModelSelectorTree(TaurusWidget):
 
+    addModels = Qt.pyqtSignal('QStringList')
+
     def __init__(self, parent=None, selectables=None, buttonsPos=None, designMode=None):
         TaurusWidget.__init__(self, parent)
         if selectables is None:
@@ -145,6 +147,8 @@ class TaurusModelChooser(TaurusWidget):
       - "updateModels"  emitted when the user clicks on the update button. It
         passes a list<str> of models that have been selected.
     '''
+
+    updateModels = Qt.pyqtSignal('QStringList')
 
     def __init__(self, parent=None, selectables=None, host=None, designMode=None, singleModel=False):
         '''Creator of TaurusModelChooser
