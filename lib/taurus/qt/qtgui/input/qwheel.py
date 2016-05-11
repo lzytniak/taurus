@@ -183,8 +183,8 @@ class QWheelEdit(Qt.QFrame):
     """A widget designed to handle numeric scalar values. It allows interaction
     based on single digit as well as normal value edition."""
 
-    numberChanged = Qt.pyqtSignal(double)
-    numberEdited = Qt.pyqtSignal(double)
+    numberChanged = Qt.pyqtSignal(float)
+    numberEdited = Qt.pyqtSignal(float)
     returnPressed = Qt.pyqtSignal()
 
     DefaultIntDigitCount = 6

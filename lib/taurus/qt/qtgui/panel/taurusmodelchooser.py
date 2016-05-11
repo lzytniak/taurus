@@ -68,8 +68,7 @@ class TaurusModelSelectorTree(TaurusWidget):
 
         self._deviceTree.recheckTaurusParent()  # NOT WORKING????
         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
-        self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
-                     self._deviceTree.setModel)
+        self.modelChanged.connect(self._deviceTree.setModel)
 
     def setButtonsPos(self, buttonsPos):
         # we must delete the previous layout before we can set a new one
@@ -192,8 +191,7 @@ class TaurusModelChooser(TaurusWidget):
 
         # self.tree.setUseParentModel(True)  #It does not work!!!!
         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
-        self.connect(self, Qt.SIGNAL(
-            self.ModelChangedSignal), self.tree.setModel)
+        self.modelChanged.connect(self.tree.setModel)
 
         # connections:
         self.tree.addModels.connect(self.addModels)

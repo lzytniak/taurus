@@ -95,8 +95,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
     writeWClass = None
 
     enterEditTriggers = (Qt.Qt.Key_F2, Qt.QEvent.MouseButtonDblClick)
-    exitEditTriggers = (Qt.Qt.Key_Escape, Qt.QEvent.FocusOut,
-                        TaurusBaseWritableWidget.appliedSignalSignature)
+    exitEditTriggers = (Qt.Qt.Key_Escape, Qt.QEvent.FocusOut, 'applied')
 
     def __init__(self, parent=None, designMode=False,
                  readWClass=None, writeWClass=None,
@@ -159,7 +158,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
             elif isinstance(e, Qt.QEvent.Type):
                 eventTypes.append(e)
             elif isinstance(e, (basestring, Qt.QString)):
-                signals.append(Qt.SIGNAL(e))
+                signals.append(e)
             else:
                 raise TypeError('Unsupported trigger type: %s' % repr(type(e)))
         return shortcuts, eventTypes, signals
@@ -216,7 +215,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
         if self.exitEditEventTypes:
             self.writeWidget.installEventFilter(self)
         for sig in self.exitEditSignals:
-            self.connect(self.writeWidget, sig, self.exitEdit)
+            getattr(self.writeWidget, sig).connect(self.exitEdit)
         # update size policy
         self._updateSizePolicy()
         # register configuration (we use the class name to avoid mixing configs
