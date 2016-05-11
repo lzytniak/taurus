@@ -41,6 +41,8 @@ class CurveStatsDialog(Qt.QDialog):
     A dialog for configuring and displaying statistics from  curves of a plot
     """
 
+    closed = Qt.pyqtSignal()
+
     statColumns = ('points', 'min', 'max', 'mean', 'std', 'rms')
 
     def __init__(self, parent=None):

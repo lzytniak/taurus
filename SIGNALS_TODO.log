@@ -47,26 +47,7 @@ NEEDS_DECLARE:
   TaurusModelList:         self.dataChanged
 
 NEEDS_DECLARE:
-  ControllerBox: self.selected
-
-NEEDS_DECLARE:
-  CurveStatsDialog:         self.closed
-
-NEEDS_DECLARE:
-  CurvesTableModel:                 self.dataChanged
-
-NEEDS_DECLARE:
-  CurvesTableModel: self.dataChanged
-
-NEEDS_DECLARE:
   CurvesAppearanceChooser:             self.curvesLW.CurveTitleEdited
-
-NEEDS_DECLARE:
-  CurvesAppearanceChooser:
-        self.controlChanged
-
-NEEDS_DECLARE:
-  CurvesAppearanceChooser: self.curveAppearanceChanged
 
 NEEDS_DECLARE:
   TaurusXValues:         self._signalGen.taurusEvent
@@ -88,6 +69,3 @@ NEEDS_DECLARE:
 
 NEEDS_DECLARE:
   TaurusTrend: self.dataChanged
-
-NEEDS_DECLARE:
-  BooleanWidget: self.valueChanged
