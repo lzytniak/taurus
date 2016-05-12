@@ -183,14 +183,10 @@ class TaurusConfigurationPanel(Qt.QWidget):
         Qt.QWidget.__init__(self, parent)
         self.loadUi()
 
-        Qt.QObject.connect(self._ui.pushButtonOk,
-                           Qt.SIGNAL("clicked()"), self._onOk)
-        Qt.QObject.connect(self._ui.pushButtonApply,
-                           Qt.SIGNAL("clicked()"), self._onApply)
-        Qt.QObject.connect(self._ui.pushButtonCancel,
-                           Qt.SIGNAL("clicked()"), self._onCancel)
-        Qt.QObject.connect(self._ui.pushButtonRestore,
-                           Qt.SIGNAL("clicked()"), self._onRestore)
+        self._ui.pushButtonOk.clicked.connect(self._onOk)
+        self._ui.pushButtonApply.clicked.connect(self._onApply)
+        self._ui.pushButtonCancel.clicked.connect(self._onCancel)
+        self._ui.pushButtonRestore.clicked.connect(self._onRestore)
 
     def _onOk(self):
         self._onApply()

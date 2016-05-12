@@ -39,8 +39,6 @@ import types
 
 import Queue
 
-from PyQt4 import Qt
-
 from taurus import Manager
 from taurus.core import AttrQuality, DataType
 from taurus.core.util.containers import CaselessDefaultDict
@@ -78,7 +76,7 @@ def parseTangoUri(name):
         return None
 
 
-class QEmitter(QObject):
+class QEmitter(Qt.QObject):
     updateView = Qt.pyqtSignal(Qt.QGraphicsView)
 
 
@@ -112,8 +110,7 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
         emitter = QEmitter()
         emitter.moveToThread(Qt.QApplication.instance().thread())
         emitter.setParent(Qt.QApplication.instance())
-        #Qt.QObject.connect(emitter, Qt.SIGNAL("updateView"), self._updateView)
-        self.emitter.updateView.connect(self._updateView)
+        emitter.updateView.connect(self._updateView)
 
         p = self.parent()
         while True:
