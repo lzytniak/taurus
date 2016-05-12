@@ -179,9 +179,9 @@ class demo(Qt.QDialog):
         self.setLayout(mainLayout)
 
         # connections
-        Qt.QObject.connect(self.addBT, Qt.SIGNAL("clicked()"), self.onAdd)
-        Qt.QObject.connect(self.remBT, Qt.SIGNAL("clicked()"), self.onRem)
-        Qt.QObject.connect(self.dataBT, Qt.SIGNAL("clicked()"), self.onData)
+        self.addBT.clicked.connect(self.onAdd)
+        self.remBT.clicked.connect(self.onRem)
+        self.dataBT.clicked.connect(self.onData)
 
         # misc
         self.table.resizeColumnsToContents()

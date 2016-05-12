@@ -106,7 +106,7 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
         emitter = Qt.QObject()
         emitter.moveToThread(Qt.QApplication.instance().thread())
         emitter.setParent(Qt.QApplication.instance())
-        Qt.QObject.connect(emitter, Qt.SIGNAL("updateView"), self._updateView)
+        emitter.updateView.connect(self._updateView)
 
         p = self.parent()
         while True:
