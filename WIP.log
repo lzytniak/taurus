@@ -69,8 +69,12 @@ Gara S:
  - BooleanWidget: done!
 
 Antonio M:
- - TaurusGraphicsUpdateThread: wip - pending to be review.
+ - TaurusGraphicsUpdateThread: wip - pending to be review by C.Pascual.
  - TaurusCurveDialog: wip
  - TaurusTrendDialog: wip
  - AutoScrollTool: done !
- 
+ - TaurusModelSelectorTree: done !
+ - TaurusModelChooser: done !
+ - TaurusModelModel: done !
+ - TaurusModelList: done !
+ -

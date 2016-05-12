@@ -18,30 +18,6 @@ NOT_CONVERTED:
 #         self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
 #                     self._deviceTree.setModel)
 
-# NEEDS_DECLARE:
-#  TaurusModelSelectorTree: self.addModels
-
-# NOT_CONVERTED:
-
-#         # self.tree.setUseParentModel(True)  #It does not work!!!!
-#         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
-#         self.connect(self, Qt.SIGNAL(
-#             self.ModelChangedSignal), self.tree.setModel)
-
-# NEEDS_DECLARE:
-#   TaurusModelChooser:         self.updateModels
-
-# NEEDS_DECLARE:
-#   TaurusModelChooser: self.UpdateAttrs
-
-# NEEDS_DECLARE:
-#   TaurusModelModel: self.dataChanged
-
-# NEEDS_DECLARE:
-#   TaurusModelModel:         self.dataChanged
-
-# NEEDS_DECLARE:
-#   TaurusModelList:         self.dataChanged
 
 NEEDS_DECLARE:
   CurvesAppearanceChooser:             self.curvesLW.CurveTitleEdited
