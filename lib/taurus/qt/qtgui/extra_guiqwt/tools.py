@@ -215,7 +215,7 @@ class AutoScrollTool(ToggleTool):
 
     def register_plot(self, baseplot):
         ToggleTool.register_plot(self, baseplot)
-        self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
+        baseplot.SIG_ITEMS_CHANGED.connect(self.items_changed)
 
     def activate_command(self, plot, checked):
         """Activate tool"""

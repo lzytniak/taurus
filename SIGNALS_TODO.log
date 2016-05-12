@@ -4,17 +4,14 @@ NOT_CONVERTED:
 NOT_CONVERTED:
  self.connect(self.writeWidget, sig, self.exitEdit)
 
-NEEDS_DECLARE:
-  TaurusCurveDialog: self.modelChanged
+# NEEDS_DECLARE:
+#   TaurusCurveDialog: self.modelChanged
 
-NEEDS_DECLARE:
-  TaurusTrendDialog:         self.modelChanged
+# NEEDS_DECLARE:
+#   TaurusTrendDialog:         self.modelChanged
 
-NOT_CONVERTED:
-         self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
-
-NEEDS_DECLARE:
-  TaurusGraphicsUpdateThread: emitter.updateView
+# NEEDS_DECLARE:
+#  TaurusGraphicsUpdateThread: emitter.updateView
 
 NOT_CONVERTED:
          # @todo: This is Workaround because UseSetParentModel is giving trouble again!
