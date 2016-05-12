@@ -39,6 +39,8 @@ import types
 
 import Queue
 
+from PyQt4 import Qt
+
 from taurus import Manager
 from taurus.core import AttrQuality, DataType
 from taurus.core.util.containers import CaselessDefaultDict
@@ -76,6 +78,10 @@ def parseTangoUri(name):
         return None
 
 
+class QEmitter(QObject):
+    updateView = Qt.pyqtSignal(Qt.QGraphicsView)
+
+
 class TaurusGraphicsUpdateThread(Qt.QThread):
 
     def __init__(self, parent=None, period=3):
@@ -103,10 +109,11 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
 
     def run(self):
         self.log.debug("run... - TaurusGraphicsUpdateThread")
-        emitter = Qt.QObject()
+        emitter = QEmitter()
         emitter.moveToThread(Qt.QApplication.instance().thread())
         emitter.setParent(Qt.QApplication.instance())
-        Qt.QObject.connect(emitter, Qt.SIGNAL("updateView"), self._updateView)
+        #Qt.QObject.connect(emitter, Qt.SIGNAL("updateView"), self._updateView)
+        self.emitter.updateView.connect(self._updateView)
 
         p = self.parent()
         while True:
@@ -123,7 +130,8 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
 
             for v in p.views():
                 # p.debug("emit('updateView')")
-                emitter.updateView.emit(v)
+                # emitter.updateView.emit(v)
+                self.emitter.updateView.emit(v)
             # This sleep is needed to reduce CPU usage of the application!
             self.sleep(self.period)
             # End of while

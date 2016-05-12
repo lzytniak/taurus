@@ -7,6 +7,8 @@ Vincent M:
   - TaurusBaseComponent: done!
   - TaurusBaseWidget: done!
   - TaurusBaseWritableWidget: done!
+  - TaurusCurveDialog: wip
+  - TaurusTrendDialog: wip
 Gara S:
  - Grabber: done!
  - ExternalAppAction: done!
@@ -61,3 +63,5 @@ Gara S:
  - QRawDataWidget: done!
  - QBaseModelWidget: done!
  - GraphicalChoiceWidget: done!
+Antonio M:
+ - TaurusGraphicsUpdateThread: wip
