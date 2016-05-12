@@ -13,10 +13,10 @@ NOT_CONVERTED:
 # NEEDS_DECLARE:
 #  TaurusGraphicsUpdateThread: emitter.updateView
 
-NOT_CONVERTED:
-         # @todo: This is Workaround because UseSetParentModel is giving trouble again!
-        self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
-                     self._deviceTree.setModel)
+# NOT_CONVERTED: Not found!!!
+#          # @todo: This is Workaround because UseSetParentModel is giving trouble again!
+#         self.connect(self, Qt.SIGNAL(self.ModelChangedSignal),
+#                     self._deviceTree.setModel)
 
 NEEDS_DECLARE:
   TaurusModelSelectorTree: self.addModels
