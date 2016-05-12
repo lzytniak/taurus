@@ -7,8 +7,7 @@ Vincent M:
   - TaurusBaseComponent: done!
   - TaurusBaseWidget: done!
   - TaurusBaseWritableWidget: done!
-  - TaurusCurveDialog: wip
-  - TaurusTrendDialog: wip
+
 Gara S:
  - Grabber: done!
  - ExternalAppAction: done!
@@ -63,5 +62,14 @@ Gara S:
  - QRawDataWidget: done!
  - QBaseModelWidget: done!
  - GraphicalChoiceWidget: done!
+ - ControllerBox: done!
+ - CurveStatsDialog: done!
+ - CurvesTableModel: done!
+ - CurvesAppearanceChooser: partially done! - signal CurveTitleEdited - is emitted by a sub-object, need discussion
+ - BooleanWidget: done!
+
 Antonio M:
  - TaurusGraphicsUpdateThread: wip
+ - TaurusCurveDialog: wip
+ - TaurusTrendDialog: wip
+

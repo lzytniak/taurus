@@ -66,6 +66,8 @@ class BooleanWidget(Qt.QWidget):
     It change the value by using getValue and setValue methods
     """
 
+    valueChanged = Qt.pyqtSignal(bool, bool)
+
     def __init__(self, parent=None):
         Qt.QWidget.__init__(self, parent)
         self._formLayout = Qt.QHBoxLayout(self)
@@ -75,10 +77,8 @@ class BooleanWidget(Qt.QWidget):
         self._formLayout.addWidget(self.falseButton)
         self.trueButton.setText("Yes")
         self.falseButton.setText("No")
-        Qt.QObject.connect(self.trueButton, Qt.SIGNAL(
-            "clicked()"), self.valueChanged)
-        Qt.QObject.connect(self.falseButton, Qt.SIGNAL(
-            "clicked()"), self.valueChanged)
+        self.trueButton.clicked.connect(self.valueChanged)
+        self.falseButton.clicked.connect(self.valueChanged)
         self.setValue(self.getDefaultValue())
 
     def valueChanged(self):
@@ -232,8 +232,7 @@ class ProjectPage(BasePage):
         self._layout.addWidget(self._projectDirLE, 1, 1)
         self._layout.addWidget(self._projectDirBT, 1, 2)
 
-        Qt.QObject.connect(self._projectDirBT, Qt.SIGNAL(
-            "clicked()"), self.onSelectDir)
+        self._projectDirBT.clicked.connect(self.onSelectDir)
 
     def onSelectDir(self):
         dirname = unicode(Qt.QFileDialog.getExistingDirectory(
@@ -343,12 +342,9 @@ class GeneralSettings(BasePage):
         self.setStatusLabelPalette(self._status_label)
         self._layout.addWidget(self._status_label, 9, 0, 1, 3)
 
-        Qt.QObject.connect(self._guiNameLineEdit, Qt.SIGNAL(
-            "textChanged(const QString&)"), self.checkData)
-        Qt.QObject.connect(self._organizationCombo, Qt.SIGNAL(
-            "editTextChanged(const QString&)"), self.checkData)
-        Qt.QObject.connect(self._organizationCombo, Qt.SIGNAL(
-            "currentIndexChanged(const QString&)"), self.checkData)
+        self._guiNameLineEdit.textChanged.connect(self.checkData)
+        self._organizationCombo.editTextChanged.connect(self.checkData)
+        self._organizationCombo.currentIndexChanged.connect(self.checkData)
 
     def _getOrganizationNames(self):
         return ["TAURUS", "ALBA", "DESY", "Elettra", "ESRF", "MAX-lab", "SOLEIL", "XFEL"]
@@ -431,14 +427,10 @@ class CustomLogoPage(BasePage):
         self._layout.addWidget(self._customLogo, 4, 1,
                                1, 1, Qt.Qt.AlignHCenter)
 
-        Qt.QObject.connect(self._customLogoButton, Qt.SIGNAL(
-            "clicked()"), self._selectImage)
-        Qt.QObject.connect(self._customLogoDefaultButton,
-                           Qt.SIGNAL("clicked()"), self._setDefaultImage)
-        Qt.QObject.connect(self._customLogoRemoveButton,
-                           Qt.SIGNAL("clicked()"), self._removeImage)
-        Qt.QObject.connect(self._customLogoLineEdit, Qt.SIGNAL(
-            "textChanged(const QString&)"), self._changeImage)
+        self._customLogoButton.clicked.connect(self._selectImage)
+        self._customLogoDefaultButton.clicked.connect(self._setDefaultImage)
+        self._customLogoRemoveButton.clicked.connect(self._removeImage)
+        self._customLogoLineEdit.textChanged.connect(self._changeImage)
 
         self._spacerItem1 = Qt.QSpacerItem(
             10, 0, Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Expanding)
@@ -586,14 +578,10 @@ class SynopticPage(BasePage):
         self._upButton.setIcon(taurus.qt.qtgui.resource.getThemeIcon("go-up"))
         self._downButton.setIcon(
             taurus.qt.qtgui.resource.getThemeIcon("go-down"))
-        Qt.QObject.connect(self._addButton, Qt.SIGNAL(
-            "clicked()"), self._addSynoptic)
-        Qt.QObject.connect(self._removeButton, Qt.SIGNAL(
-            "clicked()"), self._removeSynoptic)
-        Qt.QObject.connect(self._upButton, Qt.SIGNAL(
-            "clicked()"), self._moveUp)
-        Qt.QObject.connect(self._downButton, Qt.SIGNAL(
-            "clicked()"), self._moveDown)
+        self._addButton.clicked.connect(self._addSynoptic)
+        self._removeButton.clicked.connect(self._removeSynoptic)
+        self._upButton.clicked.connect(self._moveUp)
+        self._downButton.clicked.connect(self._moveDown)
         #Qt.QObject.connect(self._synopticList, Qt.SIGNAL("itemDoubleClicked(QListWidgetItem*)"), self._editSynoptic)
         self._spacerItem1 = Qt.QSpacerItem(
             10, 0, Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Expanding)
@@ -707,12 +695,11 @@ class MacroServerInfoPage(BasePage):
         self.setStatusLabelPalette(self._status_label)
         self._layout.addWidget(self._status_label, 9, 0, 1, 1)
 
-        Qt.QObject.connect(self._confWidget.macroServerComboBox, Qt.SIGNAL(
-            "currentIndexChanged(const QString&)"), self.checkData)
-        Qt.QObject.connect(self._confWidget.doorComboBox, Qt.SIGNAL(
-            "currentIndexChanged(const QString&)"), self.checkData)
-        Qt.QObject.connect(self._macroGroupBox, Qt.SIGNAL(
-            "toggled(bool)"), self.checkData)
+        self._confWidget.macroServerComboBox.currentIndexChanged.connect(
+            self.checkData)
+        self._confWidget.doorComboBox.currentIndexChanged.connect(
+            self.checkData)
+        self._macroGroupBox.toggled.connect(self.checkData)
 
     def fromXml(self, xml):
         macroserverName = AppSettingsWizard.getValueFromNode(
@@ -858,16 +845,11 @@ class PanelsPage(BasePage):
         self._upButton.setIcon(taurus.qt.qtgui.resource.getThemeIcon("go-up"))
         self._downButton.setIcon(
             taurus.qt.qtgui.resource.getThemeIcon("go-down"))
-        Qt.QObject.connect(self._addButton, Qt.SIGNAL(
-            "clicked()"), self._addPanel)
-        Qt.QObject.connect(self._removeButton, Qt.SIGNAL(
-            "clicked()"), self._removePanel)
-        Qt.QObject.connect(self._upButton, Qt.SIGNAL(
-            "clicked()"), self._moveUp)
-        Qt.QObject.connect(self._downButton, Qt.SIGNAL(
-            "clicked()"), self._moveDown)
-        Qt.QObject.connect(self._panelList, Qt.SIGNAL(
-            "itemDoubleClicked(QListWidgetItem*)"), self._editPanel)
+        self._addButton.clicked.connect(self._addPanel)
+        self._removeButton.clicked.connect(self._removePanel)
+        self._upButton.clicked.connect(self._moveUp)
+        self._downButton.clicked.connect(self._moveDown)
+        self._panelList.itemDoubleClicked.connect(self._editPanel)
         self._spacerItem1 = Qt.QSpacerItem(
             10, 0, Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Expanding)
         self._layout.addItem(self._spacerItem1, 8, 0, 1, 1, Qt.Qt.AlignCenter)
@@ -1011,12 +993,9 @@ class ExternalAppEditor(Qt.QDialog):
         self._layout1.addItem(self._spacerItem1, 8, 0, 1, 1, Qt.Qt.AlignCenter)
 
         # connections
-        Qt.QObject.connect(self._execFileButton, Qt.SIGNAL(
-            "clicked()"), self._selectExecFile)
-        Qt.QObject.connect(self._execFileLineEdit, Qt.SIGNAL(
-            "textChanged(const QString&)"), self._setDefaultText)
-        Qt.QObject.connect(self._iconLogo, Qt.SIGNAL(
-            "clicked()"), self._selectIcon)
+        self._execFileButton.clicked.connect(self._selectExecFile)
+        self._execFileLineEdit.textChanged.connect(self._setDefaultText)
+        self._iconLogo.clicked.connect(self._selectIcon)
         self._dlgBox.accepted.connect(self.accept)
         self._dlgBox.rejected.connect(self.reject)
         self.checkData()
@@ -1178,16 +1157,11 @@ class ExternalAppPage(BasePage):
         self._upButton.setIcon(taurus.qt.qtgui.resource.getThemeIcon("go-up"))
         self._downButton.setIcon(
             taurus.qt.qtgui.resource.getThemeIcon("go-down"))
-        Qt.QObject.connect(self._addButton, Qt.SIGNAL(
-            "clicked()"), self._addApplication)
-        Qt.QObject.connect(self._removeButton, Qt.SIGNAL(
-            "clicked()"), self._removeApplication)
-        Qt.QObject.connect(self._upButton, Qt.SIGNAL(
-            "clicked()"), self._moveUp)
-        Qt.QObject.connect(self._downButton, Qt.SIGNAL(
-            "clicked()"), self._moveDown)
-        Qt.QObject.connect(self._externalAppList, Qt.SIGNAL(
-            "itemDoubleClicked(QListWidgetItem*)"), self._editApplication)
+        self._addButton.clicked.connect(self._addApplication)
+        self._removeButton.clicked.connect(self._removeApplication)
+        self._upButton.clicked.connect(self._moveUp)
+        self._downButton.clicked.connect(self._moveDown)
+        self._externalAppList.itemDoubleClicked.connect(self._editApplication)
         self._spacerItem1 = Qt.QSpacerItem(
             10, 0, Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Expanding)
         self._layout.addItem(self._spacerItem1, 8, 0, 1, 1, Qt.Qt.AlignCenter)
@@ -1303,10 +1277,8 @@ class MonitorPage(BasePage):
         self._layout.addWidget(self._monitorLineEdit, 2, 1, Qt.Qt.AlignRight)
         self._layout.addWidget(self._monitorButton, 2, 2, Qt.Qt.AlignLeft)
         self._layout.addWidget(self._monitorClearButton, 2, 3, Qt.Qt.AlignLeft)
-        Qt.QObject.connect(self._monitorButton, Qt.SIGNAL(
-            "clicked()"), self._selectMonitor)
-        Qt.QObject.connect(self._monitorClearButton,
-                           Qt.SIGNAL("clicked()"), self._clearMonitor)
+        self._monitorButton.clicked.connect(self._selectMonitor)
+        self._monitorClearButton.clicked.connect(self._clearMonitor)
         # self._synopticClear.hide()
 
         self._spacerItem1 = Qt.QSpacerItem(

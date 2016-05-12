@@ -37,6 +37,8 @@ from curvesAppearanceChooserDlg import CurveAppearanceProperties
 @UILoadable
 class ControllerBox(Qt.QWidget):
 
+    selected = Qt.pyqtSignal(int)
+
     def __init__(self, parent=None, x=0, y=0, corr=0):
         Qt.QWidget.__init__(self, parent)
         self.loadUi()

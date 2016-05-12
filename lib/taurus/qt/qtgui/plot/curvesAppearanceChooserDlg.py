@@ -103,6 +103,10 @@ class CurvesAppearanceChooser(Qt.QWidget):
 
     NAME_ROLE = Qt.Qt.UserRole
 
+    controlChanged = Qt.pyqtSignal()
+    curveAppearanceChanged = Qt.pyqtSignal(tuple, list)
+    CurveTitleEdited = Qt.pyqtSignal('QString', 'QString')
+
     def __init__(self, parent=None, curvePropDict={}, showButtons=False, autoApply=False, designMode=False):
         # try:
         super(CurvesAppearanceChooser, self).__init__(parent)
@@ -130,33 +134,21 @@ class CurvesAppearanceChooser(Qt.QWidget):
         # Note: The assignToY1BT and assignToY2BT buttons are not connected to anything
         # Their signals are handled by the Config dialog because we haven't got
         # access to the curve objects here
-        Qt.QObject.connect(self.curvesLW, Qt.SIGNAL(
-            "itemSelectionChanged()"), self.onSelectedCurveChanged)
-        Qt.QObject.connect(self.curvesLW, Qt.SIGNAL(
-            "itemChanged(QListWidgetItem *)"), self.onItemChanged)
-        Qt.QObject.connect(self.applyBT, Qt.SIGNAL("clicked()"), self.onApply)
-        Qt.QObject.connect(self.resetBT, Qt.SIGNAL("clicked()"), self.onReset)
-        Qt.QObject.connect(self.sStyleCB, Qt.SIGNAL(
-            "currentIndexChanged(const QString&)"), self._onSymbolStyleChanged)
+        self.curvesLW.itemSelectionChanged.connect(self.onSelectedCurveChanged)
+        self.curvesLW.itemChanged.connect(self.onItemChanged)
+        self.applyBT.clicked.connect(self.onApply)
+        self.resetBT.clicked.connect(self.onReset)
+        self.sStyleCB.currentIndexChanged.connect(self._onSymbolStyleChanged)
 
-        Qt.QObject.connect(self.sStyleCB, Qt.SIGNAL(
-            "currentIndexChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.lStyleCB, Qt.SIGNAL(
-            "currentIndexChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.sColorCB, Qt.SIGNAL(
-            "currentIndexChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.lColorCB, Qt.SIGNAL(
-            "currentIndexChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.cStyleCB, Qt.SIGNAL(
-            "currentIndexChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.sSizeSB, Qt.SIGNAL(
-            "valueChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.lWidthSB, Qt.SIGNAL(
-            "valueChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.sFillCB, Qt.SIGNAL(
-            "stateChanged(int)"), self.onControlChanged)
-        Qt.QObject.connect(self.cFillCB, Qt.SIGNAL(
-            "stateChanged(int)"), self.onControlChanged)
+        self.sStyleCB.currentIndexChanged.connect(self.onControlChanged)
+        self.lStyleCB.currentIndexChanged.connect(self.onControlChanged)
+        self.sColorCB.currentIndexChanged.connect(self.onControlChanged)
+        self.lColorCB.currentIndexChanged.connect(self.onControlChanged)
+        self.cStyleCB.currentIndexChanged.connect(self.onControlChanged)
+        self.sSizeSB.valueChanged.connect(self.onControlChanged)
+        self.lWidthSB.valueChanged.connect(self.onControlChanged)
+        self.sFillCB.stateChanged.connect(self.onControlChanged)
+        self.cFillCB.stateChanged.connect(self.onControlChanged)
         # except Exception, e:
         # print "CURVE APPEARANCE EXCEPTION:",str(e)
 
@@ -189,7 +181,7 @@ class CurvesAppearanceChooser(Qt.QWidget):
         currentTitle = item.text()
         if previousTitle != currentTitle:
             self.curvePropDict[name].title = currentTitle
-            self.curvesLW.CurveTitleEdited.emit(name, currentTitle)
+            self.CurveTitleEdited.emit(name, currentTitle)
 
     def updateTitles(self, newTitlesDict=None):
         '''

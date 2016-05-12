@@ -43,6 +43,7 @@ from taurus.core.taurusbasetypes import DataFormat
 # TODO: Tango-centric
 from taurus.core.util.containers import LoopList, CaselessDict, CaselessList
 from taurus.core.util.safeeval import SafeEvaluator
+from taurus.qt.qtcore.util.signal import baseSignal
 from taurus.qt.qtcore.mimetypes import TAURUS_MODEL_LIST_MIME_TYPE, TAURUS_ATTR_MIME_TYPE
 from taurus.qt.qtgui.base import TaurusBaseComponent, TaurusBaseWidget
 from taurus.qt.qtgui.plot import TaurusPlotConfigDialog, FancyScaleDraw,\
@@ -163,7 +164,6 @@ class TaurusXValues(TaurusBaseComponent):
 
     def __init__(self, name, parent=None):
         self._xValues = None
-        self._signalGen = Qt.QObject()
         self.call__init__(TaurusBaseComponent, self.__class__.__name__)
         self._listeners = []
         self.setModel(name)
@@ -247,6 +247,8 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
     # disabling)
     droppedEventsWarning = -1
 
+    dataChanged = baseSignal('dataChanged', 'QString')
+
     def __init__(self, name, xname=None, parent=None, rawData=None, optimized=False):
 
         Qwt5.QwtPlotCurve.__init__(self)
@@ -261,7 +263,6 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
         self._history = []
         self._titleText = '<label>'
         self.setXValuesBuilder()
-        self._signalGen = Qt.QObject()
         self._maxPeakMarker = TaurusCurveMarker(name, self)
         self._minPeakMarker = TaurusCurveMarker(name, self)
         self.__curveName = name
@@ -541,7 +542,7 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
         if model is None:
             self._xValues = numpy.zeros(0)
             self._yValues = numpy.zeros(0)
-            self._signalGen.dataChanged.emit(str(self.getModel()))
+            self.dataChanged.emit(str(self.getModel()))
             return
 
         if evt_type == taurus.core.taurusbasetypes.TaurusEventType.Config:
@@ -558,7 +559,7 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
             self._onDroppedEvent(reason=str(e))
             return
         self._updateMarkers()
-        self._signalGen.dataChanged.emit(str(self.getModel()))
+        self.dataChanged.emit(str(self.getModel()))
 
     def _onDroppedEvent(self, reason='Unknown'):
         '''inform the user about a dropped event
@@ -845,7 +846,7 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
         :param listener: (QWidget) listener object
         :param meth: (callable) callback method
         '''
-        self._signalGen.dataChanged.connect(meth)
+        self.dataChanged.connect(meth)
 
     def unregisterDataChanged(self, listener, meth):
         '''unregisters the given listener and method from the DataChangedSignal
@@ -854,7 +855,7 @@ class TaurusCurve(Qwt5.QwtPlotCurve, TaurusBaseComponent):
         :param listener: (QWidget) listener object
         :param meth: (callable) callback method
         '''
-        self._signalGen.dataChanged.disconnect(meth)
+        self.dataChanged.disconnect(meth)
 
     def isReadOnly(self):
         '''see :meth:`TaurusBaseComponent.isReadOnly`'''
@@ -1019,7 +1020,11 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
                  :ref:`TaurusPlot User's Interface Guide <taurusplot_ui>`,
                  :ref:`The TaurusPlot coding examples <examples_taurusplot>`
     '''
-    dataChanged = Qt.pyqtSignal('const QString &')
+
+    #: Override the default modelChanged('QString') signal
+    modelChanged = Qt.pyqtSignal()
+
+    dataChanged = Qt.pyqtSignal('QString')
     CurvesYAxisChanged = Qt.pyqtSignal('QStringList', int)
 
     def __init__(self, parent=None, designMode=False):
@@ -3690,9 +3695,7 @@ def main():
             w.close()
         else:
             for ts in w.trendSets.values():
-                #                Qt.QObject.connect(ts._signalGen, ts._signalGen.newDataChangedSignal(), exportIfAllCurves)
-                Qt.QObject.connect(ts._signalGen, Qt.SIGNAL(
-                    "dataChanged(const QString &)"), exportIfAllCurves)
+                ts.dataChanged.connect(exportIfAllCurves)
         sys.exit(app.exec_())  # exit without showing the widget
 
     # show the widget

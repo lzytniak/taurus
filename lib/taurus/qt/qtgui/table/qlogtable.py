@@ -380,9 +380,7 @@ class LoggingToolBar(FilterToolBar):
             logLevelComboBox.addItem(
                 level, Qt.QVariant(getattr(taurus, level)))
         logLevelComboBox.setCurrentIndex(0)
-        Qt.QObject.connect(logLevelComboBox,
-                           Qt.SIGNAL("currentIndexChanged(int)"),
-                           self.onLogLevelChanged)
+        logLevelComboBox.currentIndexChanged.connect(self.onLogLevelChanged)
         logLevelComboBox.setToolTip("Filter by log level")
 
         self._filterLevelAction = self.addWidget(logLevelComboBox)

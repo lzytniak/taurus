@@ -183,8 +183,8 @@ class QWheelEdit(Qt.QFrame):
     """A widget designed to handle numeric scalar values. It allows interaction
     based on single digit as well as normal value edition."""
 
-    numberChanged = Qt.pyqtSignal(double)
-    numberEdited = Qt.pyqtSignal(double)
+    numberChanged = Qt.pyqtSignal(float)
+    numberEdited = Qt.pyqtSignal(float)
     returnPressed = Qt.pyqtSignal()
 
     DefaultIntDigitCount = 6
@@ -907,17 +907,13 @@ def main():
     minv.setValue(arrowWidget.getMinValue())
     maxv.setValue(arrowWidget.getMaxValue())
     showarrowbutton.setChecked(arrowWidget.getShowArrowButtons())
-    Qt.QObject.connect(isb, Qt.SIGNAL("valueChanged(int)"),
-                       arrowWidget.setIntDigitCount)
-    Qt.QObject.connect(dsb, Qt.SIGNAL("valueChanged(int)"),
-                       arrowWidget.setDecDigitCount)
-    Qt.QObject.connect(minv, Qt.SIGNAL(
-        "valueChanged(double)"), arrowWidget.setMinValue)
-    Qt.QObject.connect(showarrowbutton, Qt.SIGNAL(
-        "stateChanged(int)"), arrowWidget.setShowArrowButtons)
-    Qt.QObject.connect(nanbutton, Qt.SIGNAL("clicked()"), setNAN)
-    Qt.QObject.connect(nonebutton, Qt.SIGNAL("clicked()"), setNone)
-    Qt.QObject.connect(resetbutton, Qt.SIGNAL("clicked()"), resetAll)
+    isb.valueChanged.connect(arrowWidget.setIntDigitCount)
+    dsb.valueChanged.connect(arrowWidget.setDecDigitCount)
+    minv.valueChanged.connect(arrowWidget.setMinValue)
+    showarrowbutton.stateChanged.connect(arrowWidget.setShowArrowButtons)
+    nanbutton.clicked.connect(setNAN)
+    nonebutton.clicked.connect(setNone)
+    resetbutton.clicked.connect(resetAll)
     panel.setVisible(True)
     a.exec_()
 
