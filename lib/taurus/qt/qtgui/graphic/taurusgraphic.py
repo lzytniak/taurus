@@ -462,7 +462,6 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
         # SynopticSelectionStyle but there is nothing about it
         self._selectionStyle = selectionStyle
 
-    #@Qt.pyqtSignature("selectGraphicItem(const QString &)")
     def selectGraphicItem(self, item_name):
         """
         A blue circle is drawn around the matching item name.
