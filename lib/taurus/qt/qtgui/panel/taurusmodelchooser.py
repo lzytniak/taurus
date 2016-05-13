@@ -149,8 +149,7 @@ class TaurusModelChooser(TaurusWidget):
     '''
 
     updateModels = Qt.pyqtSignal('QStringList')
-    # (list<str> or QMimeData)
-    UpdateAttrs = Qt.pyqtSignal('QStringList')
+    UpdateAttrs = Qt.pyqtSignal(['QStringList'], ['QMimeData'])
 
     def __init__(self, parent=None, selectables=None, host=None, designMode=None, singleModel=False):
         '''Creator of TaurusModelChooser
