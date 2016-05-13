@@ -77,7 +77,7 @@ def parseTangoUri(name):
 
 
 class QEmitter(Qt.QObject):
-    updateView = Qt.pyqtSignal(Qt.QGraphicsView)
+    updateView = Qt.pyqtSignal('QGraphicsView')
 
 
 class TaurusGraphicsUpdateThread(Qt.QThread):
