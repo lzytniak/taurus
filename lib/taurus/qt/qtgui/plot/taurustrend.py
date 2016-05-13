@@ -90,7 +90,7 @@ class TaurusTrendsSet(Qt.QObject, TaurusBaseComponent):
     # disabling)
     droppedEventsWarning = -1
 
-    dataChanged = Qt.pyqtSignal('const QString &')
+    dataChanged = Qt.pyqtSignal('QString')
 
     def __init__(self, name, parent=None, curves=None):
         Qt.QObject.__init__(self, parent)
@@ -584,7 +584,7 @@ class ScanTrendsSet(TaurusTrendsSet):
     """
     DEFAULT_X_DATA_KEY = 'point_nb'
 
-    dataChanged = Qt.pyqtSignal('const QString &')
+    dataChanged = Qt.pyqtSignal('QString')
 
     def __init__(self, name, parent=None, autoClear=True, xDataKey=None):
         '''
@@ -880,7 +880,7 @@ class TaurusTrend(TaurusPlot):
 
     DEFAULT_MAX_BUFFER_SIZE = 65536  # (=2**16, i.e., 64K events))
 
-    dataChanged = Qt.pyqtSignal('const QString &')
+    dataChanged = Qt.pyqtSignal('QString')
 
     def __init__(self, parent=None, designMode=False):
         TaurusPlot.__init__(self, parent=parent, designMode=designMode)
@@ -1337,7 +1337,7 @@ class TaurusTrend(TaurusPlot):
             self.curves_lock.release()
         self.updateLegend(self.legend())
 
-    @Qt.pyqtSignature("dataChanged(const QString &)")
+    @Qt.pyqtSlot('QString')
     def curveDataChanged(self, name):
         '''slot that is called whenever a curve emits a dataChanged signal
 
