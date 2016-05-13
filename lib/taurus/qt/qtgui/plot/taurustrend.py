@@ -1331,7 +1331,7 @@ class TaurusTrend(TaurusPlot):
             self.curves_lock.release()
         self.updateLegend(self.legend())
 
-    @Qt.pyqtSignature("dataChanged(const QString &)")
+    @Qt.pyqtSlot('QString', name='dataChanged')
     def curveDataChanged(self, name):
         '''slot that is called whenever a curve emits a dataChanged signal
 
