@@ -128,7 +128,7 @@ class TaurusValueComboBox(Qt.QComboBox, TaurusBaseWritableWidget):
     # signals, gui events... things related to "write" in the end
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-    @Qt.pyqtSignature("currentIndexChanged(int)")
+    @Qt.pyqtSlot(int, name='currentIndexChanged')
     def writeIndexValue(self, index):
         '''slot called to emit a valueChanged signal when the currentIndex is changed'''
         self.emitValueChanged()
