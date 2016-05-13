@@ -191,7 +191,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
         if self.enterEditEventTypes:
             self.readWidget.installEventFilter(self)
         for sig in self.enterEditSignals:
-            self.connect(self.readWidget, sig, self.enterEdit)
+            getattr(self.readWidget, sig).connect(self.enterEdit)
         # update size policy
         self._updateSizePolicy()
         # register configuration (we use the class name to avoid mixing configs
