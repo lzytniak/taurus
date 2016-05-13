@@ -19,26 +19,5 @@ NOT_CONVERTED:
 #                     self._deviceTree.setModel)
 
 
-NEEDS_DECLARE:
-  CurvesAppearanceChooser:             self.curvesLW.CurveTitleEdited
-
-NEEDS_DECLARE:
-  TaurusXValues:         self._signalGen.taurusEvent
-
-NEEDS_DECLARE:
-  TaurusCurve:             self._signalGen.dataChanged
-
-NEEDS_DECLARE:
-  TaurusCurve:         self._signalGen.dataChanged
-
-NEEDS_DECLARE:
-  TaurusTrendsSet: self.dataChanged
-
-NEEDS_DECLARE:
-  ScanTrendsSet:         self.dataChanged
-
-NEEDS_DECLARE:
-  ScanTrendsSet: self.dataChanged
-
-NEEDS_DECLARE:
-  TaurusTrend: self.dataChanged
+# NEEDS_DECLARE:  NOT FOUND !
+#   TaurusXValues:         self._signalGen.taurusEvent

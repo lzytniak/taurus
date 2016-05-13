@@ -77,4 +77,7 @@ Antonio M:
  - TaurusModelChooser: done !
  - TaurusModelModel: done !
  - TaurusModelList: done !
- -
+ - TaurusCurve: done !
+ - TaurusTrendSet: done !
+ - ScanTrendSet: done !
+ - TaurusTrend: done !
