@@ -7,6 +7,7 @@ Vincent M:
   - TaurusBaseComponent: done!
   - TaurusBaseWidget: done!
   - TaurusBaseWritableWidget: done!
+
 Gara S:
  - Grabber: done!
  - ExternalAppAction: done!
@@ -66,3 +67,17 @@ Gara S:
  - CurvesTableModel: done!
  - CurvesAppearanceChooser: partially done! - signal CurveTitleEdited - is emitted by a sub-object, need discussion
  - BooleanWidget: done!
+
+Antonio M:
+ - TaurusGraphicsUpdateThread: wip - pending to be review by C.Pascual.
+ - TaurusCurveDialog: wip
+ - TaurusTrendDialog: wip
+ - AutoScrollTool: done !
+ - TaurusModelSelectorTree: done !
+ - TaurusModelChooser: done !
+ - TaurusModelModel: done !
+ - TaurusModelList: done !
+ - TaurusCurve: done !
+ - TaurusTrendSet: done !
+ - ScanTrendSet: done !
+ - TaurusTrend: done !

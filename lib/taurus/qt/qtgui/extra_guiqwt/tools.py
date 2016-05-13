@@ -31,7 +31,6 @@ __docformat__ = 'restructuredtext'
 
 from taurus.external.qt import Qt
 from guiqwt.tools import CommandTool, ToggleTool, DefaultToolbarID, QActionGroup, add_actions
-from guiqwt.signals import SIG_ITEMS_CHANGED
 
 from taurus.core.taurusbasetypes import TaurusElementType
 from taurus.qt.qtgui.resource import getIcon
@@ -215,7 +214,7 @@ class AutoScrollTool(ToggleTool):
 
     def register_plot(self, baseplot):
         ToggleTool.register_plot(self, baseplot)
-        self.connect(baseplot, SIG_ITEMS_CHANGED, self.items_changed)
+        baseplot.items_changed.connect(self.items_changed)
 
     def activate_command(self, plot, checked):
         """Activate tool"""

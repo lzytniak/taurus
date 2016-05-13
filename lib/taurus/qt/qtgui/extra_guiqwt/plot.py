@@ -659,6 +659,6 @@ def taurusImageDlgMain():
 
 
 if __name__ == "__main__":
-    #    taurusCurveDlgMain()
-    taurusTrendDlgMain()
+    taurusCurveDlgMain()
+    # taurusTrendDlgMain()
 #    taurusImageDlgMain()
