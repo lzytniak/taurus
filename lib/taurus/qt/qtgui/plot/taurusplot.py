@@ -1738,7 +1738,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
             self.curves_lock.release()
         self.replot()
 
-    @Qt.pyqtSignature("dataChanged(const QString &)")
+    @Qt.pyqtSlot("QString", name="dataChanged")
     def curveDataChanged(self, name):
         '''slot that is called whenever a curve emits a dataChanged signal
 
@@ -2069,7 +2069,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''See :meth:`QWidget.sizeHint`'''
         return Qt.QSize(300, 200)
 
-    @Qt.pyqtSignature("modelChanged(const QString &)")
+    @Qt.pyqtSlot('QString', name='modelChanged')
     def parentModelChanged(self, parentmodel_name):
         '''See :meth:`TaurusBaseComponent.parentModelChanged`'''
         self.curves_lock.acquire()
@@ -3159,7 +3159,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
     # grid properties
     #-~-~-~-~-~-~-~-~-~-~-~-~
 
-    @Qt.pyqtSignature("setGridColor(QColor)")
+    @Qt.pyqtSlot('QColor')
     def setGridColor(self, color):
         '''Changes the color of the plot grid and refreshes the plot
 
@@ -3180,7 +3180,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''equivalent to self.setGridColor(Qt.Qt.gray)'''
         self.setGridColor(Qt.Qt.gray)
 
-    @Qt.pyqtSignature("setGridWidth(int)")
+    @Qt.pyqtSlot(int)
     def setGridWidth(self, width):
         '''Changes the width of the plot grid lines and refreshes the plot
 
@@ -3223,7 +3223,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
                 models.append(str(m).lower())
         return models
 
-    @Qt.pyqtSignature("setModel(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def setModel(self, modelNames):
         '''sets the models of the Tango attributes that should be displayed in
         this TaurusPlot.
@@ -3259,7 +3259,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''equivalent to setModel([])'''
         self.setModel([])
 
-    @Qt.pyqtSignature("addModels(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def addModels(self, modelNames):
         '''Adds models to the existing ones:
 
@@ -3272,7 +3272,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         modelNames = [str(m) for m in modelNames if m not in self._modelNames]
         self.setModel(self._modelNames + modelNames)
 
-    @Qt.pyqtSignature("removeModels(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def removeModels(self, modelNames):
         '''Removes models from those already in the plot.
 
@@ -3289,7 +3289,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
                 self.warning("'%s' not in model list" % name)
         self.setModel(self._modelNames)
 
-    @Qt.pyqtSignature("setUseParentModel(bool)")
+    @Qt.pyqtSlot(bool)
     def setUseParentModel(self, yesno):
         '''Sets whether the TaurusCurves of this plot should use the plot's parent model
 
@@ -3333,7 +3333,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
     # legend properties
     #-~-~-~-~-~-~-~-~-~-~-~-~
 
-    @Qt.pyqtSignature("setLegendPosition(int)")
+    @Qt.pyqtSlot(int)
     def setLegendPosition(self, pos):
         '''Specify the position of the legend relative to the plot
 
@@ -3501,7 +3501,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''equivalent to setXIsTime(False)'''
         self.setXIsTime(False)
 
-    @Qt.pyqtSignature("setAllowZoomers(bool)")
+    @Qt.pyqtSlot(bool)
     def setAllowZoomers(self, allow):
         '''enable/disable the zoomers for the plot. (The zoomers provide zooming
         by selecting a region of the plot)
@@ -3511,7 +3511,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         self._allowZoomers = allow
         self._zoomer.setEnabled(allow)
 
-    @Qt.pyqtSignature("getAllowZoomers()")
+    @Qt.pyqtSlot(result=bool)
     def getAllowZoomers(self):
         '''Whether the Zoomers are enabled for this plot
 
@@ -3521,12 +3521,12 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         return self._allowZoomers
 
-    @Qt.pyqtSignature("resetAllowZoomers()")
+    @Qt.pyqtSlot()
     def resetAllowZoomers(self):
         '''same as setAllowZoomers(True)'''
         self.setAllowZoomers(True)
 
-    @Qt.pyqtSignature("isPannerEnabled(bool)")
+    @Qt.pyqtSlot(bool)
     def setPannerEnabled(self, enable):
         '''Specify whether the plot can be panned (i.e., dragged around to navigate it)
 
@@ -3534,7 +3534,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         self._panner.setEnabled(enable)
 
-    @Qt.pyqtSignature("isPannerEnabled()")
+    @Qt.pyqtSlot(result=bool)
     def isPannerEnabled(self):
         '''Whether the Panner is enabled for this plot
 
@@ -3544,12 +3544,12 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         return self._panner.isEnabled()
 
-    @Qt.pyqtSignature("resetPannerEnabled()")
+    @Qt.pyqtSlot()
     def resetPannerEnabled(self):
         '''same as setPannerEnabled(True)'''
         self.setPannerEnabled(True)
 
-    @Qt.pyqtSignature("setMagnifierEnabled(bool)")
+    @Qt.pyqtSlot(bool)
     def setMagnifierEnabled(self, enable):
         '''Specify whether the plot can be magnified (i.e. zoomed in and out
         with the mousewheel)
@@ -3558,7 +3558,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         self._magnifier.setEnabled(enable)
 
-    @Qt.pyqtSignature("isMagnifierEnabled()")
+    @Qt.pyqtSlot(result=bool)
     def isMagnifierEnabled(self):
         '''Whether the magnifier is enabled for this plot
 
@@ -3568,12 +3568,12 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         return self._magnifier.isEnabled()
 
-    @Qt.pyqtSignature("resetMagnifierEnabled()")
+    @Qt.pyqtSlot()
     def resetMagnifierEnabled(self):
         '''same as `setMagnifierEnabled(True)`'''
         self.setMagnifierEnabled(True)
 
-    @Qt.pyqtSignature("setOptimizationEnabled(bool)")
+    @Qt.pyqtSlot(bool)
     def setOptimizationEnabled(self, enable):
         '''Specify whether the plot should use paint optimizations
 
@@ -3590,7 +3590,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         finally:
             self.curves_lock.release()
 
-    @Qt.pyqtSignature("isOptimizationEnabled()")
+    @Qt.pyqtSlot(result=bool)
     def isOptimizationEnabled(self):
         '''Whether painting optimization is enabled for this plot
 
@@ -3598,7 +3598,7 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
         '''
         return self._optimizationEnabled
 
-    @Qt.pyqtSignature("resetOptimizationEnabled()")
+    @Qt.pyqtSlot()
     def resetOptimizationEnabled(self):
         '''Equivalent to `setOptimizationEnabled(True)`
         '''
