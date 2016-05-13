@@ -158,8 +158,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
             self.warning('Unable to emitColors: %s' % traceback.format_exc())
         return item_colors
 
-    #@Qt.pyqtSignature("selectGraphicItem(QString)")
-    @Qt.pyqtSignature("selectGraphicItem(const QString &)")
+    @Qt.pyqtSlot('QString')
     def selectGraphicItem(self, item_name):
         self.scene().selectGraphicItem(item_name)
         return False
