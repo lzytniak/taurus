@@ -100,10 +100,8 @@ def demo():
             pixmap_widge.textChanged.connect(self.changePixmap)
             aspect_ratio_widget.currentIndexChanged.connect(self.changeAspectRatio)
             transformation_widget.currentIndexChanged.connect(self.changeTransformationMode)
-            Qt.QObject.connect(halign_widget, Qt.SIGNAL(
-                "currentIndexChanged(int)"), self.changeAlignment)
-            Qt.QObject.connect(valign_widget, Qt.SIGNAL(
-                "currentIndexChanged(int)"), self.changeAlignment)
+            halign_widget.currentIndexChanged.connect(self.changeAlignment)
+            valign_widget.currentIndexChanged.connect(self.changeAlignment)
 
             self.w = w
             self.w_pixmap = pixmap_widget
