@@ -361,7 +361,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
         else:
             return self._panelClass
 
-    @Qt.pyqtSignature("setModel(QString)")
+    @Qt.pyqtSlot('QString')
     def setModel(self, model, alias=None, delayed=False, trace=False):
         self.modelName = str(model)
         self._currF = str(model)
