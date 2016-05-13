@@ -260,13 +260,13 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
                     pass
 
                 # if isinstance(widget,Qt.QWidget):
-                  # if not standAlone:
-                    #obj = newDialog(self.parent())
-                  # else:
-                    #obj = newDialog()
-                  # obj.initComponents(widget,objName,clName)
-                  # obj.setModal(False)
-                  # obj.setVisible(True)
+                    # if not standAlone:
+                        #obj = newDialog(self.parent())
+                    # else:
+                        #obj = newDialog()
+                    # obj.initComponents(widget,objName,clName)
+                    # obj.setModal(False)
+                    # obj.setVisible(True)
 
                 widget.setWindowTitle('%s - %s' % (clName, objName))
                 self.panels.append(widget)
@@ -467,7 +467,6 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
         # SynopticSelectionStyle but there is nothing about it
         self._selectionStyle = selectionStyle
 
-    #@Qt.pyqtSignature("selectGraphicItem(const QString &)")
     def selectGraphicItem(self, item_name):
         """
         A blue circle is drawn around the matching item name.

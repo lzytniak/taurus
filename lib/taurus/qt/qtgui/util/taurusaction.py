@@ -44,7 +44,7 @@ class ExternalAppAction(Qt.QAction, BaseConfigurableClass):
     with the current cmdArgs list as its argument.
     """
     DEFAULT_ICON_NAME = 'application-x-executable'
-    
+
     cmdArgsChanged = Qt.pyqtSignal(str)
 
     def __init__(self, cmdargs, text=None, icon=None, parent=None, interactive=True):
@@ -100,7 +100,7 @@ class ExternalAppAction(Qt.QAction, BaseConfigurableClass):
     def cmdArgs(self):
         return self.__cmdargs
 
-    @Qt.pyqtSignature("triggered()")
+    @Qt.pyqtSlot(name='triggered', result=bool)
     def actionTriggered(self, args=None):
         '''launches the external application as a subprocess'''
         import subprocess
@@ -203,11 +203,11 @@ class TaurusAction(Qt.QAction):
         model = self.parent().getModelObj()
         self.setDisabled(model is None)
 
-    @Qt.pyqtSignature("modelChanged(const QString &)")
+    @Qt.pyqtSlot('QString')
     def modelChanged(self, modelName):
         self.update()
 
-    @Qt.pyqtSignature("triggered()")
+    @Qt.pyqtSlot(name='triggered')
     def actionTriggered(self):
         pass
 

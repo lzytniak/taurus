@@ -582,7 +582,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
         self.trace('setModelCheck(%s)' % str(model)[:80])
         self.loadTree(model)
 
-    @Qt.pyqtSignature("addModels(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def addModels(self, modelNames):
         '''Adds models to the existing ones:
         :param modelNames:  (sequence<str>) the names of the models to be added
@@ -603,7 +603,6 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
     ##########################################################################
     # Loading/Cleaning the tree
 
-    #@Qt.pyqtSignature("loadTree(QString)")
     # def loadTree(self,filters,clear=False):
         #'''
         # This method show a list of instances and devices depending on the given servers in QTProperty or in another widget,
@@ -919,7 +918,6 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
     ###########################################################################
     # New expand/search methods
 
-    #@Qt.pyqtSignature("expandNode")
     def expandNode(self, node=None, expand=True):
         """ Needed to do threaded expansion of the tree """
         if node is None:
@@ -938,7 +936,7 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
         self.findInTree(str(Qt.QInputDialog.getText(
             self, 'Search ...', 'Write a part of the name', Qt.QLineEdit.Normal)[0]))
 
-    @Qt.pyqtSignature("findInTree(const QString &)")
+    @Qt.pyqtSlot('QString')
     def findInTree(self, regexp, collapseAll=None, exclude=None, select=True, queue=True):
         self.trace('In TauTree.findInTree(%s)' % regexp)
         if collapseAll is None:
@@ -1021,7 +1019,6 @@ class TaurusDevTree(TaurusTreeNodeContainer, Qt.QTreeWidget, TaurusBaseWidget):
     ###########################################################################
     # Update node colors
 
-    #@Qt.pyqtSignature("setIcons")
     def setIcons(self, dct={}, root_name=None, regexps=True):
         '''
         This method change the icons depending of the status of the devices

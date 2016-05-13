@@ -181,7 +181,7 @@ class TaurusForm(TaurusWidget):
         '''
         return self._customWidgetMap
 
-    @Qt.pyqtSignature("modelChanged(const QString &)")
+    @Qt.pyqtSlot('QString', name='modelChanged')
     def parentModelChanged(self, parentmodel_name):
         self.info("Parent model changed to '%s'" % parentmodel_name)
         parentmodel_name = str(parentmodel_name)
@@ -241,7 +241,7 @@ class TaurusForm(TaurusWidget):
     def getModel(self):
         return self._model
 
-    @Qt.pyqtSignature("addModels(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def addModels(self, modelNames):
         '''Adds models to the existing ones:
 
@@ -252,7 +252,7 @@ class TaurusForm(TaurusWidget):
         modelNames = self._splitModel(modelNames)
         self.setModel(self.getModel() + modelNames)
 
-    @Qt.pyqtSignature("removeModels(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def removeModels(self, modelNames):
         '''Removes models from those already in the form.
 
@@ -504,11 +504,11 @@ class TaurusForm(TaurusWidget):
             for item in self.getItems():
                 item.labelConfig = (str(labelConfig))
 
-    @Qt.pyqtSignature("apply()")
+    @Qt.pyqtSlot()
     def apply(self):
         self.safeApplyOperations()
 
-    @Qt.pyqtSignature("reset()")
+    @Qt.pyqtSlot()
     def reset(self):
         self.resetPendingOperations()
 
@@ -732,7 +732,7 @@ class TaurusCommandsForm(TaurusWidget):
         '''
         return self._viewFilters
 
-    @Qt.pyqtSignature("setCommand(bool)")
+    @Qt.pyqtSlot(bool, name="setCommand")
     def setExpertView(self, expert):
         '''sets the expert view mode
 
@@ -836,7 +836,7 @@ class TaurusAttrForm(TaurusWidget):
         '''
         return self._viewFilters
 
-    @Qt.pyqtSignature("setExpertView(bool)")
+    @Qt.pyqtSlot(bool)
     def setExpertView(self, expert):
         '''sets the expert view mode
 

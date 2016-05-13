@@ -294,7 +294,7 @@ class TaurusDevicePanel(TaurusWidget):
         self._dups[-1].setModel(self.getModel())
         self._dups[-1].show()
 
-    @Qt.pyqtSignature("setModel(QString)")
+    @Qt.pyqtSlot('QString')
     def setModel(self, model, pixmap=None):
         model, modelclass, raw = str(model).strip(), '', model
         if model:

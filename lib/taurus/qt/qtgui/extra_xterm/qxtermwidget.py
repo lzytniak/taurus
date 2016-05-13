@@ -50,7 +50,7 @@ class QXTermWidget(QtGui.QWidget):
         self._endTheProcess()
         event.accept()
 
-    @QtCore.pyqtSignature("commandFinished(int,QProcess::ExitStatus)")
+    @QtCore.pyqtSlot(int, int, name='commandFinished')
     def _commandFinished(self, exitCode, exitStatus):
         self.commandFinished.emit(exitCode)
         if exitStatus == 0:
@@ -92,7 +92,7 @@ class QXTermWidget(QtGui.QWidget):
     def getCommand(self):
         return self._command
 
-    @QtCore.pyqtSignature("setCommand(QString)")
+    @QtCore.pyqtSlot('QString')
     def setCommand(self, value):
         self._command = value
         self._restartTheProcess()
@@ -106,7 +106,7 @@ class QXTermWidget(QtGui.QWidget):
     def getFontSize(self):
         return self._fontSize
 
-    @QtCore.pyqtSignature("setFontSize(int)")
+    @QtCore.pyqtSlot(int)
     def setFontSize(self, value):
         self._fontSize = value
         self._restartTheProcess()

@@ -92,7 +92,7 @@ class TaurusCurveItem(CurveItem, TaurusBaseComponent):
             return
         if evt_src is self._xcomp or evt_src is self._ycomp:
             self.onCurveDataChanged()
-            self.getSignaller().emit(Qt.SIGNAL('dataChanged'))
+            self.getSignaller().dataChanged.emit()
 
     def onCurveDataChanged(self):
         # TODO: Take units into account for displaying curves, axis, etc.
@@ -238,14 +238,14 @@ class TaurusTrendItem(CurveItem, TaurusBaseComponent):
         self.set_data(x, y)
 
         # signal data changed and replot
-        self.getSignaller().emit(Qt.SIGNAL('dataChanged'), self)
+        self.getSignaller().dataChanged.emit()
 
         if plot is not None:
             value = x[-1]
             axis = self.xAxis()
             xmin, xmax = plot.get_axis_limits(axis)
             if value > xmax or value < xmin:
-                self.getSignaller().emit(Qt.SIGNAL('scrollRequested'), plot, axis, value)
+                self.getSignaller().scrollRequested.emit(plot, axis, value)
             plot.replot()
 
     def get_item_parameters(self, itemparams):

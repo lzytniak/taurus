@@ -74,10 +74,10 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
      allows to configure custom context menus for graphic items using a list
      of tuples. Empty tuples will insert separators in the menu.
     '''
-        itemsChanged = Qt.pyqtSignal()
-        modelsChanged = Qt.pyqtSignal()
-        graphicItemSelected = Qt.pyqtSignal('QString')
-        graphicSceneClicked = Qt.pyqtSignal('QPoint')
+    itemsChanged = Qt.pyqtSignal()
+    modelsChanged = Qt.pyqtSignal()
+    graphicItemSelected = Qt.pyqtSignal('QString')
+    graphicSceneClicked = Qt.pyqtSignal('QPoint')
 
     def __init__(self, parent=None, designMode=False, updateMode=None, alias=None, resizable=True, panelClass=None):
         name = self.__class__.__name__
@@ -158,8 +158,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
             self.warning('Unable to emitColors: %s' % traceback.format_exc())
         return item_colors
 
-    #@Qt.pyqtSignature("selectGraphicItem(QString)")
-    @Qt.pyqtSignature("selectGraphicItem(const QString &)")
+    @Qt.pyqtSlot('QString')
     def selectGraphicItem(self, item_name):
         self.scene().selectGraphicItem(item_name)
         return False
@@ -362,7 +361,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
         else:
             return self._panelClass
 
-    @Qt.pyqtSignature("setModel(QString)")
+    @Qt.pyqtSlot('QString')
     def setModel(self, model, alias=None, delayed=False, trace=False):
         self.modelName = str(model)
         self._currF = str(model)
@@ -394,8 +393,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
                 self.setScene(scene)
                 self.scene().graphicItemSelected.connect(self._graphicItemSelected)
                 self.scene().graphicSceneClicked.connect(self._graphicSceneClicked)
-                # Qt.QObject.connect(Qt.QApplication.instance(),
-                # Qt.SIGNAL("lastWindowClosed()"), self.close) #It caused a
+                # Qt.QApplication.instance().lastWindowClosed.connect(self.close) #It caused a
                 # segfault!
                 self.modelsChanged()
                 self.setWindowTitle(self.modelName)

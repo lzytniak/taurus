@@ -987,7 +987,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         """
         return getattr(self, '_useParentModel', False)
 
-    @Qt.pyqtSignature("setUseParentModel(bool)")
+    @Qt.pyqtSlot(bool)
     def setUseParentModel(self, yesno):
         """Sets/unsets using the parent model
 
@@ -1004,7 +1004,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         self.setUseParentModel(False)
         self.updateStyle()
 
-    @Qt.pyqtSignature("setShowQuality(bool)")
+    @Qt.pyqtSlot(bool)
     def setShowQuality(self, showQuality):
         """Sets/unsets the show quality property
 
@@ -1026,7 +1026,7 @@ class TaurusBaseComponent(TaurusListener, BaseConfigurableClass):
         """Resets the show quality to self.__class__._showQuality"""
         self.setShowQuality(self.__class__._showQuality)
 
-    @Qt.pyqtSignature("setShowText(bool)")
+    @Qt.pyqtSlot(bool)
     def setShowText(self, showText):
         """Sets/unsets showing the display value of the model
 
@@ -1164,7 +1164,7 @@ class TaurusBaseWidget(TaurusBaseComponent):
 
     _UseParentMsg = False
 
-    @Qt.pyqtSignature("setUseParentModel(bool)")
+    @Qt.pyqtSlot(bool)
     def setUseParentModel(self, yesno):
         """Sets/unsets using the parent model.
 

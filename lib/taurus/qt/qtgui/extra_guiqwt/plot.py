@@ -85,7 +85,7 @@ class TaurusCurveDialog(CurveDialog, TaurusBaseWidget):
             modelNames = modelNames.split()
         return modelNames
 
-    @Qt.pyqtSignature("setModel(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def setModel(self, modelNames):
         '''Removes current TaurusCurveItems and adds new ones.
 
@@ -236,7 +236,7 @@ class TaurusTrendDialog(CurveDialog, TaurusBaseWidget):
             modelNames = modelNames.split()
         return modelNames
 
-    @Qt.pyqtSignature("setModel(QStringList)")
+    @Qt.pyqtSlot('QStringList')
     def setModel(self, modelNames):
         '''Removes current TaurusCurveItems and adds new ones.
 

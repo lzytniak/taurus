@@ -113,7 +113,7 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
     # My methods
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-    @QtCore.pyqtSignature("setTable(QString)")
+    @QtCore.pyqtSlot('QString')
     def setTable(self, dev_name):
         """
         Fills the table with the names of properties and their values for the
@@ -125,7 +125,7 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
         elif self.db is None:
             self.warning('Model must be set before calling setTable')
             return
-	    self.cellChanged.disconnect(self.valueChanged)
+        self.cellChanged.disconnect(self.valueChanged)
         dev_name = str(dev_name)
         self.list_prop = list(self.db.get_device_property_list(dev_name, '*'))
         self.setRowCount(len(self.list_prop))
@@ -368,7 +368,7 @@ class EditTextDialog(QtGui.QDialog):
         self.show()
         self.result = 0
         # Signals
-        
+
         self.buttonBox.accepted.connect(self.pressOK)
         self.buttonBox.rejected.connect(self.close)
 

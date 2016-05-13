@@ -65,16 +65,16 @@ class TaurusGroupBox(Qt.QGroupBox, TaurusBaseContainer):
     # Public slots for apply/restore changes
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-    @Qt.pyqtSignature("pendingOperationsChanged(bool)")
+    @Qt.pyqtSlot(bool)
     def pendingOperationsChanged(self, yesno):
         self.debug("emiting pendingOperationsChanged(%s)" % str(yesno))
         self.pendingOperationsChanged.emit(yesno)
 
-    @Qt.pyqtSignature("applyPendingChanges()")
+    @Qt.pyqtSlot()
     def applyPendingChanges(self):
         self.applyPendingOperations()
 
-    @Qt.pyqtSignature("resetPendingChanges()")
+    @Qt.pyqtSlot()
     def resetPendingChanges(self):
         self.resetPendingOperations()
 
@@ -93,7 +93,7 @@ class TaurusGroupBox(Qt.QGroupBox, TaurusBaseContainer):
     def getPrefixText(self):
         return self._prefix
 
-    @Qt.pyqtSignature("setPrefixText(QString)")
+    @Qt.pyqtSlot('QString')
     def setPrefixText(self, prefix):
         self._prefix = prefix
         import taurus.core
@@ -103,7 +103,7 @@ class TaurusGroupBox(Qt.QGroupBox, TaurusBaseContainer):
     def getSuffixText(self):
         return self._suffix
 
-    @Qt.pyqtSignature("setSuffixText(QString)")
+    @Qt.pyqtSlot('QString')
     def setSuffixText(self, suffix):
         self._suffix = suffix
         import taurus.core

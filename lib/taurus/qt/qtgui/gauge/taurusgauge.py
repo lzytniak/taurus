@@ -215,7 +215,7 @@ class TaurusCircularGauge(qtcontrols.ECircularGauge, TaurusBaseWidget):
     def getLogScale(self):
         return self._logScale
 
-    @Qt.pyqtSignature("setLogScale(bool)")
+    @Qt.pyqtSlot(bool)
     def setLogScale(self, val):
         self._logScale = bool(val)
         self.updateStyle()

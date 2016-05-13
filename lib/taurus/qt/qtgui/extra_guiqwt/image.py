@@ -84,7 +84,7 @@ class TaurusBaseImageItem(TaurusBaseComponent):
         if lut_range[0] == lut_range[1]:
             lut_range = None
         self.set_data(v, lut_range=lut_range)
-        self.getSignaller().emit(Qt.SIGNAL('dataChanged'))
+        self.getSignaller().dataChanged.emit()
         p = self.plot()
 
         if p is not None:
@@ -365,14 +365,14 @@ class TaurusTrend2DItem(XYImageItem, TaurusBaseComponent):
         self.set_xy(x, y)
 
         # signal data changed and replot
-        self.getSignaller().emit(Qt.SIGNAL('dataChanged'))
+        self.getSignaller().dataChanged.emit()
 
         if plot is not None:
             value = x[-1]
             axis = self.xAxis()
             xmin, xmax = plot.get_axis_limits(axis)
             if value > xmax or value < xmin:
-                self.getSignaller().emit(Qt.SIGNAL('scrollRequested'), plot, axis, value)
+                self.getSignaller().scrollRequested.emit(plot, axis, value)
             plot.update_colormap_axis(self)
             plot.replot()
 
@@ -497,14 +497,14 @@ class TaurusTrend2DScanItem(TaurusTrend2DItem):
         self.set_xy(x, y)
 
         # signal data changed and replot
-        self.getSignaller().emit(Qt.SIGNAL('dataChanged'))
+        self.getSignaller().dataChanged.emit()
         plot = self.plot()
         if plot is not None:
             value = x[-1]
             axis = self.xAxis()
             xmin, xmax = plot.get_axis_limits(axis)
             if value > xmax or value < xmin:
-                self.getSignaller().emit(Qt.SIGNAL('scrollRequested'), plot, axis, value)
+                self.getSignaller().scrollRequested.emit(plot, axis, value)
             plot.update_colormap_axis(self)
             plot.replot()
 
