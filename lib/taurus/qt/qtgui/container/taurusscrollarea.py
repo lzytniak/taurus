@@ -86,11 +86,11 @@ class TaurusScrollArea(Qt.QScrollArea, TaurusBaseContainer):
     # Public slots for apply/restore changes
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-    @Qt.pyqtSignature("applyPendingChanges()")
+    @Qt.pyqtSlot()
     def applyPendingChanges(self):
         self.applyPendingOperations()
 
-    @Qt.pyqtSignature("resetPendingChanges()")
+    @Qt.pyqtSlot()
     def resetPendingChanges(self):
         self.resetPendingOperations()
 
