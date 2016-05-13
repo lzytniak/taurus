@@ -115,7 +115,6 @@ class TaurusModelItem(object):
 class TaurusModelModel(Qt.QAbstractListModel):
     ''' A Qt data model for describing taurus models
     '''
-    dataChanged = Qt.pyqtSignal(int, int)
 
     def __init__(self, items=None):
         if items is None:
@@ -278,7 +277,7 @@ class TaurusModelList(Qt.QListView):
     associated with it. It also allows drag and drop of models and sorting.
     '''
 
-    dataChanged = Qt.pyqtSignal(list)
+    dataChanged = Qt.pyqtSignal('QStringList')
 
     def __init__(self, parent=None, items=None, designMode=False):
         super(TaurusModelList, self).__init__(parent)
