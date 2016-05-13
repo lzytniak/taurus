@@ -1496,7 +1496,7 @@ class TaurusDevTreeOptions(Qt.QWidget):
         self.layout().addWidget(self._button)
 
     def connectWithTree(self, tree):
-        Qt.QObject.connect(self, Qt.SIGNAL("search(QString)"), tree.findInTree)
+        self.search.connect(tree.findInTree)
 
     def _emitSearch(self):
         text = self._edit.text()

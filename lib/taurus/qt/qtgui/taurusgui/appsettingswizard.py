@@ -582,7 +582,7 @@ class SynopticPage(BasePage):
         self._removeButton.clicked.connect(self._removeSynoptic)
         self._upButton.clicked.connect(self._moveUp)
         self._downButton.clicked.connect(self._moveDown)
-        #Qt.QObject.connect(self._synopticList, Qt.SIGNAL("itemDoubleClicked(QListWidgetItem*)"), self._editSynoptic)
+        #self._synopticList.itemDoubleClicked.connect(self._editSynoptic)
         self._spacerItem1 = Qt.QSpacerItem(
             10, 0, Qt.QSizePolicy.Fixed, Qt.QSizePolicy.Expanding)
         self._layout.addItem(self._spacerItem1, 8, 0, 1, 1, Qt.Qt.AlignCenter)
@@ -1680,7 +1680,7 @@ class AppSettingsWizard(Qt.QWizard):
                 name, xml = externalApp
                 item = etree.fromstring(xml)
                 externalApps.append(item)
-       # monitor page
+        # monitor page
         monitor = etree.SubElement(root, "MONITOR")
         monitor.text = self.__getitem__("monitor")
 

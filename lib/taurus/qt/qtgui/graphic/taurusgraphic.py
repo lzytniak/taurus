@@ -106,7 +106,7 @@ class TaurusGraphicsUpdateThread(Qt.QThread):
         emitter = Qt.QObject()
         emitter.moveToThread(Qt.QApplication.instance().thread())
         emitter.setParent(Qt.QApplication.instance())
-        Qt.QObject.connect(emitter, Qt.SIGNAL("updateView"), self._updateView)
+        emitter.updateView.connect(self._updateView)
 
         p = self.parent()
         while True:
@@ -255,13 +255,13 @@ class TaurusGraphicsScene(Qt.QGraphicsScene):
                     pass
 
                 # if isinstance(widget,Qt.QWidget):
-                  # if not standAlone:
-                    #obj = newDialog(self.parent())
-                  # else:
-                    #obj = newDialog()
-                  # obj.initComponents(widget,objName,clName)
-                  # obj.setModal(False)
-                  # obj.setVisible(True)
+                    # if not standAlone:
+                        #obj = newDialog(self.parent())
+                    # else:
+                        #obj = newDialog()
+                    # obj.initComponents(widget,objName,clName)
+                    # obj.setModal(False)
+                    # obj.setVisible(True)
 
                 widget.setWindowTitle('%s - %s' % (clName, objName))
                 self.panels.append(widget)

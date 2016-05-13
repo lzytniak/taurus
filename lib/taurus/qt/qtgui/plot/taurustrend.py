@@ -1906,8 +1906,7 @@ def main():
             w.close()
         else:
             for ts in w.trendSets.values():
-                Qt.QObject.connect(ts, Qt.SIGNAL(
-                    "dataChanged(const QString &)"), exportIfAllCurves)
+                ts.dataChanged.connect(exportIfAllCurves)
         sys.exit(app.exec_())  # exit without showing the widget
 
     # period option
