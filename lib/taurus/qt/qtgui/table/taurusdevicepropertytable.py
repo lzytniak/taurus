@@ -113,7 +113,7 @@ class TaurusPropTable(QtGui.QTableWidget, TaurusBaseWidget):
     # My methods
     #-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-    @QtCore.pyqtSignature("setTable(QString)")
+    @QtCore.pyqtSlot('QString')
     def setTable(self, dev_name):
         """
         Fills the table with the names of properties and their values for the
@@ -368,7 +368,7 @@ class EditTextDialog(QtGui.QDialog):
         self.show()
         self.result = 0
         # Signals
-        
+
         self.buttonBox.accepted.connect(self.pressOK)
         self.buttonBox.rejected.connect(self.close)
 
