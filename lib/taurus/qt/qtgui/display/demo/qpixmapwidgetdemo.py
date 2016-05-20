@@ -97,7 +97,7 @@ def demo():
             valign_widget.addItem("Center", Qt.QVariant(Qt.Qt.AlignVCenter))
             valign_widget.addItem("Bottom", Qt.QVariant(Qt.Qt.AlignBottom))
 
-            pixmap_widge.textChanged.connect(self.changePixmap)
+            pixmap_widget.textChanged.connect(self.changePixmap)
             aspect_ratio_widget.currentIndexChanged.connect(self.changeAspectRatio)
             transformation_widget.currentIndexChanged.connect(self.changeTransformationMode)
             halign_widget.currentIndexChanged.connect(self.changeAlignment)
