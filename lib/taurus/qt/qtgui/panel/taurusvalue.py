@@ -851,7 +851,7 @@ class TaurusValue(Qt.QWidget, TaurusBaseWidget):
             # hide getPendingOperations of the writeWidget so that containers don't get duplicate lists
             #self._writeWidget._getPendingOperations = self._writeWidget.getPendingOperations
             #self._writeWidget.getPendingOperations = lambda : []
-            self._writeWidget.valueChanged.connect(self.updatePendingOpsStyle)
+            self._writeWidget.valueChangedSignal.connect(self.updatePendingOpsStyle)
             self._writeWidget.setDangerMessage(self.getDangerMessage())
             self._writeWidget.setForceDangerousOperations(
                 self.getForceDangerousOperations())
