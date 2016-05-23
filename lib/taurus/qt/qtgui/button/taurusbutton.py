@@ -267,7 +267,7 @@ class TaurusCommandButton(Qt.QPushButton, TaurusBaseWidget):
     .. seealso:: :class:`TaurusCommandsForm` provides a good example of use of
                  TaurusCommandButton (including managing the return value) '''
 
-    commandExecuted = Qt.pyqtSignal()
+    commandExecuted = Qt.pyqtSignal(object)
 
     def __init__(self, parent=None, designMode=False, command=None,
                  parameters=None, icon=None, text=None,
@@ -312,7 +312,7 @@ class TaurusCommandButton(Qt.QPushButton, TaurusBaseWidget):
         return self._command
 
     @ProtectTaurusMessageBox(title="Unexpected error when executing command")
-    def onClicked(self):
+    def onClicked(self, value=0):
         return self._onClicked()
 
     def _onClicked(self):
