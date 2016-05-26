@@ -221,9 +221,9 @@ class AutoScrollTool(ToggleTool):
         # retrieve current Taurus curves
         for item in self.getScrollItems(plot):
             if checked:
-                item.getSignaller().scrollRequested.connect(self.onScrollRequested)
+                item.scrollRequested.connect(self.onScrollRequested)
             else:
-                item.getSignaller().scrollRequested.disconnect(self.onScrollRequested)
+                item.scrollRequested.disconnect(self.onScrollRequested)
 
     def getScrollItems(self, plot):
         return [item for item in plot.get_items() if isinstance(item, (TaurusTrendItem, TaurusTrend2DItem))]

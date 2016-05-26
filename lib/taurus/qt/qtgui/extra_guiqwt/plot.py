@@ -485,7 +485,7 @@ class TaurusImageDialog(ImageDialog, TaurusBaseWidget):
         self.imgItem.set_readonly(not self.isModifiableByUser())
         # IMPORTANT: connect the cross section plots to the taurusimage so that
         # they are updated when the taurus data changes
-        self.imgItem.getSignaller().dataChanged.connect(self.update_cross_sections)
+        self.imgItem.dataChanged.connect(self.update_cross_sections)
 
     def getModel(self):
         '''reimplemented from :class:`TaurusBaseWidget`'''
