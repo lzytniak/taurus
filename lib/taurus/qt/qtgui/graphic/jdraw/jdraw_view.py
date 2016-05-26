@@ -75,7 +75,7 @@ class TaurusJDrawSynopticsView(Qt.QGraphicsView, TaurusBaseWidget):
      of tuples. Empty tuples will insert separators in the menu.
     '''
     itemsChanged = Qt.pyqtSignal(str, dict)
-    modelsChanged = Qt.pyqtSignal('QStringList')
+    modelsChanged = Qt.pyqtSignal(list)
     graphicItemSelected = Qt.pyqtSignal('QString')
     graphicSceneClicked = Qt.pyqtSignal('QPoint')
 
