@@ -201,7 +201,7 @@ requires = [
     'ply (>=2.3)',  # [Taurus-Qt-Synoptic]
     'lxml (>=2.1)',  # [Taurus-TaurusGUI]
     'spyder (>=2.2)',  # [Taurus-Editor] --> or maybe move it to sardana
-    # Consider also guiqwt, guidata, PyMca,...
+    # Consider also guiqwt, guidata, PyMca5,...
     #
     #########################################################################
 ]
