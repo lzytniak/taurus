@@ -101,8 +101,8 @@ class TaurusNeXusBrowser(TaurusWidget):
         self.layout().setMenuBar(self._toolbar)
 
         # connections
-        self.__fileModel.fileAppended.connect(self.treeWidget.fileAppended)
-        self.treeWidget.HDF5WidgetSignal.connect(self.onHDF5WidgetSignal)
+        self.__fileModel.sigFileAppended.connect(self.treeWidget.fileAppended)
+        self.treeWidget.sigHDF5WidgetSignal.connect(self.onHDF5WidgetSignal)
         self.openFileAction.triggered.connect(self.openFile)
         self.togglePreviewAction.toggled.connect(self.__previewStack.setVisible)
 
