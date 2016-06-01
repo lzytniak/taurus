@@ -2186,20 +2186,20 @@ class TaurusPlot(Qwt5.QwtPlot, TaurusBaseWidget):
 
         autoScaleThisAxis = lambda: self.setAxisAutoScale(axis=axis)
         autoscaleAction = menu.addAction("AutoScale %s" % axisname)
-        autoscaleAction.triggered.connect(autoScaleThisAxis)
+        autoscaleAction.triggered[()].connect(autoScaleThisAxis)
 
         if not self.getXIsTime():
             switchThisAxis = lambda: self.setAxisScaleType(
                 axis=axis, scale=None)
             switchThisAxisAction = menu.addAction(
                 "Toggle linear/log for %s" % axisname)
-            switchThisAxisAction.triggered.connect(switchThisAxis)
+            switchThisAxisAction.triggered[()].connect(switchThisAxis)
 
         if axis in (Qwt5.QwtPlot.yLeft, Qwt5.QwtPlot.yRight):
             zoomOnThisAxis = lambda: self.toggleZoomer(axis=axis)
             zoomOnThisAxisAction = menu.addAction(
                 "Zoom-to-region acts on %s" % axisname)
-            zoomOnThisAxisAction.triggered.connect(zoomOnThisAxis)
+            zoomOnThisAxisAction.triggered[()].connect(zoomOnThisAxis)
 
         elif axis in (Qwt5.QwtPlot.xBottom, Qwt5.QwtPlot.xTop):
             if self.isXDynScaleSupported():
