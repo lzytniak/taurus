@@ -103,7 +103,7 @@ class TaurusNeXusBrowser(TaurusWidget):
         # connections
         self.__fileModel.sigFileAppended.connect(self.treeWidget.fileAppended)
         self.treeWidget.sigHDF5WidgetSignal.connect(self.onHDF5WidgetSignal)
-        self.openFileAction.triggered.connect(self.openFile)
+        self.openFileAction.triggered[()].connect(self.openFile)
         self.togglePreviewAction.toggled.connect(self.__previewStack.setVisible)
 
         # configuration
