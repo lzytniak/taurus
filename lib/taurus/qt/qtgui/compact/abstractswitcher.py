@@ -194,10 +194,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
         if self.enterEditEventTypes:
             self.readWidget.installEventFilter(self)
         for sig in self.enterEditSignals:
-            try:
-                self.connect(self.readWidget, sig, self.enterEdit)
-            except Exception, e:
-                self.debug('Cannot connect signal. Reason: %s', e)
+            self.connect(self.readWidget, sig, self.enterEdit)
         # update size policy
         self._updateSizePolicy()
         # register configuration (we use the class name to avoid mixing configs
@@ -221,10 +218,7 @@ class TaurusReadWriteSwitcher(TaurusWidget):
         if self.exitEditEventTypes:
             self.writeWidget.installEventFilter(self)
         for sig in self.exitEditSignals:
-            try:
-                self.connect(self.writeWidget, sig, self.exitEdit)
-            except Exception, e:
-                self.debug('Cannot connect signal. Reason: %s', e)
+            self.connect(self.writeWidget, sig, self.exitEdit)
         # update size policy
         self._updateSizePolicy()
         # register configuration (we use the class name to avoid mixing configs
