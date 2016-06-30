@@ -85,6 +85,7 @@ class EpicsAttributeNameValidator(TaurusAttributeNameValidator):
     groups are created:
 
      - attrname: attribute name (an epics PV name).
+     - _field: process variable field
 
     Note: brackets on the group name indicate that this group will only contain
     a value if the URI contains it.
@@ -96,7 +97,7 @@ class EpicsAttributeNameValidator(TaurusAttributeNameValidator):
     fragment = '[^# ]*'
 
     def getNames(self, fullname, factory=None, fragment=False):
-        """reimplemented from :class:`TaurusDeviceNameValidator`"""
+        """reimplemented from :class:`TaurusAttributeNameValidator`"""
 
         groups = self.getUriGroups(fullname)
         if groups is None:
